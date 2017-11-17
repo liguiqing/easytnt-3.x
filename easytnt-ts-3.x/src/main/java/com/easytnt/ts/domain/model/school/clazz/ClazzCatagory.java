@@ -1,0 +1,62 @@
+/*
+ * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
+ */
+
+package com.easytnt.ts.domain.model.school.clazz;
+
+import com.easytnt.commons.AssertionConcerns;
+import com.easytnt.commons.domain.IdentifiedValueObject;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
+/**
+ * 班级分类，重点班，实验班，民族班等
+ *
+ * @author Liguiqing
+ * @since V3.0
+ */
+
+public class ClazzCatagory extends IdentifiedValueObject {
+    private String code;
+
+    private String name;
+
+    public ClazzCatagory(String code, String name) {
+        AssertionConcerns.assertArgumentNotNull(code,"班级分类代码不能为空");
+        AssertionConcerns.assertArgumentNotNull(name,"班级分类名称不能为空");
+        this.code = code;
+        this.name = name;
+    }
+
+    public boolean sameCodeOf(String code){
+        return this.code().equals(code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.code);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ClazzCatagory) {
+            ClazzCatagory that = (ClazzCatagory) o;
+            return Objects.equal(this.code, that.code);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("name", this.name)
+                .add("code", this.code).toString();
+    }
+
+    public String code() {
+        return code;
+    }
+
+    public String name() {
+        return name;
+    }
+}

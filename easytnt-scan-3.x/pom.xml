@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>easytnt</groupId>
+        <artifactId>easytnt</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>easytnt.scan</artifactId>
+
+    <name>AnswerSheet And Paper Scanner</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <easytnt.version>3.0.0-SNAPSHOT</easytnt.version>
+    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>easytnt</groupId>
+            <artifactId>easytnt.test</artifactId>
+            <version>${easytnt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>easytnt</groupId>
+            <artifactId>easytnt.commons</artifactId>
+            <version>${easytnt.version}</version>
+        </dependency>
+
+    </dependencies>
+</project>
