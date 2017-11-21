@@ -4,10 +4,10 @@
 
 package com.easytnt.ts.domain.model.school;
 
-import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.staff.HeadMaster;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.easytnt.ts.domain.model.school.staff.Teacher;
 import com.easytnt.ts.domain.model.school.term.*;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -48,6 +48,11 @@ public class School extends Entity {
         return master;
     }
 
+    public Teacher join(String teacherName, String teacherId, Date starts, Date ends, Course course){
+        Teacher teacher = new Teacher(this.schoolId(), teacherName, teacherId, new Period(starts, ends), course);
+        return teacher;
+    }
+
     public Term newTerm(TermId termId, String termName,String year, TermOrder order, Date starts, Date ends){
         Term term = new Term(termId,termName,new StudyYear(year),order,new TimeSpan(starts,ends),this.schoolId());
         return term;
@@ -60,7 +65,7 @@ public class School extends Entity {
         StudyYear year = StudyYear.yearOfNow();
         ArrayList<Grade> grads = Lists.newArrayList();
         for(int i=type.gradeFrom();i<type.gradeTo();i++){
-            GradeLevel level = GradeLevel.fromLeve(i);
+            GradeLevel level = GradeLevel.fromLevel(i);
             Grade grade = new Grade(nameGenerateStrategy.genGradeName(level),level,year);
             grads.add(grade);
         }

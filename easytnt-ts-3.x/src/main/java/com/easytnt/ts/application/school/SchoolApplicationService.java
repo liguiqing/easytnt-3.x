@@ -7,6 +7,7 @@ package com.easytnt.ts.application.school;
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.ts.application.school.command.ChangeHeaderMasterCommand;
 import com.easytnt.ts.application.school.command.NewHeaderMasterCommand;
+import com.easytnt.ts.application.school.command.NewTeacherCommand;
 import com.easytnt.ts.application.school.command.NewTermCommand;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
@@ -85,11 +86,17 @@ public class SchoolApplicationService {
         termRepository.save(term);
     }
 
-    public void addTeacher(){
+    public void addTeacher(String schoolId,NewTeacherCommand command){
+        logger.debug("Teacher {} join school {} ",command,schoolId);
 
+        School school = getSchool(schoolId);
+        Teacher teacher = school.join(command.getName(), command.getIdentity(), command.getStarts(), command.getEnds(),
+                new Course(command.getCourseName(), command.getSubjectId()));
+        staffRepository.save(teacher);
     }
 
-    private School getSchool(String schoolId){
+
+    protected School getSchool(String schoolId){
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识:"+schoolId);
         School school = schoolRepository.loadOfId(new SchoolId(schoolId));
         AssertionConcerns.assertArgumentNotNull(school,"无法读取学校数据:"+schoolId);

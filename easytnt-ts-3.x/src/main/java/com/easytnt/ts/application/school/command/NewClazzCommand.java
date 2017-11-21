@@ -24,6 +24,8 @@ public class NewClazzCommand {
 
     private String gradeLevel;
 
+    private String year;
+
     private String masterName;
 
     private String masterIdentity;
@@ -35,6 +37,8 @@ public class NewClazzCommand {
     private String type;
 
     private String wlType;
+
+    private String termId;
 
     public boolean hasMaster(){
         return this.masterName != null;
@@ -126,6 +130,22 @@ public class NewClazzCommand {
 
     public void setWlType(String wlType) {
         this.wlType = wlType;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getTermId() {
+        return termId;
+    }
+
+    public void setTermId(String termId) {
+        this.termId = termId;
     }
 
     @Override

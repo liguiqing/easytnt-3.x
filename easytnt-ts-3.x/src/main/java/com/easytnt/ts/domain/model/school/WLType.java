@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.domain.model.school;
 
+
 /**
  * 班级或者科目的文理分类
  *
@@ -28,5 +29,14 @@ public enum WLType {
 
     public int getValue(){
         return 0;
+    }
+
+    public static WLType fromName(String name){
+        for(WLType type:WLType.values()){
+            if(type.name().equals(name)){
+                return type;
+            }
+        }
+        return null;
     }
 }

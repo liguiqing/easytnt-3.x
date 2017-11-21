@@ -27,4 +27,13 @@ public enum ClazzAdiminType {
     public int getType(){
         return 9;
     }
+
+    public static ClazzAdiminType fromName(String name){
+        for(ClazzAdiminType type:ClazzAdiminType.values()){
+            if(type.name().equals(name)){
+                return type;
+            }
+        }
+        return null;
+    }
 }
