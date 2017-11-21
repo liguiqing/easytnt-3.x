@@ -2,8 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.application.school;
-
+package com.easytnt.ts.application.school.command;
 
 import com.google.common.base.MoreObjects;
 
@@ -14,10 +13,12 @@ import java.util.Date;
  * @since V3.0
  */
 
-public class NewCourseCommand {
-    private String subjectId;
-
+public class NewClazzCommand {
     private String name;
+
+    private String clazzNo;//班号，学校自编，是班级连接性的标识
+
+    private String createDate; //建班日期，使用时格式为YYYY-mm
 
     private String gradeName;
 
@@ -31,16 +32,12 @@ public class NewCourseCommand {
 
     private Date masterEends;
 
+    private String type;
+
+    private String wlType;
+
     public boolean hasMaster(){
         return this.masterName != null;
-    }
-
-    public String getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
     }
 
     public String getName() {
@@ -49,6 +46,22 @@ public class NewCourseCommand {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getClazzNo() {
+        return clazzNo;
+    }
+
+    public void setClazzNo(String clazzNo) {
+        this.clazzNo = clazzNo;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
     public String getGradeName() {
@@ -99,17 +112,35 @@ public class NewCourseCommand {
         this.masterEends = masterEends;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getWlType() {
+        return wlType;
+    }
+
+    public void setWlType(String wlType) {
+        this.wlType = wlType;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("subjectId", subjectId)
                 .add("name", name)
+                .add("clazzNo", clazzNo)
+                .add("createDate", createDate)
                 .add("gradeName", gradeName)
                 .add("gradeLevel", gradeLevel)
-                .add("masterName", masterName)
+                .add("masterMame", masterName)
                 .add("masterIdentity", masterIdentity)
                 .add("masterStarts", masterStarts)
                 .add("masterEends", masterEends)
+                .add("type", type)
                 .toString();
     }
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.application.school;
+package com.easytnt.ts.application.school.command;
 
 import com.google.common.base.MoreObjects;
 
@@ -13,40 +13,29 @@ import java.util.Date;
  * @since V3.0
  */
 
-public class NewTermCommand {
+public class NewHeaderMasterCommand {
+    private String name;
 
-    private String termName;
-
-    private String year;
-
-    private String termOrder;
+    private String identity;
 
     private Date starts;
 
     private Date ends;
 
-    public String getTermName() {
-        return termName;
+    public String getName() {
+        return name;
     }
 
-    public void setTermName(String termName) {
-        this.termName = termName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getYear() {
-        return year;
+    public String getIdentity() {
+        return identity;
     }
 
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getTermOrder() {
-        return termOrder;
-    }
-
-    public void setTermOrder(String termOrder) {
-        this.termOrder = termOrder;
+    public void setIdentity(String identity) {
+        this.identity = identity;
     }
 
     public Date getStarts() {
@@ -68,9 +57,8 @@ public class NewTermCommand {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("termName", termName)
-                .add("year", year)
-                .add("termOrder", termOrder)
+                .add("name", name)
+                .add("identity", identity)
                 .add("starts", starts)
                 .add("ends", ends)
                 .toString();

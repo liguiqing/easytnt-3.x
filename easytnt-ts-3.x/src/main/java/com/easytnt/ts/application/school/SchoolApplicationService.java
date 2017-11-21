@@ -5,6 +5,9 @@
 package com.easytnt.ts.application.school;
 
 import com.easytnt.commons.AssertionConcerns;
+import com.easytnt.ts.application.school.command.ChangeHeaderMasterCommand;
+import com.easytnt.ts.application.school.command.NewHeaderMasterCommand;
+import com.easytnt.ts.application.school.command.NewTermCommand;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
 import com.easytnt.ts.domain.model.school.staff.*;
@@ -80,6 +83,10 @@ public class SchoolApplicationService {
         Term term = school.newTerm(termId, command.getTermName(),command.getYear(),
                 TermOrder.valueOf(command.getTermOrder()), command.getStarts(), command.getEnds());
         termRepository.save(term);
+    }
+
+    public void addTeacher(){
+
     }
 
     private School getSchool(String schoolId){
