@@ -4,12 +4,16 @@
 
 package com.easytnt.ts.application.school;
 
+import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.application.school.data.GradeData;
-import com.easytnt.ts.domain.model.school.School;
-import com.easytnt.ts.domain.model.school.SchoolId;
-import com.easytnt.ts.domain.model.school.SchoolRepository;
-import com.easytnt.ts.domain.model.school.SchoolType;
+import com.easytnt.ts.domain.model.school.*;
+import com.google.common.collect.Lists;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +27,24 @@ public class SchoolQueryService {
 
     private SchoolRepository schoolRepository;
 
+    private JdbcTemplate query;
+
+    /**
+     * 查询学校年级
+     * @param schoolId
+     * @return
+     */
     public List<GradeData> schoolGrade(String schoolId){
-        School school = schoolRepository.loadOfId(new SchoolId(schoolId));
-        SchoolType type = school.type();
-        //TODO
-        return null;
+        SchoolId schoolId1 = new SchoolId(schoolId);
+        GradeNameGenerateStrategy nameGenerateStrategy =
+                GradeNameGenerateStrategyFactory.lookup(schoolId1);
+        School school = schoolRepository.loadOfId(schoolId1);
+        List<Grade> grades = school.grades();
+        ArrayList<GradeData> gs = Lists.newArrayList();
+        for(Grade g:grades){
+            gs.add(new GradeData(g.name(), g.seq().getSeq()));
+        }
+        return gs;
     }
 
 }

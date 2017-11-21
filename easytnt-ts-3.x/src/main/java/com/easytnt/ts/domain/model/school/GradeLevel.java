@@ -82,4 +82,13 @@ public enum GradeLevel {
         return null;
     }
 
+    public static GradeLevel fromLeve(int level){
+        for(GradeLevel aLevel:GradeLevel.values()){
+            if(aLevel.getSeq() == level)
+                return aLevel;
+        }
+
+        return null;
+    }
+
 }

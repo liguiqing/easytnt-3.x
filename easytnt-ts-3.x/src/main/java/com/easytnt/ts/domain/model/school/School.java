@@ -11,8 +11,11 @@ import com.easytnt.ts.domain.model.school.staff.Period;
 import com.easytnt.ts.domain.model.school.term.*;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 学校
@@ -48,6 +51,20 @@ public class School extends Entity {
     public Term newTerm(TermId termId, String termName,String year, TermOrder order, Date starts, Date ends){
         Term term = new Term(termId,termName,new StudyYear(year),order,new TimeSpan(starts,ends),this.schoolId());
         return term;
+    }
+
+    public List<Grade> grades (){
+        GradeNameGenerateStrategy nameGenerateStrategy =
+                GradeNameGenerateStrategyFactory.lookup(this.schoolId());
+        SchoolType type = this.type();
+        StudyYear year = StudyYear.yearOfNow();
+        ArrayList<Grade> grads = Lists.newArrayList();
+        for(int i=type.gradeFrom();i<type.gradeTo();i++){
+            GradeLevel level = GradeLevel.fromLeve(i);
+            Grade grade = new Grade(nameGenerateStrategy.genGradeName(level),level,year);
+            grads.add(grade);
+        }
+        return grads;
     }
 
     @Override

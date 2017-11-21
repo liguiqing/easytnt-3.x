@@ -6,8 +6,11 @@ package com.easytnt.ts.domain.model.school;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.ValueObject;
+import com.easytnt.commons.util.DateUtilWrapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+
+import java.util.Date;
 
 /**
  * 学年
@@ -47,6 +50,15 @@ public class StudyYear extends ValueObject {
 
     public String year(){
         return this.startsYear + "-" + this.endsYear;
+    }
+
+    public static StudyYear yearOfNow(){
+        Date now = new Date();
+        int month = DateUtilWrapper.month(now);
+        if(month>=2 && month <=8){
+            return  new StudyYear(DateUtilWrapper.prevYear(now),DateUtilWrapper.year(now));
+        }
+        return new StudyYear(DateUtilWrapper.year(now) ,DateUtilWrapper.nextYear(now));
     }
 
     public StudyYear nextYear(){

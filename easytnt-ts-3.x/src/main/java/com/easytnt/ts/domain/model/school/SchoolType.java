@@ -106,4 +106,5 @@ public enum SchoolType {
     public boolean isIn(int gradeSeq){
         return this.gradeFrom() <= gradeSeq && gradeSeq <= this.gradeTo();
     }
+
 }
