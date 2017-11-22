@@ -63,7 +63,7 @@ public enum GradeLevel {
             return 11;
         }
     },
-    Twevel{
+    Twelve{
         public int getSeq(){
             return 12;
         }

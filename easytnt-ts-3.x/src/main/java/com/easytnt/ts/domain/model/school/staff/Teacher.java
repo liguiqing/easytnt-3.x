@@ -15,7 +15,7 @@ import com.easytnt.ts.domain.model.school.common.Person;
 import java.util.Date;
 
 /**
- * 教师，负责某班级课程教学
+ * 教师，负责某课程教学
  *
  * @author Liguiqing
  * @since V3.0
