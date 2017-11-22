@@ -40,7 +40,7 @@ public class Teacher extends Staff {
     }
 
     @Override
-    protected Staff renew(Period newPeroid) {
+    protected Teacher renew(Period newPeroid) {
         this.changePeriod(newPeroid);
         return this;
     }
@@ -54,4 +54,15 @@ public class Teacher extends Staff {
         return this.period().isBetween(today);
     }
 
+    /**
+     * 教其他课程
+     *
+     * @param course
+     * @param period
+     * @return
+     */
+    public Teacher teachingMore(Course course,Period period){
+        Teacher newTeacher = new Teacher(this.schoolId(),this.person().name(),this.person().identity(),period,course);
+        return newTeacher;
+    }
 }
