@@ -21,14 +21,22 @@ import com.easytnt.ts.domain.model.school.common.Person;
 public class SubjectMaster extends Staff{
     private String subjectId;
 
-    public SubjectMaster(SchoolId schoolId,String name,  String identity, Period period) {
+    private String subjectName;
+
+    public SubjectMaster(SchoolId schoolId,String name,  String identity, Period period,
+                         String subjectName,String subjectId) {
         super(schoolId,new Person(identity,name), Gender.Unknow,
                 new Identity(IdentityType.JobNo,identity), period,StaffPost.Subject);
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
     }
 
-    public SubjectMaster(SchoolId schoolId,String name, Gender gender, String identity, Period period) {
+    public SubjectMaster(SchoolId schoolId,String name, Gender gender, String identity, Period period,
+                         String subjectName,String subjectId) {
         super(schoolId,new Person(identity,name,gender), Gender.Unknow,
                 new Identity(IdentityType.JobNo,identity), period,StaffPost.Subject);
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
     }
 
     @Override
