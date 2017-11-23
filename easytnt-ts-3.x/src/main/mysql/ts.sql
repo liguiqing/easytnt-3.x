@@ -99,7 +99,7 @@ CREATE TABLE `ts_subject_master` (
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `subjectId` varchar(36) NOT NULL COMMENT '负责学科唯一标识',
-  `subjectName` varchar(16) NOT NULL COMMENT '负责学科唯一标识',
+  `subjectName` varchar(16) NOT NULL COMMENT '负责学科名称',
   PRIMARY KEY (`id`),
   KEY `x_ts_subject_master_schoolId` (`schoolId`),
   KEY `x_ts_subject_master_personId` (`personId`),
@@ -123,3 +123,16 @@ CREATE TABLE `ts_clazz_master` (
   KEY `x_ts_clazz_master_personId` (`personId`),
   KEY `x_ts_clazz_master_clazzId` (`clazzId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班主任信息表';
+
+DROP TABLE IF EXISTS `ts_course`;
+CREATE TABLE `ts_course` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `gradeName` varchar (8) NOT NULL  COMMENT '年级名称',
+  `gradeLevel` varchar (8) NOT NULL   COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
+  `name` varchar (8) NOT NULL  COMMENT '课程名称',
+  `subjectId` varchar (8) NOT NULL  COMMENT '课程名称',
+  `schoolId` varchar(36)  COMMENT '开设学校，如果为空，表示通用',
+  PRIMARY KEY (`id`),
+  KEY `x_ts_course_subjectId` (`subjectId`),
+  KEY `x_ts_course_schoolId` (`schoolId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='课程信息表';
