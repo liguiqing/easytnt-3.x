@@ -6,6 +6,8 @@ package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.Course;
+import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Identity;
@@ -64,5 +66,40 @@ public class Teacher extends Staff {
     public Teacher teachingMore(Course course,Period period){
         Teacher newTeacher = new Teacher(this.schoolId(),this.person().name(),this.person().identity(),period,course);
         return newTeacher;
+    }
+
+    /**
+     * 作为班主任
+     *
+     * @param clazzId
+     * @param period
+     * @return
+     */
+    public ClazzMaster asClazzMaster(ClazzId clazzId,Period period){
+        return new ClazzMaster(clazzId,this.schoolId(),this.person().name(),this.person().identity(),period);
+    }
+
+    /**
+     * 作为年级主任
+     *
+     * @param grade
+     * @param period
+     * @return
+     */
+    public GradeMaster asGradeMaster(Grade grade,Period period){
+        return new GradeMaster(this.schoolId(),grade,this.person().name(),this.person().identity(),period);
+    }
+
+    /**
+     * 作为学科负责人
+     *
+     * @param period
+     * @param subjectName
+     * @param subjectId
+     * @return
+     */
+    public SubjectMaster asSubjectMaster(Period period,String subjectName,String subjectId){
+        return new SubjectMaster(this.schoolId(), this.person().name(), this.person().identity(),
+                period, subjectName, subjectId);
     }
 }
