@@ -21,11 +21,7 @@ public enum WLType {
         public int getValue(){
             return 2;
         }
-    },None{//不分
-        public int getValue(){
-            return 0;
-        }
-    };
+    },None;
 
     public int getValue(){
         return 0;
