@@ -127,9 +127,9 @@ CREATE TABLE `ts_clazz_master` (
 DROP TABLE IF EXISTS `ts_course`;
 CREATE TABLE `ts_course` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `gradeName` varchar (8) NOT NULL  COMMENT '年级名称',
-  `gradeLevel` varchar (8) NOT NULL   COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
-  `name` varchar (8) NOT NULL  COMMENT '课程名称',
+  `gradeName` varchar (8)   COMMENT '年级名称,为空表示全年级通过，如语文，英语，数学',
+  `gradeLevel` varchar (8)  COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
+  `name` varchar (8) NOT NULL  COMMENT '课程名称，如语文，英语，数学',
   `subjectId` varchar (8) NOT NULL  COMMENT '课程名称',
   `schoolId` varchar(36)  COMMENT '开设学校，如果为空，表示通用',
   PRIMARY KEY (`id`),
