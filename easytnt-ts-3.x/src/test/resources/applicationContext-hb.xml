@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
+  -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans         
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd       
+		 http://www.springframework.org/schema/aop        
+		  http://www.springframework.org/schema/aop/spring-aop-4.0.xsd        
+		 http://www.springframework.org/schema/context        
+		  http://www.springframework.org/schema/context/spring-context-4.0.xsd       
+		  http://www.springframework.org/schema/tx         
+		  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+       	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd  ">
+	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="ds" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.use_sql_comments">false</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.jdbc.use_streams_for_binary">true</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.autoReconnect">true</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+				</prop>
+				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext
+				</prop>
+				<!--  <prop key="hibernate.hql.bulk_id_strategy">org.hibernate.hql.spi.id.inline.InlineIdsOrClauseBulkIdStrategy</prop>-->
+			</props>
+		</property>
+
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:hibernate/mapping/ts</value>
+			</list>
+		</property>
+		<!-- <property name="mappingResources"> <list> <value>hibernate/mapping/AnswerSheetBag.hbm.xml</value> 
+			<value>hibernate/mapping/StudentAnswerSheetImage.hbm.xml</value> <value>hibernate/mapping/TableField.hbm.xml</value> 
+			<value>hibernate/mapping/OfficeOfEducation.hbm.xml</value> <value>hibernate/mapping/School.hbm.xml</value> 
+			<value>hibernate/mapping/Grade.hbm.xml</value> <value>hibernate/mapping/Teacher.hbm.xml</value> 
+			<value>hibernate/mapping/Subject.hbm.xml</value> <value>hibernate/mapping/ExamType.hbm.xml</value> 
+			<value>hibernate/mapping/Exam.hbm.xml</value> <value>hibernate/mapping/Examinee.hbm.xml</value> 
+			<value>hibernate/mapping/ExamSubject.hbm.xml</value> <value>hibernate/mapping/ExamSchool.hbm.xml</value> 
+			<value>hibernate/mapping/AnswerSheet.hbm.xml</value> <value>hibernate/mapping/GiveScoreItem.hbm.xml</value> 
+			<value>hibernate/mapping/ItemBlock.hbm.xml</value> <value>hibernate/mapping/ImageServer.hbm.xml</value> 
+			<value>hibernate/mapping/ZgItem.hbm.xml</value> <value>hibernate/mapping/ZgItemBlock.hbm.xml</value> 
+			<value>hibernate/mapping/ExamKgAnswer.hbm.xml</value> <value>hibernate/mapping/ExamTeacherRole.hbm.xml</value> 
+			<value>hibernate/mapping/ZgItemSamllGroup.hbm.xml</value> <value>hibernate/mapping/ExamineeZkzh.hbm.xml</value> 
+			<value>hibernate/mapping/ExamineeKgScore.hbm.xml</value> <value>hibernate/mapping/ExamineeKgItemScore.hbm.xml</value> 
+			</list> </property> -->
+	</bean>
+
+</beans>
