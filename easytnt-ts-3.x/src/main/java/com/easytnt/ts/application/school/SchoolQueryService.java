@@ -9,6 +9,8 @@ import com.easytnt.ts.application.school.data.CourseData;
 import com.easytnt.ts.application.school.data.GradeData;
 import com.easytnt.ts.domain.model.school.*;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,6 +30,7 @@ import java.util.List;
  */
 
 public class SchoolQueryService {
+    private static Logger logger = LoggerFactory.getLogger(SchoolQueryService.class);
 
     @Autowired
     private SchoolRepository schoolRepository;
@@ -43,6 +46,7 @@ public class SchoolQueryService {
     @Transactional(readOnly = true)
     @Cacheable(value = "SchoolGradeCache", key = "#schoolId")
     public List<GradeData> schoolGrade(String schoolId){
+        logger.debug("Query school Grades for {}",schoolId);
         SchoolId schoolId1 = new SchoolId(schoolId);
         GradeNameGenerateStrategy nameGenerateStrategy =
                 GradeNameGenerateStrategyFactory.lookup(schoolId1);
@@ -64,6 +68,7 @@ public class SchoolQueryService {
     @Transactional(readOnly = true)
     @Cacheable(value = "SchoolCourseCache", key = "#schoolId")
     public List<CourseData> schoolCourses(String schoolId){
+        logger.debug("Query school Courses for {}",schoolId);
         String sql = " select name,subjectId,gradeName from (select name,subjectId,gradeName,gradeLevel from ts_course where schoolId is null union select name,subjectId,gradeName,gradeLevel from ts_course where schoolId=?) a order by gradeLevel";
         return query.query(sql, new RowMapper<CourseData>() {
             @Override
