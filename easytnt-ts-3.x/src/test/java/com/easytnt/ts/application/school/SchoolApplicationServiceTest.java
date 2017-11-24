@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.application.school;
 
+import com.easytnt.ts.application.school.command.NewTermCommand;
 import com.easytnt.ts.domain.model.school.School;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.SchoolRepository;
