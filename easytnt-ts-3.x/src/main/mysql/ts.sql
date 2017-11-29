@@ -28,17 +28,31 @@ CREATE TABLE `ts_term` (
   KEY `x_ts_term_termId` (`termId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学期信息表';
 
+DROP TABLE IF EXISTS `ts_staff`;
+CREATE TABLE `ts_staff` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `personId` varchar(36) NOT NULL COMMENT '教职工唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
+  `name` varchar(36) NOT NULL COMMENT '姓名',
+  `identity` varchar(32) NOT NULL COMMENT '教职工身份证件号',
+  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '教职工身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
+  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教职工身份证件名，与identityType保持一致',
+  `gender` varchar(4) DEFAULT '无' COMMENT '教职工性别',
+  `periodStarts` DATE  COMMENT '教职工入职时间，为空时表示一直在职',
+  `periodEnds` DATE  COMMENT '教职工离职时间,为空时表示一直在职',
+  PRIMARY KEY (`id`),
+  KEY `x_ts_staff_schoolId` (`schoolId`),
+  KEY `x_ts_staff_personId` (`personId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='教职工信息表';
+
 DROP TABLE IF EXISTS `ts_teacher`;
 CREATE TABLE `ts_teacher` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
-  `identity` varchar(32) NOT NULL COMMENT '教师身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '教师身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教师身份证件名，与identityType保持一致',
-  `gender` varchar(4) DEFAULT '无' COMMENT '教师性别',
-  `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
-  `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
+  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `name` varchar(36) NOT NULL COMMENT '姓名',
+  `periodStarts` DATE  COMMENT '任教时间，为空时表示一直在职',
+  `periodEnds` DATE  COMMENT '离任时间,为空时表示一直在职',
   `courseName` varchar(8) NOT NULL COMMENT '教学课程名称',
   `subjectId` varchar(36) NOT NULL COMMENT '教学课科目唯一标识',
   PRIMARY KEY (`id`),
@@ -52,11 +66,8 @@ DROP TABLE IF EXISTS `ts_master`;
 CREATE TABLE `ts_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
-  `identity` varchar(32) NOT NULL COMMENT '校领导身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '校领导身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '校领导身份证件名，与identityType保持一致',
-  `gender` varchar(4) DEFAULT '无' COMMENT '校领导性别',
+  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `post` varchar (8)   COMMENT '职位，如校长，教务主任等',
@@ -70,11 +81,8 @@ DROP TABLE IF EXISTS `ts_grade_master`;
 CREATE TABLE `ts_grade_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
-  `identity` varchar(32) NOT NULL COMMENT '校领导身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '校领导身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '校领导身份证件名，与identityType保持一致',
-  `gender` varchar(4) DEFAULT '无' COMMENT '校领导性别',
+  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `gradeName` varchar (8)   COMMENT '年级名称',
@@ -91,11 +99,8 @@ DROP TABLE IF EXISTS `ts_subject_master`;
 CREATE TABLE `ts_subject_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
-  `identity` varchar(32) NOT NULL COMMENT '学科负责人身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '学科负责人身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教师身份证件名，与identityType保持一致',
-  `gender` varchar(4) DEFAULT '无' COMMENT '学科负责人性别',
+  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `subjectId` varchar(36) NOT NULL COMMENT '负责学科唯一标识',
@@ -110,14 +115,11 @@ DROP TABLE IF EXISTS `ts_clazz_master`;
 CREATE TABLE `ts_clazz_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
-  `identity` varchar(32) NOT NULL COMMENT '班主任身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '班主任身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教师身份证件名，与identityType保持一致',
-  `gender` varchar(4) DEFAULT '无' COMMENT '学科负责人性别',
+  `clazzId` varchar(36) NOT NULL COMMENT '负责班级唯一标识',
+  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
-  `clazzId` varchar(36) NOT NULL COMMENT '负责班级唯一标识',
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_master_schoolId` (`schoolId`),
   KEY `x_ts_clazz_master_personId` (`personId`),
@@ -128,7 +130,7 @@ DROP TABLE IF EXISTS `ts_course`;
 CREATE TABLE `ts_course` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `gradeName` varchar (8)   COMMENT '年级名称,为空表示全年级通过，如语文，英语，数学',
-  `gradeLevel` varchar (8)  COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
+  `gradeLevel` SMALLINT (2)  COMMENT '年级序列，数字1到12',
   `name` varchar (8) NOT NULL  COMMENT '课程名称，如语文，英语，数学',
   `subjectId` varchar (8) NOT NULL  COMMENT '课程名称',
   `schoolId` varchar(36)  COMMENT '开设学校，如果为空，表示通用',
