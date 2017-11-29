@@ -33,6 +33,8 @@ public class Grade extends ValueObject {
         StudyYear year = this.year.nextYear();
         GradeLevel level = this.seq.next();
         String name = nameGenerateStrategy.genGradeName(level);
+        if(level == null)
+            return this;
         return new Grade(name, level, year);
     }
 
