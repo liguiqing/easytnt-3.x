@@ -5,12 +5,11 @@
 package com.easytnt.ts.application.school;
 
 import com.easytnt.commons.AssertionConcerns;
-import com.easytnt.ts.application.school.command.ChangeHeaderMasterCommand;
-import com.easytnt.ts.application.school.command.NewHeaderMasterCommand;
-import com.easytnt.ts.application.school.command.NewTeacherCommand;
-import com.easytnt.ts.application.school.command.NewTermCommand;
+import com.easytnt.ts.application.school.command.*;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
+import com.easytnt.ts.domain.model.school.position.HeadMaster;
+import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.staff.*;
 import com.easytnt.ts.domain.model.school.term.*;
 import org.slf4j.Logger;
@@ -53,6 +52,10 @@ public class SchoolApplicationService {
         schoolRepository.save(school);
     }
 
+    public void addStaff(String schoolId,NewStaffCommand command){
+
+    }
+
     /**
      * 增加学校校长
      *
@@ -64,7 +67,7 @@ public class SchoolApplicationService {
 
         School school = getSchool(schoolId);
         HeadMaster master = school.newHeaderMaster(command.getName(),command.getIdentity(),command.getStarts(),command.getEnds());
-        staffRepository.save(master);
+        //staffRepository.save(master);
     }
 
 
@@ -72,8 +75,8 @@ public class SchoolApplicationService {
         logger.debug("Chagen headerMaster Period of school {} {} ",schoolId,command);
 
         HeadMaster master = postService.headMasterFrom(new SchoolId(schoolId),command.getIdentity(), new Period(command.getOldStarts(), command.getOldEnds()));
-        master.changePeriod(new Period(command.getNewStarts(), command.getNewEnds()));
-        staffRepository.save(master);
+        //master.changePeriod(new Period(command.getNewStarts(), command.getNewEnds()));
+        //staffRepository.save(master);
     }
 
 
@@ -92,7 +95,7 @@ public class SchoolApplicationService {
         School school = getSchool(schoolId);
         Teacher teacher = school.join(command.getName(), command.getIdentity(), command.getStarts(), command.getEnds(),
                 new Course(command.getCourseName(), command.getSubjectId()));
-        staffRepository.save(teacher);
+        //staffRepository.save(teacher);
     }
 
 
