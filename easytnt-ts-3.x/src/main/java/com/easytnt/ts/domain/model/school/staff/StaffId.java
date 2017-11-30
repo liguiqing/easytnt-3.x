@@ -4,13 +4,19 @@
 
 package com.easytnt.ts.domain.model.school.staff;
 
-import com.easytnt.commons.domain.EntityRepository;
+import com.easytnt.commons.domain.AbstractId;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
 
-public interface StaffRepository  extends EntityRepository<Staff,StaffId>{
+public class StaffId extends AbstractId {
 
+    public StaffId(String anId) {
+        super(anId);
+    }
+
+    public StaffId() {
+    }
 }

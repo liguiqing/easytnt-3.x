@@ -5,8 +5,8 @@
 package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.ts.domain.model.school.SchoolId;
-
-import java.util.Date;
+import com.easytnt.ts.domain.model.school.position.GradeMaster;
+import com.easytnt.ts.domain.model.school.position.HeadMaster;
 
 /**
  * 职务创建接口
@@ -17,9 +17,9 @@ import java.util.Date;
 
 public interface PostService {
 
-    HeadMaster headMasterFrom(SchoolId schoolId,String identity,Period period);
+    HeadMaster headMasterFrom(SchoolId schoolId, String identity, Period period);
 
-    GradeMaster gradeMasterFrom(SchoolId schoolId,String identity,Period period);
+    GradeMaster gradeMasterFrom(SchoolId schoolId, String identity, Period period);
 
     GradeMaster clazzMasterFrom(SchoolId schoolId,String identity,Period period);
 }

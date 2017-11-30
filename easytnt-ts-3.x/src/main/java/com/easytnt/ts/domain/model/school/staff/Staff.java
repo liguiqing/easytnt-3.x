@@ -12,8 +12,11 @@ import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Person;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
+import javax.persistence.Id;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 教职工
@@ -22,27 +25,35 @@ import java.util.Date;
  * @since V3.0
  */
 
-public abstract class Staff extends Entity {
+public  class Staff extends Entity {
     private SchoolId schoolId;
 
-    private Person person;
+    private StaffId staffId;
+
+    private String name;
 
     private Gender gender;
 
-    private Identity identity; //唯一标识,可以是学校的工号，也可以由系统自动生成
+    private Set<Identity> identity; //唯一标识,可以是学校的工号，也可以由系统自动生成
 
     private Period period;
 
-    private StaffPost post;
+    public Staff(SchoolId schoolId,StaffId staffId,String name,Identity identity, Period period) {
+        this(schoolId,staffId,name, Gender.Unknow, identity, period);
+    }
 
-    public Staff(SchoolId schoolId, Person person,  Gender gender,
-                 Identity identity, Period period, StaffPost post) {
+    public Staff(SchoolId schoolId,StaffId staffId,String name,Gender gender,Identity identity, Period period) {
         this.schoolId = schoolId;
-        this.person = person;
+        this.staffId = staffId;
+        this.name = name;
         this.gender = gender;
-        this.identity = identity;
+        this.identity = Sets.newHashSet();
+        this.addIdentity(identity);
         this.period = period;
-        this.post = post;
+    }
+
+    public void addIdentity(Identity identity){
+        this.identity.add(identity);
     }
 
     /**
@@ -50,26 +61,14 @@ public abstract class Staff extends Entity {
      * @param ends
      * @return
      */
-    public Staff renew(Date ends){
+    public void renew(Date ends){
         boolean b = this.period.gratherThan(ends);
         AssertionConcerns.assertArgumentTrue(b,"续签日期应该大于当前任职的结束日期");
-        Period newPeriod = new Period(this.period.starts(),ends);
-        return renew(newPeriod);
+        this.period = new Period(this.period.starts(),ends);
     }
-
 
     public void changePeriod(Period period) {
         this.period = period;
-    }
-
-    protected abstract Staff renew(Period newPeroid);
-
-    public boolean isPostOf(StaffPost post){
-        return this.post.equals(post);
-    }
-
-    public boolean isTeaching(){
-        return false;
     }
 
     @Override
@@ -77,35 +76,32 @@ public abstract class Staff extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Staff staff = (Staff) o;
-        return Objects.equal(identity, staff.identity);
+        return Objects.equal(schoolId, staff.schoolId) &&
+                Objects.equal(staffId, staff.staffId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(identity);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("identity", identity)
-                .add("period", period)
-                .toString();
+        return Objects.hashCode(schoolId, staffId);
     }
 
     public SchoolId schoolId() {
         return schoolId;
     }
 
-    public Person person() {
-        return person;
+    public StaffId staffId() {
+        return staffId;
+    }
+
+    public String name() {
+        return name;
     }
 
     public Gender gender() {
         return gender;
     }
 
-    public Identity identity() {
+    public Set<Identity> identity() {
         return identity;
     }
 
@@ -113,7 +109,4 @@ public abstract class Staff extends Entity {
         return period;
     }
 
-    public StaffPost post() {
-        return post;
-    }
 }
