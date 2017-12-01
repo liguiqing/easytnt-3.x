@@ -21,6 +21,7 @@ import com.easytnt.ts.domain.model.school.term.TermOrder;
 import com.google.common.collect.Sets;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -73,6 +74,15 @@ public class Clazz extends Entity {
 
     public boolean canStudyAndTeachIn(){
         return this.adminType == ClazzAdiminType.Study || this.adminType == ClazzAdiminType.Union;
+    }
+
+    public Grade termGrade(Term term){
+        for(ClazzHistory history:this.histories){
+            if(history.termId().equals(term.termId())){
+                return history.grade();
+            }
+        }
+        throw new ClazzNotInTermException(term.toString());
     }
 
     public ClazzMaster changeClazzMaster(Teacher teacher,Period period){
