@@ -10,6 +10,7 @@ import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Person;
+import com.easytnt.ts.domain.model.school.position.Position;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
@@ -37,6 +38,8 @@ public  class Staff extends Entity {
     private Set<Identity> identity; //唯一标识,可以是学校的工号，也可以由系统自动生成
 
     private Period period;
+
+    private Set<Position> positions;
 
     public Staff(SchoolId schoolId,StaffId staffId,String name,Identity identity, Period period) {
         this(schoolId,staffId,name, Gender.Unknow, identity, period);
