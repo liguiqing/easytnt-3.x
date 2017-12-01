@@ -25,11 +25,11 @@ public abstract class IdentifiedDomainObject implements Serializable {
         this.setId(-1);
     }
 
-    protected long id() {
+    protected long getId() {
         return this.id;
     }
 
-    private void setId(long anId) {
+    protected void setId(long anId) {
         this.id = anId;
     }
 }
