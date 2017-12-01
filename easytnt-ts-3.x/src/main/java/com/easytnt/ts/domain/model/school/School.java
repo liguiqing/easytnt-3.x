@@ -5,9 +5,9 @@
 package com.easytnt.ts.domain.model.school;
 
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.staff.HeadMaster;
+import com.easytnt.ts.domain.model.school.position.HeadMaster;
 import com.easytnt.ts.domain.model.school.staff.Period;
-import com.easytnt.ts.domain.model.school.staff.Teacher;
+import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.*;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;

@@ -9,7 +9,11 @@ import com.easytnt.commons.domain.DomainEventPublisher;
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.*;
-import com.easytnt.ts.domain.model.school.staff.Teacher;
+import com.easytnt.ts.domain.model.school.common.WLType;
+import com.easytnt.ts.domain.model.school.position.ClazzMaster;
+import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.easytnt.ts.domain.model.school.position.TeacherToClazzMasterTranslater;
+import com.easytnt.ts.domain.model.school.staff.Period;
 import com.easytnt.ts.domain.model.school.teach.Teach;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
@@ -18,7 +22,6 @@ import com.google.common.collect.Sets;
 
 import java.util.Date;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * 班级
@@ -72,19 +75,23 @@ public class Clazz extends Entity {
         return this.adminType == ClazzAdiminType.Study || this.adminType == ClazzAdiminType.Union;
     }
 
+    public ClazzMaster changeClazzMaster(Teacher teacher,Period period){
+        return teacher.transfer(new TeacherToClazzMasterTranslater(this.clazzId(),period));
+    }
+
     public Teach addTeacher(Teacher teacher, Grade grade, Term term, Course course){
         AssertionConcerns.assertArgumentTrue(this.canStudyAndTeachIn(),"老师不能在非教学班级里教学");
 
         Teach teach =  new Teach(teacher,this.schoolId,this.clazzId,grade,term.termId(),
                 term.timeSpan().starts(),term.timeSpan().ends(),course);
-        DomainEventPublisher.instance().publish(new TeacherJoinedToClazz(this.clazzId,teacher.person().name(),
-                teacher.person().identity()));
+        DomainEventPublisher.instance().publish(new TeacherJoinedToClazz(this.clazzId,teacher.name(),
+                teacher.identity()));
         return teach;
     }
 
     /**
      * 班级升一个年级
-     * 能升班的规则是，最近的班级史必须是下学期;新学期必须学年必须是最近班级史的下一学年
+     * 能升班的规则是，最近的班级史必须是下学期;新学期学年必须是最近班级史的下一学年
      *
      * @param term
      */

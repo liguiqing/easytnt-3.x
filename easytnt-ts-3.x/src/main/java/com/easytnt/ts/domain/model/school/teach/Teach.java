@@ -9,13 +9,14 @@ import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
-import com.easytnt.ts.domain.model.school.staff.Teacher;
+import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.TermId;
 
 import java.util.Date;
 
 /**
- * 老师教学
+ * 老师班级教学情况
+ *
  *
  * @author Liguiqing
  * @since V3.0

@@ -5,7 +5,7 @@
 package com.easytnt.ts.domain.model.school.clazz;
 
 import com.easytnt.commons.domain.ValueObject;
-import com.easytnt.ts.domain.model.school.WLType;
+import com.easytnt.ts.domain.model.school.common.WLType;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;
