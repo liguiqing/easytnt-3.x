@@ -5,9 +5,11 @@
 package com.easytnt.ts.domain.model.school;
 
 import com.easytnt.commons.domain.Entity;
+import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.position.HeadMaster;
 import com.easytnt.ts.domain.model.school.staff.Period;
-import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.easytnt.ts.domain.model.school.staff.Staff;
+import com.easytnt.ts.domain.model.school.staff.StaffId;
 import com.easytnt.ts.domain.model.school.term.*;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -34,7 +36,6 @@ public class School extends Entity {
 
     private SchoolType type;
 
-
     public School(TenantId tenantId,SchoolId schoolId,String name,SchoolType type){
         this.name = name;
         this.type = type;
@@ -42,15 +43,15 @@ public class School extends Entity {
         this.tenantId = tenantId;
     }
 
-    public HeadMaster newHeaderMaster(String masterName,String masterId,Date starts,Date ends){
+    public HeadMaster changeHeadMaster(String masterName,String masterId,Date starts,Date ends){
         HeadMaster master = new HeadMaster(this.schoolId(),masterName, masterId,
                 new Period(starts, ends));
         return master;
     }
 
-    public Teacher join(String teacherName, String teacherId, Date starts, Date ends, Course course){
-        Teacher teacher = new Teacher(this.schoolId(), teacherName, teacherId, new Period(starts, ends), course);
-        return teacher;
+    public Staff join(String staffName, StaffId staffId, Date starts, Date ends, Identity identity){
+        Staff staff = new Staff(this.schoolId(), staffId, staffName, identity,new Period(starts, ends));
+        return staff;
     }
 
     public Term newTerm(TermId termId, String termName,String year, TermOrder order, Date starts, Date ends){
