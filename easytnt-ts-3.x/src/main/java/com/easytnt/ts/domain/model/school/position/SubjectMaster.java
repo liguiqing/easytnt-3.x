@@ -6,6 +6,7 @@ package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.google.common.base.Objects;
 
 
 /**
@@ -26,6 +27,31 @@ public class SubjectMaster extends Position {
         super(schoolId,name, identity, period);
         this.subjectId = subjectId;
         this.subjectName = subjectName;
+    }
+
+    @Override
+    public String positionName() {
+        return "学科组长";
+    }
+
+    @Override
+    public Position renew(Period newPerid) {
+        return new SubjectMaster(this.schoolId(),this.name(),this.identity(),newPerid,this.subjectId,this.subjectName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SubjectMaster that = (SubjectMaster) o;
+        return Objects.equal(subjectId, that.subjectId) &&
+                Objects.equal(subjectName, that.subjectName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), subjectId, subjectName);
     }
 
     public String subjectId() {

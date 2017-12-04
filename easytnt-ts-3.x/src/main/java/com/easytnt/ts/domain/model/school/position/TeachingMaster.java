@@ -6,6 +6,7 @@ package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.google.common.base.Objects;
 
 /**
  * 其他校领导，如教务主任
@@ -23,7 +24,26 @@ public class TeachingMaster extends Position {
     }
 
     @Override
+    public Position renew(Period newPerid) {
+        return new TeachingMaster(this.schoolId(),this.name(),this.identity(),newPerid,this.positionName);
+    }
+
+    @Override
     public String positionName() {
         return this.positionName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TeachingMaster that = (TeachingMaster) o;
+        return Objects.equal(positionName, that.positionName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), positionName);
     }
 }

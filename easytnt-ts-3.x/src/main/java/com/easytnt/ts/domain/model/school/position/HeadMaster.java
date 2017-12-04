@@ -20,6 +20,10 @@ public class HeadMaster extends Position {
         super(schoolId,name, identity, period);
     }
 
+    @Override
+    public Position renew(Period newPerid) {
+        return new HeadMaster(this.schoolId(),this.name(),this.identity(),newPerid);
+    }
 
     @Override
     public String positionName() {

@@ -10,6 +10,7 @@ import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.google.common.base.Objects;
 
 import java.util.Date;
 
@@ -38,6 +39,11 @@ public class Teacher extends Position {
         return this.period().isBetween(today);
     }
 
+    @Override
+    public Position renew(Period newPerid) {
+        return new Teacher(this.schoolId(),this.name(),this.identity(),newPerid,this.course);
+    }
+
     public  <T extends Position> T transfer(PositionTransfer transfer){
         return transfer.translate(this);
     }
@@ -46,5 +52,19 @@ public class Teacher extends Position {
     @Override
     public String positionName() {
         return "教师";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Teacher teacher = (Teacher) o;
+        return Objects.equal(course, teacher.course);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), course);
     }
 }

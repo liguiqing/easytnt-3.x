@@ -7,6 +7,7 @@ package com.easytnt.ts.domain.model.school.position;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.google.common.base.Objects;
 
 /**
  * 年级负责人
@@ -27,6 +28,25 @@ public class GradeMaster extends Position {
     @Override
     public String positionName() {
         return "年级主任";
+    }
+
+    @Override
+    public Position renew(Period newPerid) {
+        return new GradeMaster(this.schoolId(),this.grade,this.name(),this.identity(),newPerid);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        GradeMaster that = (GradeMaster) o;
+        return Objects.equal(grade, that.grade);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), grade);
     }
 
     public Grade grade() {

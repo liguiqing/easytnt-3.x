@@ -9,6 +9,8 @@ import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.staff.Period;
 import com.google.common.base.Objects;
 
+import java.util.Date;
+
 /**
  * 学校职务
  * 如果校长，年级主任，学科老师等
@@ -35,6 +37,12 @@ public abstract class Position extends ValueObject implements Comparable<Positio
     }
 
     public abstract String positionName();
+
+    public abstract Position renew(Period newPerid);
+
+    public boolean sameSchoolOf(SchoolId schoolId){
+        return this.schoolId.equals(schoolId);
+    }
 
     @Override
     public int compareTo(Position duty) {
@@ -73,4 +81,6 @@ public abstract class Position extends ValueObject implements Comparable<Positio
     public String identity() {
         return identity;
     }
+
+
 }

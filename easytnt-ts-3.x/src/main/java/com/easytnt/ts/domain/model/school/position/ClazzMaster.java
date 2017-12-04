@@ -7,6 +7,7 @@ package com.easytnt.ts.domain.model.school.position;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.google.common.base.Objects;
 
 /**
  * 班主任
@@ -25,11 +26,30 @@ public class ClazzMaster extends Position {
     }
 
     @Override
+    public Position renew(Period newPerid) {
+        return new ClazzMaster(this.clazzId,this.schoolId(),this.name(),this.identity(),newPerid);
+    }
+
+    @Override
     public String positionName() {
         return "班主任";
     }
 
     public ClazzId clazzId() {
         return clazzId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ClazzMaster that = (ClazzMaster) o;
+        return Objects.equal(clazzId, that.clazzId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), clazzId);
     }
 }
