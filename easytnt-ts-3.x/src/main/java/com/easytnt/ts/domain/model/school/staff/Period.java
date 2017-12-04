@@ -26,6 +26,9 @@ public class Period {
 
     public Period(Date starts, Date ends) {
         AssertionConcerns.assertArgumentNotNull(starts,"请提供任期的开始日期");
+        if(ends != null){
+            AssertionConcerns.assertArgumentTrue(DateUtilWrapper.lessThan(starts,ends),"任期开始时间不能大于结束时间");
+        }
         this.starts = starts;
         this.ends = ends;
     }
@@ -66,5 +69,9 @@ public class Period {
 
     public Date ends() {
         return ends;
+    }
+
+    public boolean hasEnds() {
+        return this.ends != null;
     }
 }

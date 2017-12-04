@@ -10,13 +10,16 @@ import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Person;
+import com.easytnt.ts.domain.model.school.position.HeadMaster;
 import com.easytnt.ts.domain.model.school.position.Position;
+import com.easytnt.ts.domain.model.school.position.PositionFilter;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
 import javax.persistence.Id;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -62,6 +65,27 @@ public  class Staff extends Entity {
     public void addPosition(Position aPosition){
         if(this.positions == null)
             this.positions = Sets.newHashSet();
+    }
+
+    /**
+     * 续签一个职位
+     *
+     * @param newPeriod
+     * @param positionFilter
+     */
+    public void renewOfPosition(Period newPeriod,PositionFilter positionFilter){
+        Iterator<Position> it = this.positions.iterator();
+        while(it.hasNext()){
+            Position position = it.next();
+            if(positionFilter.isSatisfied(position)){
+                Position oldPosition = position.renew(new Period(position.period().starts(),new Date()));
+                this.positions.remove(position);
+                this.positions.add(oldPosition);
+                Position newPosition = position.renew(newPeriod);
+                this.positions.add(newPosition);
+                break;
+            }
+        }
     }
 
     /**
