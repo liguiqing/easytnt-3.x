@@ -59,6 +59,11 @@ public  class Staff extends Entity {
         this.identity.add(identity);
     }
 
+    public void addPosition(Position aPosition){
+        if(this.positions == null)
+            this.positions = Sets.newHashSet();
+    }
+
     /**
      * 续签
      * @param ends
