@@ -15,10 +15,6 @@ public class ChangeHeaderMasterCommand {
 
     private String identity;
 
-    private Date oldStarts;
-
-    private Date oldEnds;
-
     private Date newStarts;
 
     private Date newEnds;
@@ -29,22 +25,6 @@ public class ChangeHeaderMasterCommand {
 
     public void setIdentity(String identity) {
         this.identity = identity;
-    }
-
-    public Date getOldStarts() {
-        return oldStarts;
-    }
-
-    public void setOldStarts(Date oldStarts) {
-        this.oldStarts = oldStarts;
-    }
-
-    public Date getOldEnds() {
-        return oldEnds;
-    }
-
-    public void setOldEnds(Date oldEnds) {
-        this.oldEnds = oldEnds;
     }
 
     public Date getNewStarts() {

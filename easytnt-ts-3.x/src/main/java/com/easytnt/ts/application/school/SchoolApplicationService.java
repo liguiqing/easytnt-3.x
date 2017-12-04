@@ -8,7 +8,11 @@ import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.ts.application.school.command.*;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
+import com.easytnt.ts.domain.model.school.common.Identity;
+import com.easytnt.ts.domain.model.school.common.IdentityType;
 import com.easytnt.ts.domain.model.school.position.HeadMaster;
+import com.easytnt.ts.domain.model.school.position.Position;
+import com.easytnt.ts.domain.model.school.position.PositionFilter;
 import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.staff.*;
 import com.easytnt.ts.domain.model.school.term.*;
@@ -25,14 +29,11 @@ import org.slf4j.LoggerFactory;
 public class SchoolApplicationService {
     private static Logger logger = LoggerFactory.getLogger(SchoolApplicationService.class);
 
-
     private SchoolRepository schoolRepository;
 
     private ClazzRepository clazzRepository;
 
     private StaffRepository staffRepository;
-
-    private PostService postService;
 
     private TermRepository termRepository;
 
@@ -52,8 +53,16 @@ public class SchoolApplicationService {
         schoolRepository.save(school);
     }
 
+    /**
+     * 给学校增加新的教职工
+     * @param schoolId
+     * @param command
+     */
     public void addStaff(String schoolId,NewStaffCommand command){
+        logger.debug("Add Staff {} to school {}  ",schoolId,command);
 
+        School school = getSchool(schoolId);
+        //Staff staff = new Staff(school.schoolId(),new StaffId(command.));
     }
 
     /**
@@ -66,17 +75,31 @@ public class SchoolApplicationService {
         logger.debug("New school {} master is ",schoolId,command);
 
         School school = getSchool(schoolId);
-        HeadMaster master = school.newHeaderMaster(command.getName(),command.getIdentity(),command.getStarts(),command.getEnds());
-        //staffRepository.save(master);
+        HeadMaster master = school.changeHeadMaster(command.getName(),command.getIdentity(),command.getStarts(),command.getEnds());
+        Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
+        staff.addPosition(master);
+        staffRepository.save(staff);
     }
 
 
-    public void changeHeadMasterPeriod(String schoolId,ChangeHeaderMasterCommand command){
+    public void changeHeadMasterPeriod(final String schoolId,final ChangeHeaderMasterCommand command){
         logger.debug("Chagen headerMaster Period of school {} {} ",schoolId,command);
 
-        HeadMaster master = postService.headMasterFrom(new SchoolId(schoolId),command.getIdentity(), new Period(command.getOldStarts(), command.getOldEnds()));
-        //master.changePeriod(new Period(command.getNewStarts(), command.getNewEnds()));
-        //staffRepository.save(master);
+        Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
+        staff.renewOfPosition(new Period(command.getNewStarts(),command.getNewEnds()),new PositionFilter() {
+
+            @Override
+            public boolean isSatisfied(Position position) {
+                if(position instanceof HeadMaster){
+                    HeadMaster headMaster = (HeadMaster) position;
+                    if(headMaster.sameSchoolOf(new SchoolId(schoolId))){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        staffRepository.save(staff);
     }
 
 
@@ -93,9 +116,17 @@ public class SchoolApplicationService {
         logger.debug("Teacher {} join school {} ",command,schoolId);
 
         School school = getSchool(schoolId);
-        Teacher teacher = school.join(command.getName(), command.getIdentity(), command.getStarts(), command.getEnds(),
+        Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
+        if(staff == null){
+            staff = new Staff(school.schoolId(),staffRepository.nextIdentity(),command.getName(),
+                        new Identity(IdentityType.EduID.Other,command.getIdentity()),
+                        new Period(command.getStarts(), command.getEnds()));
+        }
+
+        Teacher teacher = new Teacher(school.schoolId(),command.getName(), command.getIdentity(), new Period(command.getStarts(), command.getEnds()),
                 new Course(command.getCourseName(), command.getSubjectId()));
-        //staffRepository.save(teacher);
+        staff.addPosition(teacher);
+        staffRepository.save(staff);
     }
 
 
@@ -116,10 +147,6 @@ public class SchoolApplicationService {
 
     public void setStaffRepository(StaffRepository staffRepository) {
         this.staffRepository = staffRepository;
-    }
-
-    public void setPostService(PostService postService) {
-        this.postService = postService;
     }
 
     public void setTermRepository(TermRepository termRepository) {
