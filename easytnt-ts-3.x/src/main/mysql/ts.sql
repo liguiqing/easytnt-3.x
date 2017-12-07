@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS `ts_teacher`;
 CREATE TABLE `ts_teacher` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '任教时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离任时间,为空时表示一直在职',
@@ -57,7 +57,7 @@ CREATE TABLE `ts_teacher` (
   `subjectId` varchar(36) NOT NULL COMMENT '教学课科目唯一标识',
   PRIMARY KEY (`id`),
   KEY `x_ts_teacher_schoolId` (`schoolId`),
-  KEY `x_ts_teacher_personId` (`personId`),
+  KEY `x_ts_teacher_identity` (`identity`),
   KEY `x_ts_teacher_subjectId` (`subjectId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='教师信息表';
 
@@ -66,14 +66,14 @@ DROP TABLE IF EXISTS `ts_master`;
 CREATE TABLE `ts_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `post` varchar (8)   COMMENT '职位，如校长，教务主任等',
   PRIMARY KEY (`id`),
   KEY `x_ts_master_schoolId` (`schoolId`),
-  KEY `x_ts_master_personId` (`personId`),
+  KEY `x_ts_master_identity` (`identity`),
   KEY `x_ts_master_post` (`post`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='校领导信息表，如校长，教务主任等';
 
@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS `ts_grade_master`;
 CREATE TABLE `ts_grade_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
@@ -92,14 +92,14 @@ CREATE TABLE `ts_grade_master` (
   `yearEnds` SMALLINT(4) NOT NULL COMMENT '任职时学年结束年度',
   PRIMARY KEY (`id`),
   KEY `x_ts_grade_master_schoolId` (`schoolId`),
-  KEY `x_ts_grade_master_personId` (`personId`)
+  KEY `x_ts_grade_master_identity` (`identity`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='年级主任信息表';
 
 DROP TABLE IF EXISTS `ts_subject_master`;
 CREATE TABLE `ts_subject_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
@@ -107,7 +107,7 @@ CREATE TABLE `ts_subject_master` (
   `subjectName` varchar(16) NOT NULL COMMENT '负责学科名称',
   PRIMARY KEY (`id`),
   KEY `x_ts_subject_master_schoolId` (`schoolId`),
-  KEY `x_ts_subject_master_personId` (`personId`),
+  KEY `x_ts_subject_master_personId` (`identity`),
   KEY `x_ts_subject_master_subjectId` (`subjectId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学科负责人信息表';
 
@@ -116,13 +116,13 @@ CREATE TABLE `ts_clazz_master` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
   `clazzId` varchar(36) NOT NULL COMMENT '负责班级唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
+  `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.personId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间，为空时表示一直在职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_master_schoolId` (`schoolId`),
-  KEY `x_ts_clazz_master_personId` (`personId`),
+  KEY `x_ts_clazz_master_identity` (`identity`),
   KEY `x_ts_clazz_master_clazzId` (`clazzId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班主任信息表';
 
