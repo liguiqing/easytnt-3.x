@@ -5,6 +5,7 @@
 package com.easytnt.ts.domain.model.school.study;
 
 import com.easytnt.commons.domain.EntityRepository;
+import com.easytnt.ts.domain.model.school.student.Study;
 
 /**
  * @author Liguiqing

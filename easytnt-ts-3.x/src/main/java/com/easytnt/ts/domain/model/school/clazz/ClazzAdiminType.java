@@ -16,16 +16,33 @@ public enum ClazzAdiminType {
         public int getType(){
             return 1;
         }
+
+        public boolean canBeStudied(){
+            return  false;
+        }
     },
     Study{//教学班
         public int getType(){
             return 2;
         }
+
+        public boolean canBeManaged(){
+            return false;
+        }
+
     },
     Union;//不分类型
 
     public int getType(){
         return 9;
+    }
+
+    public boolean canBeManaged(){
+        return  true;
+    }
+
+    public boolean canBeStudied(){
+        return  true;
     }
 
     public static ClazzAdiminType fromName(String name){

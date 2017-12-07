@@ -27,7 +27,7 @@ public class StudyApplicationService {
         Student student = studentRepository.loadOfId(command.getStdudentId());
         Clazz clazz = clazzRepository.loadOfId(command.getClazzId());
 
-        if(clazz.canStudyAndTeachIn()){
+        if(clazz.canBeStudyAndTeachIn()){
             this.studyInClazz();
         }
         //ClazzCourse course = new ClazzCourse(command.getSchoolId(),command.getTermId(),command.getClazzId(),command.get);

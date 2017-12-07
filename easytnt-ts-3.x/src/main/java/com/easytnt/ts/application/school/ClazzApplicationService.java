@@ -10,6 +10,7 @@ import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzAdiminType;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
+import com.easytnt.ts.domain.model.school.common.WLType;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

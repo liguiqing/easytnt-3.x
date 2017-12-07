@@ -1,5 +1,6 @@
 package com.easytnt.ts.domain.model.school;
 
+import com.easytnt.ts.domain.model.school.common.WLType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

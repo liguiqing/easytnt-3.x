@@ -2,15 +2,15 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.study;
+package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
-import com.easytnt.ts.domain.model.school.student.StudentId;
 import com.easytnt.ts.domain.model.school.term.TermId;
+import com.google.common.base.Objects;
 
 import java.util.Date;
 
@@ -51,7 +51,25 @@ public class Study extends Entity {
         this.course = course;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Study study = (Study) o;
+        return Objects.equal(studentId, study.studentId) &&
+                Objects.equal(clazzId, study.clazzId) &&
+                Objects.equal(termId, study.termId) &&
+                Objects.equal(course, study.course);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(studentId, clazzId, termId, course);
+    }
+
     public void changeEnds(Date ends){
         this.ends = ends;
     }
+
+
 }

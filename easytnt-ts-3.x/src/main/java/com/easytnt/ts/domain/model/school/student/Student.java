@@ -7,21 +7,19 @@ package com.easytnt.ts.domain.model.school.student;
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.DomainEventPublisher;
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.School;
-import com.easytnt.ts.domain.model.school.clazz.Clazz;
-import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.clazz.Clazz;
+import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Person;
-import com.easytnt.ts.domain.model.school.study.Study;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -33,6 +31,8 @@ import java.util.Set;
 
 public class Student extends Entity {
 
+    private SchoolId schoolId;
+
     private StudentId studentId;
 
     private ClazzId clazzId;
@@ -41,8 +41,10 @@ public class Student extends Entity {
 
     private Set<Identity> ids;
 
+    private Set<Study> studies;
 
-    public Student(ClazzId clazzId,StudentId studentId, String name,String identity,Gender gender) {
+    public Student(SchoolId schoolId,ClazzId clazzId,StudentId studentId, String name,String identity,Gender gender) {
+        AssertionConcerns.assertArgumentNotNull(schoolId, "请提供学生所在学校");
         AssertionConcerns.assertArgumentNotNull(clazzId, "请提供学生所在班级");
         AssertionConcerns.assertArgumentNotNull(studentId, "请提供学生唯一标识");
         AssertionConcerns.assertArgumentNotNull(name, "请提供学生姓名");
@@ -50,28 +52,26 @@ public class Student extends Entity {
 
         this.studentId = studentId;
         this.person = new Person(name,identity,gender);
-        if (ids == null) {
-            this.ids = Sets.newHashSet();
-        } else {
-            this.ids = ids;
-        }
+        this.ids = Sets.newHashSet();
+        this.studies = Sets.newHashSet();
     }
 
-    public void changeManagedClazz(ClazzId clazzId){
-        ClazzId from  = this.clazzId;
-        this.clazzId = clazzId;
-        DomainEventPublisher.instance().publish(new StudentClazzChanged(from,clazzId,this));
+    public void changeManagedClazz(Clazz clazz){
+        AssertionConcerns.assertArgumentNotNull(clazz,"请提供学生的管理班级");
+        AssertionConcerns.assertArgumentTrue(clazz.canBeManaged(),"所提供班级不能管理学生");
+        AssertionConcerns.assertArgumentNotEquals(clazz.clazzId(),this.clazzId,"学生不能重加入同一个班级");
+        DomainEventPublisher.instance().publish(new StudentClazzChanged(this.clazzId,clazz.clazzId(),this));
+        this.clazzId = clazz.clazzId();
     }
-
 
     public void addId(Identity sid) {
         AssertionConcerns.assertArgumentNotNull(sid, "请提供学生唯一标识");
         this.ids.add(sid);
     }
 
-    public Study studyOn(School school,Grade grade, Clazz clazz,Term term, Course course){
-        AssertionConcerns.assertArgumentTrue(clazz.canStudyAndTeachIn(),"学生不能在非教学班级里学习");
-        return  new Study(this.studentId,school.schoolId(),clazz.clazzId(),grade,term.termId(),course,
+    public Study studyOn(Grade grade, Clazz clazz,Term term, Course course){
+        AssertionConcerns.assertArgumentTrue(clazz.canBeStudyAndTeachIn(),"学生不能在非教学班级里学习");
+        return  new Study(this.studentId,this.schoolId,clazz.clazzId(),grade,term.termId(),course,
                 term.timeSpan().starts(),term.timeSpan().ends());
     }
 

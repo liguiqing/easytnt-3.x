@@ -14,6 +14,7 @@ import com.easytnt.ts.domain.model.school.position.ClazzMaster;
 import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.position.TeacherToClazzMasterTranslater;
 import com.easytnt.ts.domain.model.school.staff.Period;
+import com.easytnt.ts.domain.model.school.student.Student;
 import com.easytnt.ts.domain.model.school.teach.Teach;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
@@ -21,7 +22,6 @@ import com.easytnt.ts.domain.model.school.term.TermOrder;
 import com.google.common.collect.Sets;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -72,8 +72,8 @@ public class Clazz extends Entity {
         this.histories.add(aHistory);
     }
 
-    public boolean canStudyAndTeachIn(){
-        return this.adminType == ClazzAdiminType.Study || this.adminType == ClazzAdiminType.Union;
+    public boolean canBeStudyAndTeachIn(){
+        return this.canBeManaged() && this.canBeStudied();
     }
 
     public Grade termGrade(Term term){
@@ -90,7 +90,7 @@ public class Clazz extends Entity {
     }
 
     public Teach addTeacher(Teacher teacher, Grade grade, Term term, Course course){
-        AssertionConcerns.assertArgumentTrue(this.canStudyAndTeachIn(),"老师不能在非教学班级里教学");
+        AssertionConcerns.assertArgumentTrue(this.canBeStudyAndTeachIn(),"老师不能在非教学班级里教学");
 
         Teach teach =  new Teach(teacher,this.schoolId,this.clazzId,grade,term.termId(),
                 term.timeSpan().starts(),term.timeSpan().ends(),course);
@@ -126,6 +126,14 @@ public class Clazz extends Entity {
         if(this.catagories == null)
             this.catagories = Sets.newHashSet();
         this.catagories.add(aCatagory);
+    }
+
+    public boolean canBeManaged(){
+        return this.adminType.canBeManaged();
+    }
+
+    public boolean canBeStudied(){
+        return this.adminType.canBeStudied();
     }
 
     public SchoolId schoolId() {
