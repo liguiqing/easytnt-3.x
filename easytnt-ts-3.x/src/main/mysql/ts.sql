@@ -138,3 +138,42 @@ CREATE TABLE `ts_course` (
   KEY `x_ts_course_subjectId` (`subjectId`),
   KEY `x_ts_course_schoolId` (`schoolId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='课程信息表';
+
+DROP TABLE IF EXISTS `ts_clazz`;
+CREATE TABLE `ts_clazz` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `clazzId` varchar(36) NOT NULL COMMENT '班级唯一标识',
+  `clazzNo` varchar(16) NOT NULL COMMENT '班级编号',
+  `name` varchar (8)  NOT NULL COMMENT '班级名称',
+  `adminType` varchar (8) NOT NULL  COMMENT '班级管理类型：Manage-行政班,Study-教学班,Union-不分',
+  PRIMARY KEY (`id`),
+  KEY `x_ts_clazz_schoolId` (`schoolId`),
+  KEY `x_ts_clazz_clazzId` (`clazzId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班级信息表';
+
+DROP TABLE IF EXISTS `ts_clazz_catagory`;
+CREATE TABLE `ts_clazz_catagory` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `clazzId` varchar(36) NOT NULL COMMENT '班级唯一标识,与表ts_clazz.classId关联',
+  `code` varchar (8)  NOT NULL COMMENT '班级分类代码',
+  `name` varchar (8) NOT NULL  COMMENT '班级分类名称，如理科，文科，重点，普通，实验等',
+  PRIMARY KEY (`id`),
+  KEY `x_ts_clazz_clazzId_catagory` (`clazzId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班级分类信息表，如理科班，文科班，重点班，普通班，实验班等';
+
+DROP TABLE IF EXISTS `ts_clazz_term_history`;
+CREATE TABLE `ts_clazz_term_history` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `clazzId` varchar(36) NOT NULL COMMENT '班级唯一标识,与表ts_clazz.classId关联',
+  `termId` varchar(36) NOT NULL COMMENT '学期唯一标识,与表ts_term.termId关联',
+  `termName` varchar(8) NOT NULL COMMENT '学期名称：First-上学期，Second-下学期',
+  `gradeName` varchar (8)   COMMENT '年级名称',
+  `gradeLevel` varchar (8)   COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
+  `yearName` varchar(32) NOT NULL COMMENT '学年',
+  `yearStarts` SMALLINT (4) NOT NULL COMMENT '学年起始年度',
+  `yearEnds` SMALLINT(4) NOT NULL COMMENT '学年结束年度',
+  PRIMARY KEY (`id`),
+  KEY `x_ts_clazz_history_clazzId` (`clazzId`),
+  KEY `x_ts_clazz_history_termId` (`termId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班级学期记录表';
