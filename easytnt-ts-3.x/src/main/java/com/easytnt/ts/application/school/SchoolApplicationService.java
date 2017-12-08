@@ -10,6 +10,7 @@ import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.IdentityType;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.position.HeadMaster;
 import com.easytnt.ts.domain.model.school.position.Position;
 import com.easytnt.ts.domain.model.school.position.PositionFilter;

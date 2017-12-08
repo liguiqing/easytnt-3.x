@@ -15,6 +15,7 @@ import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Person;
+import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -54,6 +55,7 @@ public class Student extends Entity {
         AssertionConcerns.assertArgumentNotNull(name, "请提供学生姓名");
         AssertionConcerns.assertArgumentLength(name, 1, 32, "学生姓名为1到32个字符");
 
+        this.schoolId = schoolId;
         this.studentId = studentId;
         this.person = new Person(name,identity,gender);
         this.ids = Sets.newHashSet();
@@ -61,8 +63,19 @@ public class Student extends Entity {
         this.belongTos = Sets.newHashSet();
     }
 
+    public void addStudy(Clazz clazz, Grade grade,Teacher teacher, Date starts, Date ends){
+        Study study = new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends);
+        if(this.studies.contains(study)){
+            studies.remove(study);
+        }
+        this.studies.add(study);
+    }
+
     public void changeManagedClazz(Clazz clazz, Date starts, Date ends){
-        BelongToClazz belongTo = new BelongToClazz(clazz, this.studentId, starts, ends);
+        BelongToClazz belongTo = new BelongToClazz(this.schoolId,clazz, this.studentId, starts, ends);
+        if(this.belongTos.contains(belongTo)){
+            this.belongTos.remove(belongTo);
+        }
         this.belongTos.add(belongTo);
     }
 
@@ -90,4 +103,27 @@ public class Student extends Entity {
         return MoreObjects.toStringHelper(this).add("name", this.person).add("id", this.studentId).toString();
     }
 
+    public SchoolId schoolId() {
+        return schoolId;
+    }
+
+    public StudentId studentId() {
+        return studentId;
+    }
+
+    public Person person() {
+        return person;
+    }
+
+    public Set<Identity> ids() {
+        return ids;
+    }
+
+    public Set<Study> studies() {
+        return studies;
+    }
+
+    public Set<BelongToClazz> belongTos() {
+        return belongTos;
+    }
 }

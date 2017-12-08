@@ -6,6 +6,7 @@ package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.ValueObject;
+import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Period;
@@ -22,16 +23,19 @@ import java.util.Date;
 
 public class BelongToClazz extends ValueObject{
 
+    private SchoolId schoolId;
+
     private ClazzId clazzId;
 
     private StudentId studentId;
 
     private Period period;
 
-    public BelongToClazz(Clazz clazz, StudentId studentId, Date starts,Date ends) {
+    public BelongToClazz(SchoolId schoolId,Clazz clazz, StudentId studentId, Date starts,Date ends) {
+        AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学生所属学校");
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供学生所属班级");
-        AssertionConcerns.assertArgumentNotNull(clazz,"请提供学生所属班级");
-        AssertionConcerns.assertArgumentTrue(clazz.canBeManaged(),"请提供学生所属班级");
+        AssertionConcerns.assertArgumentNotNull(studentId,"请提供学生");
+        AssertionConcerns.assertArgumentTrue(clazz.canBeManaged(),"学生所属班级不能管理学生");
         this.clazzId = clazz.clazzId();
         this.studentId = studentId;
         this.period = new Period(starts,ends);

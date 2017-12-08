@@ -9,7 +9,6 @@ import com.easytnt.ts.domain.model.school.School;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.SchoolRepository;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
-import com.easytnt.ts.domain.model.school.staff.PostService;
 import com.easytnt.ts.domain.model.school.staff.StaffRepository;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermRepository;
@@ -18,7 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Liguiqing
@@ -34,8 +34,6 @@ public class SchoolApplicationServiceTest {
 
     private StaffRepository staffRepository;
 
-    private PostService postService;
-
     private TermRepository termRepository;
 
     private SchoolApplicationService schoolApplicationService = new SchoolApplicationService();
@@ -48,8 +46,6 @@ public class SchoolApplicationServiceTest {
         schoolApplicationService.setSchoolRepository(schoolRepository);
         staffRepository = mock(StaffRepository.class);
         schoolApplicationService.setStaffRepository(staffRepository);
-        postService = mock(PostService.class);
-        schoolApplicationService.setPostService(postService);
         termRepository = mock(TermRepository.class);
         schoolApplicationService.setTermRepository(termRepository);
     }

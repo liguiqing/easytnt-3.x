@@ -40,20 +40,20 @@ public class Study extends ValueObject {
     private Teacher teacher;
 
     public Study(StudentId studentId, SchoolId schoolId, Clazz clazz, Grade grade,
-                 Course course, Teacher teacher,Date starts, Date ends) {
+                 Teacher teacher,Date starts, Date ends) {
         AssertionConcerns.assertArgumentNotNull(studentId,"请提供学生");
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学习学校");
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供学习班级");
         AssertionConcerns.assertArgumentNotNull(teacher,"请提供课程老师");
-        AssertionConcerns.assertArgumentNotNull(course,"请提供学习课程");
+        AssertionConcerns.assertArgumentNotNull(teacher,"请提供授课老师");
         AssertionConcerns.assertArgumentTrue(clazz.canBeStudied(),"不能在非教学班级学习");
         AssertionConcerns.assertArgumentTrue(teacher.isTeaching(),"课程老师已经离职");
-        AssertionConcerns.assertArgumentTrue(teacher.canBeTeachOf(course),"课程老师教授课程与学习");
         this.studentId = studentId;
         this.schoolId = schoolId;
         this.clazzId = clazz.clazzId();
         this.grade = grade;
         this.period = new Period(starts, ends);
+        this.teacher = teacher;
     }
 
     @Override
