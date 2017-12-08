@@ -61,7 +61,7 @@ public abstract class AbstractId implements Identity,Serializable{
 
     private void setId(String anId) {
         AssertionConcerns.assertArgumentNotEmpty(anId, "唯一标识不能为空值.");
-        AssertionConcerns.assertArgumentLength(anId, 8,36, "唯一标识字符长度为8-36位.");
+        AssertionConcerns.assertArgumentLength(anId, 7,37, "唯一标识字符长度为8-36位.");
 
         this.validateId(anId);
 
