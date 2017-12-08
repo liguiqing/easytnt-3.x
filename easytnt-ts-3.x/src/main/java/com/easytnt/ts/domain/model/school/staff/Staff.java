@@ -9,15 +9,12 @@ import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Identity;
-import com.easytnt.ts.domain.model.school.common.Person;
-import com.easytnt.ts.domain.model.school.position.HeadMaster;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.position.Position;
 import com.easytnt.ts.domain.model.school.position.PositionFilter;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
-import javax.persistence.Id;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;

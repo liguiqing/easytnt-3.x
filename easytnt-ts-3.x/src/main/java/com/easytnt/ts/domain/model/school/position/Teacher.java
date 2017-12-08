@@ -6,10 +6,8 @@ package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.Course;
-import com.easytnt.ts.domain.model.school.Grade;
-import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.SchoolId;
-import com.easytnt.ts.domain.model.school.staff.Period;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.Objects;
 
 import java.util.Date;
@@ -37,6 +35,10 @@ public class Teacher extends Position {
     public boolean isTeaching(){
         Date today = DateUtilWrapper.today();
         return this.period().isBetween(today);
+    }
+
+    public boolean canBeTeachOf(Course course){
+        return this.course.equals(course);
     }
 
     @Override

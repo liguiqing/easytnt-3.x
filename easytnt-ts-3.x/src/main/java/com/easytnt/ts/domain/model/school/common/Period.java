@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.staff;
+package com.easytnt.ts.domain.model.school.common;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.util.DateUtilWrapper;
@@ -12,7 +12,7 @@ import com.google.common.base.Objects;
 import java.util.Date;
 
 /**
- * 角色时期
+ * 时期段
  *
  * @author Liguiqing
  * @since V3.0
@@ -25,9 +25,9 @@ public class Period {
     private Date ends;
 
     public Period(Date starts, Date ends) {
-        AssertionConcerns.assertArgumentNotNull(starts,"请提供任期的开始日期");
+        AssertionConcerns.assertArgumentNotNull(starts,"请提供开始时间");
         if(ends != null){
-            AssertionConcerns.assertArgumentTrue(DateUtilWrapper.lessThan(starts,ends),"任期开始时间不能大于结束时间");
+            AssertionConcerns.assertArgumentTrue(DateUtilWrapper.lessThan(starts,ends),"开始时间不能大于结束时间");
         }
         this.starts = starts;
         this.ends = ends;

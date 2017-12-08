@@ -4,24 +4,28 @@
 
 package com.easytnt.ts.domain.model.school.student;
 
-import com.easytnt.commons.domain.Entity;
+import com.easytnt.commons.AssertionConcerns;
+import com.easytnt.commons.domain.ValueObject;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
-import com.easytnt.ts.domain.model.school.term.TermId;
+import com.easytnt.ts.domain.model.school.common.Period;
+import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.util.Date;
 
 /**
- * 学生学习情况
+ * 学生课程学习情况：学生什么时间在哪个班级学习什么课程
  *
  * @author Liguiqing
  * @since V3.0
  */
 
-public class Study extends Entity {
+public class Study extends ValueObject {
 
     private StudentId studentId;
 
@@ -31,24 +35,25 @@ public class Study extends Entity {
 
     private Grade grade;
 
-    private TermId termId;
+    private Period period;
 
-    private Date starts;
+    private Teacher teacher;
 
-    private Date ends;
-
-    private Course course;
-
-    public Study(StudentId studentId, SchoolId schoolId, ClazzId clazzId, Grade grade,
-                 TermId termId, Course course, Date starts, Date ends) {
+    public Study(StudentId studentId, SchoolId schoolId, Clazz clazz, Grade grade,
+                 Course course, Teacher teacher,Date starts, Date ends) {
+        AssertionConcerns.assertArgumentNotNull(studentId,"请提供学生");
+        AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学习学校");
+        AssertionConcerns.assertArgumentNotNull(clazz,"请提供学习班级");
+        AssertionConcerns.assertArgumentNotNull(teacher,"请提供课程老师");
+        AssertionConcerns.assertArgumentNotNull(course,"请提供学习课程");
+        AssertionConcerns.assertArgumentTrue(clazz.canBeStudied(),"不能在非教学班级学习");
+        AssertionConcerns.assertArgumentTrue(teacher.isTeaching(),"课程老师已经离职");
+        AssertionConcerns.assertArgumentTrue(teacher.canBeTeachOf(course),"课程老师教授课程与学习");
         this.studentId = studentId;
         this.schoolId = schoolId;
-        this.clazzId = clazzId;
+        this.clazzId = clazz.clazzId();
         this.grade = grade;
-        this.termId = termId;
-        this.starts = starts;
-        this.ends = ends;
-        this.course = course;
+        this.period = new Period(starts, ends);
     }
 
     @Override
@@ -58,18 +63,46 @@ public class Study extends Entity {
         Study study = (Study) o;
         return Objects.equal(studentId, study.studentId) &&
                 Objects.equal(clazzId, study.clazzId) &&
-                Objects.equal(termId, study.termId) &&
-                Objects.equal(course, study.course);
+                Objects.equal(grade, study.grade) &&
+                Objects.equal(teacher, study.teacher);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(studentId, clazzId, termId, course);
+        return Objects.hashCode(studentId, clazzId, grade, teacher);
     }
 
-    public void changeEnds(Date ends){
-        this.ends = ends;
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("studentId", studentId)
+                .add("clazzId", clazzId)
+                .add("grade", grade)
+                .add("teacher", teacher)
+                .toString();
     }
 
+    public StudentId studentId() {
+        return studentId;
+    }
 
+    public SchoolId schoolId() {
+        return schoolId;
+    }
+
+    public ClazzId clazzId() {
+        return clazzId;
+    }
+
+    public Grade grade() {
+        return grade;
+    }
+
+    public Period period() {
+        return period;
+    }
+
+    public Teacher teacher() {
+        return teacher;
+    }
 }

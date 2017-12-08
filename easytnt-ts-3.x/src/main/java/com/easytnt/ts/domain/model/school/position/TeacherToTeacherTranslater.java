@@ -5,7 +5,7 @@
 package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.ts.domain.model.school.Course;
-import com.easytnt.ts.domain.model.school.staff.Period;
+import com.easytnt.ts.domain.model.school.common.Period;
 
 /**
  * 老师教其他科目

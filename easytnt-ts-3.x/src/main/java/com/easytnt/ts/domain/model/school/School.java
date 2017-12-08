@@ -7,7 +7,7 @@ package com.easytnt.ts.domain.model.school;
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.position.HeadMaster;
-import com.easytnt.ts.domain.model.school.staff.Period;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.staff.Staff;
 import com.easytnt.ts.domain.model.school.staff.StaffId;
 import com.easytnt.ts.domain.model.school.term.*;

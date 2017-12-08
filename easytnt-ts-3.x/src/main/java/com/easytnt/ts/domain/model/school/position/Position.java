@@ -6,10 +6,8 @@ package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.commons.domain.ValueObject;
 import com.easytnt.ts.domain.model.school.SchoolId;
-import com.easytnt.ts.domain.model.school.staff.Period;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.Objects;
-
-import java.util.Date;
 
 /**
  * 学校职务
