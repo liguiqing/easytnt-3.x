@@ -44,7 +44,6 @@ public class Study extends ValueObject {
         AssertionConcerns.assertArgumentNotNull(studentId,"请提供学生");
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学习学校");
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供学习班级");
-        AssertionConcerns.assertArgumentNotNull(teacher,"请提供课程老师");
         AssertionConcerns.assertArgumentNotNull(teacher,"请提供授课老师");
         AssertionConcerns.assertArgumentTrue(clazz.canBeStudied(),"不能在非教学班级学习");
         AssertionConcerns.assertArgumentTrue(teacher.isTeaching(),"课程老师已经离职");

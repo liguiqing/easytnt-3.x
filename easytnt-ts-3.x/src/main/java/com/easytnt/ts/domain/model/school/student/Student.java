@@ -7,9 +7,7 @@ package com.easytnt.ts.domain.model.school.student;
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.DomainEventPublisher;
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.Course;
-import com.easytnt.ts.domain.model.school.Grade;
-import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Gender;
@@ -19,6 +17,7 @@ import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import java.util.Date;
@@ -64,6 +63,9 @@ public class Student extends Entity {
     }
 
     public void addStudy(Clazz clazz, Grade grade,Teacher teacher, Date starts, Date ends){
+        GradeCourseable gradeCourseable = GradeCourseableFactory.lookup(this.schoolId());
+        boolean canBeStudied = grade.canBeTeachOrStudyOfCourse(gradeCourseable, teacher.course());
+        AssertionConcerns.assertArgumentTrue(canBeStudied,grade.name()+"不能学习"+teacher.course().name());
         Study study = new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends);
         if(this.studies.contains(study)){
             studies.remove(study);
@@ -116,14 +118,14 @@ public class Student extends Entity {
     }
 
     public Set<Identity> ids() {
-        return ids;
+        return ImmutableSet.copyOf(ids);
     }
 
     public Set<Study> studies() {
-        return studies;
+        return ImmutableSet.copyOf(studies);
     }
 
     public Set<BelongToClazz> belongTos() {
-        return belongTos;
+        return ImmutableSet.copyOf(belongTos);
     }
 }

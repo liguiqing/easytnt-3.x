@@ -7,6 +7,8 @@ package com.easytnt.ts.domain.model.school.clazz;
 import com.easytnt.commons.domain.ValueObject;
 import com.easytnt.ts.domain.model.school.common.WLType;
 import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.position.ClazzMaster;
+import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;
 import com.google.common.base.MoreObjects;
@@ -30,6 +32,10 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
     private Grade grade; //年级
 
     private WLType wl;
+
+    private ClazzMaster master;
+
+    private Teacher mainTeacher;
 
     protected ClazzHistory(ClazzId clazzId, TermId termId,TermOrder termOrder, Grade grade, WLType wl) {
         this.clazzId = clazzId;

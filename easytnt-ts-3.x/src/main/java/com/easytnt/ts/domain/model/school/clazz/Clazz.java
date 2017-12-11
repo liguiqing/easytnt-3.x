@@ -14,10 +14,10 @@ import com.easytnt.ts.domain.model.school.position.ClazzMaster;
 import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.position.TeacherToClazzMasterTranslater;
 import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.teach.Teach;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import java.util.Date;
@@ -91,8 +91,7 @@ public class Clazz extends Entity {
     public Teach addTeacher(Teacher teacher, Grade grade, Term term, Course course){
         AssertionConcerns.assertArgumentTrue(this.canBeStudyAndTeachIn(),"老师不能在非教学班级里教学");
 
-        Teach teach =  new Teach(teacher,this.schoolId,this.clazzId,grade,term.termId(),
-                term.timeSpan().starts(),term.timeSpan().ends(),course);
+        Teach teach =  new Teach(teacher,this.clazzId,grade,term.timeSpan().starts(),term.timeSpan().ends());
         DomainEventPublisher.instance().publish(new TeacherJoinedToClazz(this.clazzId,teacher.name(),
                 teacher.identity()));
         return teach;
@@ -145,6 +144,26 @@ public class Clazz extends Entity {
 
     public String name() {
         return name;
+    }
+
+    public String clazzNo() {
+        return clazzNo;
+    }
+
+    public String createDate() {
+        return createDate;
+    }
+
+    public ClazzAdiminType adminType() {
+        return adminType;
+    }
+
+    public Set<ClazzCatagory> catagories() {
+        return ImmutableSet.copyOf(catagories);
+    }
+
+    public Set<ClazzHistory> histories() {
+        return ImmutableSet.copyOf(histories);
     }
 
     protected Clazz(){

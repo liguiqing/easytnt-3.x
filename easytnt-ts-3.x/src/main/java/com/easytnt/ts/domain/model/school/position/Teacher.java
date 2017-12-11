@@ -7,10 +7,13 @@ package com.easytnt.ts.domain.model.school.position;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.clazz.Teach;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 教师，负责某课程教学
@@ -23,9 +26,12 @@ public class Teacher extends Position {
 
     private Course course;
 
+    private Set<Teach> teachs;
+
     public Teacher(SchoolId schoolId, String name, String identity, Period period, Course course) {
         super(schoolId,identity,name, period);
         this.course = course;
+        this.teachs = Sets.newHashSet();
     }
 
     public Course course() {
@@ -35,10 +41,6 @@ public class Teacher extends Position {
     public boolean isTeaching(){
         Date today = DateUtilWrapper.today();
         return this.period().isBetween(today);
-    }
-
-    public boolean canBeTeachOf(Course course){
-        return this.course.equals(course);
     }
 
     @Override

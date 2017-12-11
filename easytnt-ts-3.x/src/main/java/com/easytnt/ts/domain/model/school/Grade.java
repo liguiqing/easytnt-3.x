@@ -7,6 +7,8 @@ package com.easytnt.ts.domain.model.school;
 import com.easytnt.commons.domain.ValueObject;
 import com.google.common.base.Objects;
 
+import java.util.Collection;
+
 /**
  * 年级
  *
@@ -36,6 +38,20 @@ public class Grade extends ValueObject {
         if(level == null)
             return this;
         return new Grade(name, level, year);
+    }
+
+    /**
+     * 年级可以教学的课程
+     *
+     * @return
+     */
+    public Collection<Course> courseOf(GradeCourseable gradeCourseable){
+        return gradeCourseable.courseOf(this);
+    }
+
+    public boolean canBeTeachOrStudyOfCourse(GradeCourseable gradeCourseable,Course course){
+        Collection<Course> gradeCourses = this.courseOf(gradeCourseable);
+        return gradeCourses.contains(course);
     }
 
     @Override
