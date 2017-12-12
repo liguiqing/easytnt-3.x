@@ -36,6 +36,11 @@ public class GradeMaster extends Position {
     }
 
     @Override
+    public Position rename(String newName) {
+        return new GradeMaster(this.schoolId(),this.grade,newName,this.identity(),this.period());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

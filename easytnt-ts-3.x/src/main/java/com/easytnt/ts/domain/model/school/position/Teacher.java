@@ -44,6 +44,11 @@ public class Teacher extends Position {
         return new Teacher(this.schoolId(),this.name(),this.identity(),newPerid,this.course);
     }
 
+    @Override
+    public Position rename(String newName) {
+        return new Teacher(this.schoolId(),newName,this.identity(),this.period(),this.course);
+    }
+
     public  <T extends Position> T transfer(PositionTransfer transfer){
         return transfer.translate(this);
     }

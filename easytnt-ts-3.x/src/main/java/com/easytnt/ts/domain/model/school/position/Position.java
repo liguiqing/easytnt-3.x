@@ -42,8 +42,14 @@ public abstract class Position extends ValueObject implements Comparable<Positio
 
     public abstract Position renew(Period newPerid);
 
+    public abstract Position rename(String newName);
+
     public boolean sameSchoolOf(SchoolId schoolId){
         return this.schoolId.equals(schoolId);
+    }
+
+    public boolean isOnPosition(){
+        return !this.period.isOver();
     }
 
     @Override

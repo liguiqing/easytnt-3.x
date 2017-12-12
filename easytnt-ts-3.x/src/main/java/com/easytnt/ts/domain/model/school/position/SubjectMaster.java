@@ -40,6 +40,11 @@ public class SubjectMaster extends Position {
     }
 
     @Override
+    public Position rename(String newName) {
+        return new SubjectMaster(this.schoolId(),newName,this.identity(),this.period(),this.subjectId,this.subjectName);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

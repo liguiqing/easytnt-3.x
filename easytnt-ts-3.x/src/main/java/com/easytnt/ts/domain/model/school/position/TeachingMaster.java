@@ -29,6 +29,11 @@ public class TeachingMaster extends Position {
     }
 
     @Override
+    public Position rename(String newName) {
+        return new TeachingMaster(this.schoolId(),newName,this.identity(),this.period(),this.positionName);
+    }
+
+    @Override
     public String positionName() {
         return this.positionName;
     }

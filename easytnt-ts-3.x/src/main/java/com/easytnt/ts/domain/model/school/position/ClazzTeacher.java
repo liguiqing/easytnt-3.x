@@ -52,6 +52,14 @@ public class ClazzTeacher extends Position{
         return newTeacher;
     }
 
+    @Override
+    public Position rename(String newName) {
+        ClazzTeacher newTeacher = new ClazzTeacher(this.schoolId(),newName,this.identity(),this.period());
+        newTeacher.clazzId = this.clazzId;
+        newTeacher.teacher = this.teacher;
+        return newTeacher;
+    }
+
     protected ClazzTeacher(SchoolId schoolId,String name, String identity, Period period){
         super(schoolId, name, identity, period);
     }

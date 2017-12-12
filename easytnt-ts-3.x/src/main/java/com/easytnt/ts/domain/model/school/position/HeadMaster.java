@@ -26,6 +26,11 @@ public class HeadMaster extends Position {
     }
 
     @Override
+    public Position rename(String newName) {
+        return new HeadMaster(this.schoolId(),newName,this.identity(),this.period());
+    }
+
+    @Override
     public String positionName() {
         return "校长";
     }

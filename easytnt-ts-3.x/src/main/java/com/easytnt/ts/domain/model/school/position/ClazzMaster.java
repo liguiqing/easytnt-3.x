@@ -31,6 +31,11 @@ public class ClazzMaster extends Position {
     }
 
     @Override
+    public Position rename(String newName) {
+        return new ClazzMaster(this.clazzId,this.schoolId(),newName,this.identity(),this.period());
+    }
+
+    @Override
     public String positionName() {
         return "班主任";
     }
