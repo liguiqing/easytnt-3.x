@@ -71,7 +71,9 @@ public class Period {
         return ends;
     }
 
-    public boolean hasEnds() {
-        return this.ends != null;
+    public boolean isOver() {
+        if(this.ends == null )
+            return false;
+        return DateUtilWrapper.greaterThanYYMMDD(this.ends,DateUtilWrapper.today());
     }
 }

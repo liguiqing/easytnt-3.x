@@ -69,7 +69,7 @@ public class School extends Entity {
         SchoolType type = this.type();
         StudyYear year = StudyYear.yearOfNow();
         ArrayList<Grade> grads = Lists.newArrayList();
-        for(int i=type.gradeFrom();i<type.gradeTo();i++){
+        for(int i=type.gradeFrom();i <= type.gradeTo();i++){
             GradeLevel level = GradeLevel.fromLevel(i);
             Grade grade = new Grade(nameGenerateStrategy.genGradeName(level),level,year);
             grads.add(grade);

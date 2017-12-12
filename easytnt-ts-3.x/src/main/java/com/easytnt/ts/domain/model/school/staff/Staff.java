@@ -75,7 +75,7 @@ public  class Staff extends Entity {
      * @param positionFilter
      */
     public void renewOfPosition(Period newPeriod,PositionFilter positionFilter){
-        if(this.positions == null || this.positions.size() == 0)
+        if(!this.hasPosition())
             return;
         Iterator<Position> it = this.positions.iterator();
         while(it.hasNext()){
@@ -91,6 +91,10 @@ public  class Staff extends Entity {
         }
     }
 
+    private boolean hasPosition(){
+        return this.positions != null && this.positions.size() > 0;
+    }
+
     /**
      * 续签
      * @param ends
@@ -104,6 +108,22 @@ public  class Staff extends Entity {
 
     public void changePeriod(Period period) {
         this.period = period;
+    }
+
+    public void rename(String newName) {
+        this.name = name();
+        if(!this.hasPosition())
+            return;
+
+        Iterator<Position> it = this.positions.iterator();
+        while(it.hasNext()){
+            Position position = it.next();
+            if(position.isOnPosition()){
+                Position copy = position.rename(newName);
+                it.remove();
+                this.positions.add(copy);
+            }
+        }
     }
 
     @Override
@@ -143,5 +163,6 @@ public  class Staff extends Entity {
     public Period period() {
         return period;
     }
+
 
 }
