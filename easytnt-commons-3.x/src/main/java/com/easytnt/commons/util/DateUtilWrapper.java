@@ -135,8 +135,10 @@ public class DateUtilWrapper {
      * @return
      */
     public static boolean greaterThanYYMMDD(Date aDate,Date otherDate){
-        if(aDate == null || otherDate == null)
+        if(aDate == null )
             return false;
+        if(otherDate == null)
+            return true;
 
         String d1 = toString(aDate,"yyyyMMdd");
         String d2 = toString(otherDate,"yyyyMMdd");
