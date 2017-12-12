@@ -88,15 +88,6 @@ public class Clazz extends Entity {
         return teacher.transfer(new TeacherToClazzMasterTranslater(this.clazzId(),period));
     }
 
-    public Teach addTeacher(Teacher teacher, Grade grade, Term term, Course course){
-        AssertionConcerns.assertArgumentTrue(this.canBeStudyAndTeachIn(),"老师不能在非教学班级里教学");
-
-        Teach teach =  new Teach(teacher,this.clazzId,grade,term.timeSpan().starts(),term.timeSpan().ends());
-        DomainEventPublisher.instance().publish(new TeacherJoinedToClazz(this.clazzId,teacher.name(),
-                teacher.identity()));
-        return teach;
-    }
-
     /**
      * 班级升一个年级
      * 能升班的规则是，最近的班级史必须是下学期;新学期学年必须是最近班级史的下一学年

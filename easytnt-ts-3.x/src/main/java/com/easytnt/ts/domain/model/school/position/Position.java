@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.domain.model.school.position;
 
+import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.ValueObject;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Period;
@@ -28,6 +29,9 @@ public abstract class Position extends ValueObject implements Comparable<Positio
     private String identity; //唯一身份标识，关联到staff.Staff时就是Staff.staffId
 
     public Position(SchoolId schoolId, String name, String identity, Period period) {
+        AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校");
+        AssertionConcerns.assertArgumentNotNull(name,"请提供姓名");
+        AssertionConcerns.assertArgumentNotNull(identity,"请提供教职工唯一标识");
         this.schoolId = schoolId;
         this.period = period;
         this.name = name;
@@ -45,7 +49,7 @@ public abstract class Position extends ValueObject implements Comparable<Positio
     @Override
     public int compareTo(Position duty) {
         if(this.identity.equals(duty.identity)){
-            return 0;
+            return duty.period().starts().compareTo(this.period().starts());
         }
         return -1;
     }
@@ -80,5 +84,7 @@ public abstract class Position extends ValueObject implements Comparable<Positio
         return identity;
     }
 
+    protected Position(){
 
+    }
 }

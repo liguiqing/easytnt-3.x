@@ -4,8 +4,6 @@
 
 package com.easytnt.ts.domain.model.school;
 
-import com.easytnt.ts.domain.model.share.ShareDomainModelQuery;
-
 /**
  * 学校类型：小学，初中，高中
  *

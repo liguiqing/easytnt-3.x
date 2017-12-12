@@ -62,6 +62,10 @@ public  class Staff extends Entity {
     public void addPosition(Position aPosition){
         if(this.positions == null)
             this.positions = Sets.newHashSet();
+        if(this.positions.contains(aPosition)){
+            this.positions.remove(aPosition);
+        }
+        this.positions.add(aPosition);
     }
 
     /**
@@ -71,6 +75,8 @@ public  class Staff extends Entity {
      * @param positionFilter
      */
     public void renewOfPosition(Period newPeriod,PositionFilter positionFilter){
+        if(this.positions == null || this.positions.size() == 0)
+            return;
         Iterator<Position> it = this.positions.iterator();
         while(it.hasNext()){
             Position position = it.next();
@@ -79,7 +85,7 @@ public  class Staff extends Entity {
                 this.positions.remove(position);
                 this.positions.add(oldPosition);
                 Position newPosition = position.renew(newPeriod);
-                this.positions.add(newPosition);
+                this.addPosition(newPosition);
                 break;
             }
         }

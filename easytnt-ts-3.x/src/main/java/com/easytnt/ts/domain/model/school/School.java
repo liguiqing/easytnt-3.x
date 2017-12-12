@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.domain.model.school;
 
+import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.position.HeadMaster;
@@ -37,8 +38,11 @@ public class School extends Entity {
     private SchoolType type;
 
     public School(TenantId tenantId,SchoolId schoolId,String name,SchoolType type){
+        AssertionConcerns.assertArgumentNotNull(tenantId,"请提供租户唯一标识");
+        AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识");
+        AssertionConcerns.assertArgumentNotNull(schoolId,"请提供校名");
         this.name = name;
-        this.type = type;
+        this.type = type == null?SchoolType.Unkow:type;
         this.schoolId = schoolId;
         this.tenantId = tenantId;
     }
@@ -111,7 +115,4 @@ public class School extends Entity {
     public SchoolType type() {
         return type;
     }
-
-
-
 }

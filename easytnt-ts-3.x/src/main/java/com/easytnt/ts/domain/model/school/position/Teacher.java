@@ -7,7 +7,6 @@ package com.easytnt.ts.domain.model.school.position;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.SchoolId;
-import com.easytnt.ts.domain.model.school.clazz.Teach;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
@@ -26,12 +25,9 @@ public class Teacher extends Position {
 
     private Course course;
 
-    private Set<Teach> teachs;
-
     public Teacher(SchoolId schoolId, String name, String identity, Period period, Course course) {
         super(schoolId,identity,name, period);
         this.course = course;
-        this.teachs = Sets.newHashSet();
     }
 
     public Course course() {
