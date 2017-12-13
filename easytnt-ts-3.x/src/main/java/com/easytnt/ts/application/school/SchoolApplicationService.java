@@ -63,7 +63,10 @@ public class SchoolApplicationService {
         logger.debug("Add Staff {} to school {}  ",schoolId,command);
 
         School school = getSchool(schoolId);
-        //Staff staff = new Staff(school.schoolId(),new StaffId(command.));
+        Staff staff = new Staff(new SchoolId(schoolId),staffRepository.nextIdentity(),command.getName(),
+                new Identity(IdentityType.EduID.Other,command.getIdentity()),
+                new Period(command.getStarts(), command.getEnds()));
+        staffRepository.save(staff);
     }
 
     /**
@@ -74,9 +77,7 @@ public class SchoolApplicationService {
      */
     public void newHeadMasterTo(String schoolId,NewHeaderMasterCommand command){
         logger.debug("New school {} master is ",schoolId,command);
-
-        School school = getSchool(schoolId);
-        HeadMaster master = school.changeHeadMaster(command.getName(),command.getIdentity(),command.getStarts(),command.getEnds());
+        HeadMaster master = new HeadMaster(new SchoolId(schoolId),command.getName(),command.getIdentity(),new Period(command.getStarts(),command.getEnds()));
         Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
         staff.addPosition(master);
         staffRepository.save(staff);
@@ -106,25 +107,24 @@ public class SchoolApplicationService {
 
     public void newTerm(String schoolId,NewTermCommand command){
         logger.debug("New term {} to school {} ",schoolId,command);
-        School school = getSchool(schoolId);
         TermId termId = termRepository.nextIdentity();
-        Term term = school.newTerm(termId, command.getTermName(),command.getYear(),
-                TermOrder.valueOf(command.getTermOrder()), command.getStarts(), command.getEnds());
+        Term term = new Term(termId, command.getTermName(),new StudyYear(command.getYear()),
+                TermOrder.valueOf(command.getTermOrder()), new TimeSpan(command.getStarts(),
+                command.getEnds()),new SchoolId(schoolId));
         termRepository.save(term);
     }
 
     public void addTeacher(String schoolId,NewTeacherCommand command){
         logger.debug("Teacher {} join school {} ",command,schoolId);
-
-        School school = getSchool(schoolId);
         Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
+        SchoolId schoolId1 = new SchoolId(schoolId);
         if(staff == null){
-            staff = new Staff(school.schoolId(),staffRepository.nextIdentity(),command.getName(),
+            staff = new Staff(schoolId1,staffRepository.nextIdentity(),command.getName(),
                         new Identity(IdentityType.EduID.Other,command.getIdentity()),
                         new Period(command.getStarts(), command.getEnds()));
         }
 
-        Teacher teacher = new Teacher(school.schoolId(),command.getName(), command.getIdentity(), new Period(command.getStarts(), command.getEnds()),
+        Teacher teacher = new Teacher(schoolId1,command.getName(), command.getIdentity(), new Period(command.getStarts(), command.getEnds()),
                 new Course(command.getCourseName(), command.getSubjectId()));
         staff.addPosition(teacher);
         staffRepository.save(staff);

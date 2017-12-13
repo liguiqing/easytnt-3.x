@@ -66,12 +66,12 @@ public abstract class Position extends ValueObject implements Comparable<Positio
         if (o == null || getClass() != o.getClass()) return false;
         Position duty = (Position) o;
         return Objects.equal(schoolId, duty.schoolId) &&
-                Objects.equal(identity, duty.identity);
+                Objects.equal(identity, duty.identity) && Objects.equal(this.period,duty.period);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(schoolId, identity);
+        return Objects.hashCode(schoolId, identity,period);
     }
 
     public SchoolId schoolId() {

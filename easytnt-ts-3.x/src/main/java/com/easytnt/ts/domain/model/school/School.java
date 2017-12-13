@@ -47,22 +47,6 @@ public class School extends Entity {
         this.tenantId = tenantId;
     }
 
-    public HeadMaster changeHeadMaster(String masterName,String masterId,Date starts,Date ends){
-        HeadMaster master = new HeadMaster(this.schoolId(),masterName, masterId,
-                new Period(starts, ends));
-        return master;
-    }
-
-    public Staff join(String staffName, StaffId staffId, Date starts, Date ends, Identity identity){
-        Staff staff = new Staff(this.schoolId(), staffId, staffName, identity,new Period(starts, ends));
-        return staff;
-    }
-
-    public Term newTerm(TermId termId, String termName,String year, TermOrder order, Date starts, Date ends){
-        Term term = new Term(termId,termName,new StudyYear(year),order,new TimeSpan(starts,ends),this.schoolId());
-        return term;
-    }
-
     public List<Grade> grades (){
         GradeNameGenerateStrategy nameGenerateStrategy =
                 GradeNameGenerateStrategyFactory.lookup(this.schoolId());

@@ -4,6 +4,8 @@
 
 package com.easytnt.ts.application.school.command;
 
+import java.util.Date;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -11,5 +13,43 @@ package com.easytnt.ts.application.school.command;
 
 public class NewStaffCommand {
 
+    private String name;
 
+    private String identity;
+
+    private Date starts;
+
+    private Date ends;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public Date getStarts() {
+        return starts;
+    }
+
+    public void setStarts(Date starts) {
+        this.starts = starts;
+    }
+
+    public Date getEnds() {
+        return ends;
+    }
+
+    public void setEnds(Date ends) {
+        this.ends = ends;
+    }
 }
