@@ -7,6 +7,7 @@ package com.easytnt.ts.application.school;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.application.school.data.CourseData;
 import com.easytnt.ts.application.school.data.GradeData;
+import com.easytnt.ts.application.school.data.SchoolData;
 import com.easytnt.ts.domain.model.school.*;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -38,6 +39,25 @@ public class SchoolQueryService {
     @Autowired
     private JdbcTemplate query;
 
+    @Transactional(readOnly = true)
+    @Cacheable(value = "SchoolNameCache", key = "#name")
+    public SchoolData findSchoolByName(String name) {
+        logger.debug("Query school by  name of {}", name);
+        String sql = "select name,alias,type from ts_school where name=? union " +
+                " select name,alias,type from ts_school where alias=?";
+
+        return query.queryForObject(sql, new RowMapper<SchoolData>() {
+
+            @Override
+            public SchoolData mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new SchoolData(rs.getString("name"),rs.getString("alias"),
+                        rs.getString("type"));
+            }
+        }, new Object[]{name,name});
+    }
+
+
+
     /**
      * 查询学校年级
      * @param schoolId
@@ -47,6 +67,7 @@ public class SchoolQueryService {
     @Cacheable(value = "SchoolGradeCache", key = "#schoolId")
     public List<GradeData> schoolGrade(String schoolId){
         logger.debug("Query school Grades for {}",schoolId);
+
         SchoolId schoolId1 = new SchoolId(schoolId);
         GradeNameGenerateStrategy nameGenerateStrategy =
                 GradeNameGenerateStrategyFactory.lookup(schoolId1);
@@ -69,7 +90,11 @@ public class SchoolQueryService {
     @Cacheable(value = "SchoolCourseCache", key = "#schoolId")
     public List<CourseData> schoolCourses(String schoolId){
         logger.debug("Query school Courses for {}",schoolId);
-        String sql = " select name,subjectId,gradeName from (select name,subjectId,gradeName,gradeLevel from ts_course where schoolId is null union select name,subjectId,gradeName,gradeLevel from ts_course where schoolId=?) a order by gradeLevel";
+
+        String sql = " select name,subjectId,gradeName from (select name,subjectId,gradeName,gradeLevel " +
+                " from ts_course where schoolId is null " +
+                " union select name,subjectId,gradeName,gradeLevel " +
+                " from ts_course where schoolId=?) a order by gradeLevel";
         return query.query(sql, new RowMapper<CourseData>() {
             @Override
             public CourseData mapRow(ResultSet rs, int rowNum) throws SQLException {

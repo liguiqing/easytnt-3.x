@@ -12,6 +12,7 @@ import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.Person;
 import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.Term;
@@ -38,11 +39,17 @@ public class Student extends Entity {
 
     private Person person;
 
+    private Period period;
+
     private Set<Identity> ids;
 
     private Set<Study> studies;
 
     private Set<BelongToClazz> belongTos;
+
+    public Student(SchoolId schoolId,StudentId studentId, String name) {
+        this(schoolId, studentId, name, studentId.id(), Gender.Unknow);
+    }
 
     public Student(SchoolId schoolId,StudentId studentId, String name,String identity) {
         this(schoolId, studentId, name, identity, Gender.Unknow);
@@ -86,6 +93,10 @@ public class Student extends Entity {
         this.ids.add(sid);
     }
 
+    public void chagePeriod(Date starts,Date ends){
+        this.period = new Period(starts, ends);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(studentId);
@@ -127,5 +138,9 @@ public class Student extends Entity {
 
     public Set<BelongToClazz> belongTos() {
         return ImmutableSet.copyOf(belongTos);
+    }
+
+    public Period period() {
+        return period;
     }
 }

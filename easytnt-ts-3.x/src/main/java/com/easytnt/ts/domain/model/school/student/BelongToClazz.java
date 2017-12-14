@@ -23,8 +23,6 @@ import java.util.Date;
 
 public class BelongToClazz extends ValueObject{
 
-    private SchoolId schoolId;
-
     private ClazzId clazzId;
 
     private StudentId studentId;

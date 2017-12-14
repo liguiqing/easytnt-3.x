@@ -35,16 +35,31 @@ public class School extends Entity {
 
     private String name;//学校名称
 
+    private String alias; //学校简称
+
     private SchoolType type;
 
-    public School(TenantId tenantId,SchoolId schoolId,String name,SchoolType type){
+    public School(TenantId tenantId,SchoolId schoolId,String name,String alias,SchoolType type){
         AssertionConcerns.assertArgumentNotNull(tenantId,"请提供租户唯一标识");
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识");
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供校名");
         this.name = name;
+        this.alias = alias==null?name:alias;
         this.type = type == null?SchoolType.Unkow:type;
         this.schoolId = schoolId;
         this.tenantId = tenantId;
+    }
+
+    public School(TenantId tenantId,SchoolId schoolId,String name,SchoolType type){
+        this(tenantId, schoolId, name, name, type);
+    }
+
+    public void changeName(String newName){
+        this.name = name;
+    }
+
+    public void changeAlias(String alias){
+        this.alias =alias;
     }
 
     public List<Grade> grades (){
@@ -98,5 +113,9 @@ public class School extends Entity {
 
     public SchoolType type() {
         return type;
+    }
+
+    public String alias() {
+        return alias;
     }
 }

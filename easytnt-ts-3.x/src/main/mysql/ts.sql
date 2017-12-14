@@ -5,6 +5,7 @@ CREATE TABLE `ts_school` (
   `schoolId` varchar(36) NOT NULL COMMENT '学校唯一标识',
   `tenantId` varchar(36) NOT NULL COMMENT '学校所属租户唯一标识',
   `name` varchar(32) NOT NULL COMMENT '学校名称',
+  `alias` varchar(32) NOT NULL COMMENT '学校简称',
   `type` varchar(16) NOT NULL COMMENT '学校类型:Primary-小学;Middle-初中;High-高中;PrimaryToMiddlel-小学到初中;MiddleToHigh-初中到高中；All-小学到高中',
   PRIMARY KEY (`id`),
   KEY `x_ts_school_schoolId` (`schoolId`),

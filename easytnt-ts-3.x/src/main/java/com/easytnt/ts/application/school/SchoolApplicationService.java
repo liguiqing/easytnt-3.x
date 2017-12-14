@@ -59,10 +59,9 @@ public class SchoolApplicationService {
      * @param schoolId
      * @param command
      */
-    public void addStaff(String schoolId,NewStaffCommand command){
+    public void addStaffTo(String schoolId,NewStaffCommand command){
         logger.debug("Add Staff {} to school {}  ",schoolId,command);
 
-        School school = getSchool(schoolId);
         Staff staff = new Staff(new SchoolId(schoolId),staffRepository.nextIdentity(),command.getName(),
                 new Identity(IdentityType.EduID.Other,command.getIdentity()),
                 new Period(command.getStarts(), command.getEnds()));
@@ -77,6 +76,7 @@ public class SchoolApplicationService {
      */
     public void newHeadMasterTo(String schoolId,NewHeaderMasterCommand command){
         logger.debug("New school {} master is ",schoolId,command);
+
         HeadMaster master = new HeadMaster(new SchoolId(schoolId),command.getName(),command.getIdentity(),new Period(command.getStarts(),command.getEnds()));
         Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
         staff.addPosition(master);
@@ -85,7 +85,7 @@ public class SchoolApplicationService {
 
 
     public void changeHeadMasterPeriod(final String schoolId,final ChangeHeaderMasterCommand command){
-        logger.debug("Chagen headerMaster Period of school {} {} ",schoolId,command);
+        logger.debug("Chage headerMaster Period of school {} {} ",schoolId,command);
 
         Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
         staff.renewOfPosition(new Period(command.getNewStarts(),command.getNewEnds()),new PositionFilter() {
@@ -107,6 +107,7 @@ public class SchoolApplicationService {
 
     public void newTerm(String schoolId,NewTermCommand command){
         logger.debug("New term {} to school {} ",schoolId,command);
+
         TermId termId = termRepository.nextIdentity();
         Term term = new Term(termId, command.getTermName(),new StudyYear(command.getYear()),
                 TermOrder.valueOf(command.getTermOrder()), new TimeSpan(command.getStarts(),
@@ -116,6 +117,7 @@ public class SchoolApplicationService {
 
     public void addTeacher(String schoolId,NewTeacherCommand command){
         logger.debug("Teacher {} join school {} ",command,schoolId);
+
         Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
         SchoolId schoolId1 = new SchoolId(schoolId);
         if(staff == null){

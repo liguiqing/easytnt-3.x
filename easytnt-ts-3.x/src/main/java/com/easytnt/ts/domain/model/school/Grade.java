@@ -16,7 +16,7 @@ import java.util.Collection;
  * @since V3.0
  */
 
-public class Grade extends ValueObject {
+public class Grade extends ValueObject implements Comparable<Grade>{
 
     private String name;
 
@@ -78,5 +78,10 @@ public class Grade extends ValueObject {
 
     public StudyYear year() {
         return year;
+    }
+
+    @Override
+    public int compareTo(Grade o) {
+        return this.seq.getSeq() - o.seq.getSeq();
     }
 }
