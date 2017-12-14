@@ -6,8 +6,8 @@ package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.position.Position;

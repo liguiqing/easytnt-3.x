@@ -5,7 +5,10 @@
 package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.commons.AssertionConcerns;
-import com.easytnt.ts.domain.model.school.*;
+import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.GradeCourseable;
+import com.easytnt.ts.domain.model.school.GradeCourseableFactory;
+import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Period;

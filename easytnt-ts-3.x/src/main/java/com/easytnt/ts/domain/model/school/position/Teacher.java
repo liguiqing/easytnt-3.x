@@ -9,10 +9,8 @@ import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
  * 教师，负责某课程教学

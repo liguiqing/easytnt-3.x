@@ -5,7 +5,6 @@
 package com.easytnt.ts.domain.model.school.clazz;
 
 import com.easytnt.commons.domain.EntityRepository;
-import org.w3c.dom.Entity;
 
 /**
  * @author Liguiqing

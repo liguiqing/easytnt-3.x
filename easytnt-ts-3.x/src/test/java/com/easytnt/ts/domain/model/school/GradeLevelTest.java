@@ -2,7 +2,8 @@ package com.easytnt.ts.domain.model.school;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Liguiqing

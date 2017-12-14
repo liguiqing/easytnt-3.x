@@ -6,7 +6,6 @@ package com.easytnt.ts.domain.model.school.position;
 
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
-import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Period;
 
 /**

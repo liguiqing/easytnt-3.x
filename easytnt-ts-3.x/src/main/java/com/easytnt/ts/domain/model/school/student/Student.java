@@ -5,17 +5,17 @@
 package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.AssertionConcerns;
-import com.easytnt.commons.domain.DomainEventPublisher;
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.*;
+import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.GradeCourseable;
+import com.easytnt.ts.domain.model.school.GradeCourseableFactory;
+import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
-import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.Person;
 import com.easytnt.ts.domain.model.school.position.Teacher;
-import com.easytnt.ts.domain.model.school.term.Term;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;

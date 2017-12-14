@@ -6,18 +6,11 @@ package com.easytnt.ts.domain.model.school;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.common.Identity;
-import com.easytnt.ts.domain.model.school.position.HeadMaster;
-import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.staff.Staff;
-import com.easytnt.ts.domain.model.school.staff.StaffId;
-import com.easytnt.ts.domain.model.school.term.*;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

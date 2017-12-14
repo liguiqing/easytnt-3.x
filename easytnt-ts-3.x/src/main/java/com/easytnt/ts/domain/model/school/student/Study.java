@@ -6,7 +6,6 @@ package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.ValueObject;
-import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;

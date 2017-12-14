@@ -4,10 +4,6 @@
 
 package com.easytnt.ts.domain.model.school;
 
-import com.easytnt.commons.util.DateUtilWrapper;
-
-import java.util.Date;
-
 /**
  * @author Liguiqing
  * @since V3.0

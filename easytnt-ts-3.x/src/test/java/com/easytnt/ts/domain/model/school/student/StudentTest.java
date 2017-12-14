@@ -21,8 +21,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Date;
 
 import static org.junit.Assert.*;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Liguiqing
