@@ -32,6 +32,10 @@ public class Teacher extends Position {
         return course;
     }
 
+    public boolean canTeach(Course course){
+        return this.course.equals(course);
+    }
+
     public boolean isTeaching(){
         Date today = DateUtilWrapper.today();
         return this.period().isBetween(today);

@@ -76,7 +76,7 @@ public class SchoolApplicationService {
      * @param schoolId
      * @param command
      */
-    public void newHeadMasterTo(String schoolId,NewHeaderMasterCommand command){
+    public void headMasterTo(String schoolId,NewHeaderMasterCommand command){
         logger.debug("New school {} master is ",schoolId,command);
 
         HeadMaster master = new HeadMaster(new SchoolId(schoolId),command.getName(),command.getIdentity(),new Period(command.getStarts(),command.getEnds()));

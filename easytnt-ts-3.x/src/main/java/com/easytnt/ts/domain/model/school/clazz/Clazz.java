@@ -46,6 +46,13 @@ public class Clazz extends Entity {
 
     private Set<ClazzHistory> histories;
 
+
+    public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
+                 Grade grade, ClazzAdiminType adminType, WLType wl, TermId termId) {
+        this(schoolId,clazzId,name,clazzNo,DateUtilWrapper.toString(createDate,"yyyyy-MM"),
+                grade,adminType,wl,termId);
+    }
+
     public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, String createDate,
                  Grade grade, ClazzAdiminType adminType, WLType wl, TermId termId) {
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识");
@@ -62,12 +69,13 @@ public class Clazz extends Entity {
         this.createDate = createDate;
         this.adminType = adminType;
 
-
-        Date date = DateUtilWrapper.toDate(createDate,"yyyy-MM");
-        TermOrder order = TermOrder.orderOf(date);
-        ClazzHistory aHistory = new ClazzHistory(clazzId,termId,order,grade,wl);
-        this.histories = Sets.newTreeSet();
-        this.histories.add(aHistory);
+        if(termId != null){
+            Date date = DateUtilWrapper.toDate(createDate,"yyyy-MM");
+            TermOrder order = TermOrder.orderOf(date);
+            ClazzHistory aHistory = new ClazzHistory(clazzId,termId,order,grade,wl);
+            this.histories = Sets.newTreeSet();
+            this.histories.add(aHistory);
+        }
     }
 
     public boolean canBeStudyAndTeachIn(){

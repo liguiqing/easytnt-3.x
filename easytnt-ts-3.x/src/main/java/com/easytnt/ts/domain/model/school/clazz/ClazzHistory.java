@@ -33,10 +33,6 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
 
     private WLType wl;
 
-    private ClazzMaster master;
-
-    private Teacher mainTeacher;
-
     protected ClazzHistory(ClazzId clazzId, TermId termId,TermOrder termOrder, Grade grade, WLType wl) {
         this.clazzId = clazzId;
         this.termId = termId;
@@ -95,10 +91,7 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
 
     @Override
     public int compareTo(ClazzHistory other) {
-        int g =  this.grade.seq().getSeq() - other.grade.seq().getSeq();
-        if(g==0)
-            return this.termOrder.compareTo(other.termOrder);
-        else
-            return g;
+        return  (this.grade.seq().getSeq() * 100 + this.termOrder.getOrder())
+                  - (other.grade.seq().getSeq() * 100 +other.termOrder.getOrder());
     }
 }

@@ -68,6 +68,19 @@ public  class Staff extends Entity {
         this.positions.add(aPosition);
     }
 
+    public Position positionOf(PositionFilter positionFilter){
+        if(!this.hasPosition())
+            return null;
+        Iterator<Position> it = this.positions.iterator();
+        while(it.hasNext()){
+            Position position = it.next();
+            if(positionFilter.isSatisfied(position)){
+                return position;
+            }
+        }
+        return  null;
+    }
+
     /**
      * 续签一个职位
      *
