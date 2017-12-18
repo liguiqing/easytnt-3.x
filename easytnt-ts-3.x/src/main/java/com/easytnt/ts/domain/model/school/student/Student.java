@@ -6,10 +6,7 @@ package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.Entity;
-import com.easytnt.ts.domain.model.school.Grade;
-import com.easytnt.ts.domain.model.school.GradeCourseable;
-import com.easytnt.ts.domain.model.school.GradeCourseableFactory;
-import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
@@ -22,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -70,14 +68,59 @@ public class Student extends Entity {
     }
 
     public void addStudy(Clazz clazz, Grade grade,Teacher teacher, Date starts, Date ends){
-        GradeCourseable gradeCourseable = GradeCourseableFactory.lookup(this.schoolId());
-        boolean canBeStudied = grade.canBeTeachOrStudyOfCourse(gradeCourseable, teacher.course());
-        AssertionConcerns.assertArgumentTrue(canBeStudied,grade.name()+"不能学习"+teacher.course().name());
-        Study study = new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends);
-        if(this.studies.contains(study)){
-            studies.remove(study);
+        checkCourseCanStudy(grade,teacher.course());
+        AssertionConcerns.assertArgumentFalse(isStuding(grade,teacher.course()),
+                grade.name()+teacher.course().name()+"正在其他班级学习");
+
+        addStudy(new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends));
+    }
+
+    public void changeStudyClazzOfCourse(Clazz clazz, Grade grade,Teacher teacher, Date starts, Date ends){
+        checkCourseCanStudy(grade,teacher.course());
+        Study old = getStudyOnLine(grade,teacher.course());
+        if(old != null){
+            Study other = old.overNow();
+            addStudy(other);
         }
-        this.studies.add(study);
+        addStudy(new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends));
+    }
+
+    private void addStudy(Study aStudy){
+        if(this.studies.contains(aStudy)){
+            studies.remove(aStudy);
+        }
+        this.studies.add(aStudy);
+    }
+
+    private boolean isStuding(Grade grade,Course course){
+        Study study  = getStudyOnLine(grade,course);
+        if(study != null)
+            return false;
+        return true;
+    }
+
+    private Study getStudyOnLine(Grade grade,Course course){
+        if(hasStudies()){
+            Iterator<Study> it = this.studies.iterator();
+            while(it.hasNext()){
+                Study study = it.next();
+                if(study.sameGradeCourseOnLineOf(grade,course)){
+                    return study;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void checkCourseCanStudy(Grade grade,Course course){
+        GradeCourseable gradeCourseable = GradeCourseableFactory.lookup(this.schoolId());
+        boolean canBeStudied = grade.canBeTeachOrStudyOfCourse(gradeCourseable, course);
+        AssertionConcerns.assertArgumentTrue(canBeStudied,grade.name()+"不能学习"+course.name());
+
+    }
+
+    private boolean hasStudies(){
+        return this.studies != null && this.studies.size() > 0;
     }
 
     public void changeManagedClazz(Clazz clazz, Date starts, Date ends){

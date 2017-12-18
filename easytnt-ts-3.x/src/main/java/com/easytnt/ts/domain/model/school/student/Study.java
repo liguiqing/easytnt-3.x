@@ -6,6 +6,8 @@ package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.ValueObject;
+import com.easytnt.commons.util.DateUtilWrapper;
+import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
@@ -14,6 +16,8 @@ import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.cglib.core.Converter;
 
 import java.util.Date;
 
@@ -52,6 +56,27 @@ public class Study extends ValueObject {
         this.grade = grade;
         this.period = new Period(starts, ends);
         this.teacher = teacher;
+    }
+
+    public boolean sameGradeCourseOf(Grade grade, Course course){
+        return this.grade.equals(grade) && this.teacher.course().equals(course);
+    }
+
+    public boolean sameGradeCourseOnLineOf(Grade grade, Course course){
+        return this.sameGradeCourseOf(grade,course) && !this.period.isOver();
+    }
+
+    public Study overNow(){
+        return this.over(DateUtilWrapper.today());
+    }
+
+    public Study over(Date ends){
+        Study study =  new Study();
+        BeanCopier copier = BeanCopier.create(Study.class,Study.class,false);
+        copier.copy(this, study,null);
+        Period period = new Period(this.period.starts(),ends);
+        study.period = period;
+        return study;
     }
 
     @Override
@@ -102,5 +127,9 @@ public class Study extends ValueObject {
 
     public Teacher teacher() {
         return teacher;
+    }
+
+    protected Study(){
+        //Only 4 Persistance;
     }
 }
