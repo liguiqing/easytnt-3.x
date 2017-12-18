@@ -33,6 +33,6 @@ public enum WLType {
                 return type;
             }
         }
-        return null;
+        throw new WLTypeNotFondException("错误的文理分类：" + name);
     }
 }

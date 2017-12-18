@@ -91,10 +91,6 @@ public class Clazz extends Entity {
         throw new ClazzNotInTermException(term.toString());
     }
 
-    public ClazzMaster changeClazzMaster(Teacher teacher,Period period){
-        return teacher.transfer(new TeacherToClazzMasterTranslater(this.clazzId(),period));
-    }
-
     /**
      * 班级升一个年级
      * 能升班的规则是，最近的班级史必须是下学期;新学期学年必须是最近班级史的下一学年
@@ -102,6 +98,9 @@ public class Clazz extends Entity {
      * @param term
      */
     public void upGrade(Term term){
+        if(this.histories == null || this.histories.size() == 0)
+            return;
+
         ClazzHistory top = this.histories.iterator().next();
         AssertionConcerns.assertArgumentTrue(top.termOrder() == TermOrder.Second,"上学期不能升班");
         StudyYear topYearNext = term.termYear().nextYear();

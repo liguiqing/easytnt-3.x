@@ -51,6 +51,6 @@ public enum ClazzAdiminType {
                 return type;
             }
         }
-        return null;
+        throw new ClazzAdminTypeNotFoundException("错误的班级管理类型：" + name);
     }
 }
