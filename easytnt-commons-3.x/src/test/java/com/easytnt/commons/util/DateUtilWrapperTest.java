@@ -57,12 +57,12 @@ public class DateUtilWrapperTest {
         Date today = DateUtilWrapper.today();
         Date tomorrow = DateUtilWrapper.tomorrow();
         Date yestoday = DateUtilWrapper.yestoday();
-        assertTrue(DateUtilWrapper.greaterThan(tomorrow,today));
-        assertTrue(DateUtilWrapper.greaterThan(today,yestoday));
-        assertFalse(DateUtilWrapper.greaterThan(tomorrow,tomorrow));
-        assertFalse(DateUtilWrapper.greaterThan(yestoday,yestoday));
-        assertFalse(DateUtilWrapper.greaterThan(today,tomorrow));
-        assertFalse(DateUtilWrapper.greaterThan(yestoday,today));
+        assertTrue(DateUtilWrapper.largeThan(tomorrow,today));
+        assertTrue(DateUtilWrapper.largeThan(today,yestoday));
+        assertFalse(DateUtilWrapper.largeThan(tomorrow,tomorrow));
+        assertFalse(DateUtilWrapper.largeThan(yestoday,yestoday));
+        assertFalse(DateUtilWrapper.largeThan(today,tomorrow));
+        assertFalse(DateUtilWrapper.largeThan(yestoday,today));
     }
 
     @Test
@@ -84,10 +84,10 @@ public class DateUtilWrapperTest {
         Date today = DateUtilWrapper.today();
         Date tomorrow = DateUtilWrapper.tomorrow();
         Date yestoday = DateUtilWrapper.yestoday();
-        assertTrue(DateUtilWrapper.greaterThanYYMMDD(today,yestoday));
-        assertTrue(DateUtilWrapper.greaterThanYYMMDD(tomorrow,today));
-        assertTrue(DateUtilWrapper.greaterThanYYMMDD(tomorrow,yestoday));
-        assertFalse(DateUtilWrapper.greaterThanYYMMDD(today,today));
+        assertTrue(DateUtilWrapper.largeThanYYMMDD(today,yestoday));
+        assertTrue(DateUtilWrapper.largeThanYYMMDD(tomorrow,today));
+        assertTrue(DateUtilWrapper.largeThanYYMMDD(tomorrow,yestoday));
+        assertFalse(DateUtilWrapper.largeThanYYMMDD(today,today));
     }
 
     @Test

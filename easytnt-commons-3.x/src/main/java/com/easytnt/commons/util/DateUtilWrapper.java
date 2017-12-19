@@ -119,7 +119,7 @@ public class DateUtilWrapper {
      * @param otherDate
      * @return
      */
-    public static boolean greaterThan(Date aDate,Date otherDate){
+    public static boolean largeThan(Date aDate, Date otherDate){
         if(aDate == null || otherDate == null)
             return false;
 
@@ -134,7 +134,7 @@ public class DateUtilWrapper {
      * @param otherDate
      * @return
      */
-    public static boolean greaterThanYYMMDD(Date aDate,Date otherDate){
+    public static boolean largeThanYYMMDD(Date aDate, Date otherDate){
         if(aDate == null )
             return false;
         if(otherDate == null)
@@ -146,6 +146,28 @@ public class DateUtilWrapper {
         int id2 = Integer.valueOf(d2);
 
         return (id1-id2) > 0;
+    }
+
+    /**
+     * 日期是否大于等于另外的日期
+     * 取日期中的年月日进行比较
+     *
+     * @param aDate
+     * @param otherDate
+     * @return
+     */
+    public static boolean lgeThanYYMMDD(Date aDate, Date otherDate){
+        if(aDate == null )
+            return false;
+        if(otherDate == null)
+            return true;
+
+        String d1 = toString(aDate,"yyyyMMdd");
+        String d2 = toString(otherDate,"yyyyMMdd");
+        int id1 = Integer.valueOf(d1);
+        int id2 = Integer.valueOf(d2);
+
+        return (id1-id2) >= 0;
     }
 
     /**
@@ -182,6 +204,27 @@ public class DateUtilWrapper {
 
         return (id1-id2) < 0;
     }
+
+    /**
+     * 日期是否小于等于另外的日期
+     * 取日期中的年月日进行比较
+     *
+     * @param aDate
+     * @param otherDate
+     * @return
+     */
+    public static boolean lseThanYYMMDD(Date aDate,Date otherDate){
+        if(aDate == null || otherDate == null)
+            return false;
+
+        String d1 = toString(aDate,"yyyyMMdd");
+        String d2 = toString(otherDate,"yyyyMMdd");
+        int id1 = Integer.valueOf(d1);
+        int id2 = Integer.valueOf(d2);
+
+        return (id1-id2) <= 0;
+    }
+
 
     /**
      * 日期是否与另外的日期相同
