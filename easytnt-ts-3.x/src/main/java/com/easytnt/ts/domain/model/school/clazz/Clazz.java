@@ -46,15 +46,24 @@ public class Clazz extends Entity {
 
     private Set<ClazzHistory> histories;
 
+    public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
+                 Grade grade, Term term) {
+        this(schoolId,clazzId,name,clazzNo,createDate,grade,ClazzAdiminType.Union,term);
+    }
 
     public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
-                 Grade grade, ClazzAdiminType adminType, WLType wl, TermId termId) {
+                 Grade grade, ClazzAdiminType adminType, Term term) {
+        this(schoolId,clazzId,name,clazzNo,createDate,grade,adminType,WLType.None,term);
+    }
+
+    public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
+                 Grade grade, ClazzAdiminType adminType, WLType wl, Term term) {
         this(schoolId,clazzId,name,clazzNo,DateUtilWrapper.toString(createDate,"yyyyy-MM"),
-                grade,adminType,wl,termId);
+                grade,adminType,wl,term);
     }
 
     public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, String createDate,
-                 Grade grade, ClazzAdiminType adminType, WLType wl, TermId termId) {
+                 Grade grade, ClazzAdiminType adminType, WLType wl, Term term) {
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识");
         AssertionConcerns.assertArgumentNotNull(clazzId,"请提供班级唯一标识");
         AssertionConcerns.assertArgumentNotNull(name,"请提供班级名称");
@@ -68,12 +77,12 @@ public class Clazz extends Entity {
         this.clazzNo = clazzNo;
         this.createDate = createDate;
         this.adminType = adminType;
+        this.histories = Sets.newTreeSet();
 
-        if(termId != null){
+        if(term != null){
             Date date = DateUtilWrapper.toDate(createDate,"yyyy-MM");
             TermOrder order = TermOrder.orderOf(date);
-            ClazzHistory aHistory = new ClazzHistory(clazzId,termId,order,grade,wl);
-            this.histories = Sets.newTreeSet();
+            ClazzHistory aHistory = new ClazzHistory(clazzId,term,order,grade,wl);
             this.histories.add(aHistory);
         }
     }
@@ -89,6 +98,15 @@ public class Clazz extends Entity {
             }
         }
         throw new ClazzNotInTermException(term.toString());
+    }
+
+    public Grade periodGrade(Period period){
+        for(ClazzHistory history:this.histories){
+            if(history.isInPeriod(period)){
+                return history.grade();
+            }
+        }
+        return null;
     }
 
     /**
@@ -108,7 +126,7 @@ public class Clazz extends Entity {
 
         GradeNameGenerateStrategy nameGenerateStrategy = GradeNameGenerateStrategyFactory.lookup(this.schoolId);
         Grade nextGrade = top.grade().next(nameGenerateStrategy);
-        ClazzHistory newHistory = new ClazzHistory(clazzId,term.termId(),term.order(),nextGrade,top.wl());
+        ClazzHistory newHistory = new ClazzHistory(clazzId,term,term.order(),nextGrade,top.wl());
         this.histories.add(newHistory);
     }
 

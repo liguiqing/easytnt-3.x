@@ -11,6 +11,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -67,6 +68,16 @@ public class School extends Entity {
             grads.add(grade);
         }
         return grads;
+    }
+
+    public boolean hasGrade(Grade aGrade){
+        Iterator<Grade> grades = this.grades().iterator();
+        while(grades.hasNext()){
+            Grade grade = grades.next();
+            if(grade.equals(aGrade))
+                return true;
+        }
+        return false;
     }
 
     @Override

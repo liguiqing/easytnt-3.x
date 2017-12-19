@@ -6,9 +6,11 @@ package com.easytnt.ts.domain.model.school.clazz;
 
 import com.easytnt.commons.domain.ValueObject;
 import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.WLType;
 import com.easytnt.ts.domain.model.school.position.ClazzMaster;
 import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;
 import com.google.common.base.MoreObjects;
@@ -29,16 +31,23 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
 
     private TermOrder termOrder;
 
+    private Period period;
+
     private Grade grade; //年级
 
     private WLType wl;
 
-    protected ClazzHistory(ClazzId clazzId, TermId termId,TermOrder termOrder, Grade grade, WLType wl) {
+    protected ClazzHistory(ClazzId clazzId, Term term, TermOrder termOrder, Grade grade, WLType wl) {
         this.clazzId = clazzId;
-        this.termId = termId;
+        this.termId = term.termId();
+        this.period = new Period(term.timeSpan().starts(),term.timeSpan().ends());
         this.grade = grade;
         this.wl = wl;
         this.termOrder = termOrder;
+    }
+
+    public boolean isInPeriod(Period aPeriod){
+        return this.period.contains(aPeriod);
     }
 
     public ClazzId clazzId() {
@@ -59,6 +68,10 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
 
     public TermOrder termOrder() {
         return termOrder;
+    }
+
+    public Period period() {
+        return period;
     }
 
     @Override
@@ -94,4 +107,5 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
         return  (this.grade.seq().getSeq() * 100 + this.termOrder.getOrder())
                   - (other.grade.seq().getSeq() * 100 +other.termOrder.getOrder());
     }
+
 }

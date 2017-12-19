@@ -79,8 +79,7 @@ public class Student extends Entity {
         checkCourseCanStudy(grade,teacher.course());
         Study old = getStudyOnLine(grade,teacher.course());
         if(old != null){
-            Study other = old.overNow();
-            addStudy(other);
+            addStudy(old.overNow());
         }
         addStudy(new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends));
     }

@@ -8,6 +8,7 @@ import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.ts.application.school.command.NewClazzCommand;
 import com.easytnt.ts.application.school.command.NewClazzMasterCommand;
 import com.easytnt.ts.application.school.command.NewClazzTeacherCommand;
+import com.easytnt.ts.application.school.command.NewStudentCommand;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzAdiminType;
@@ -19,7 +20,9 @@ import com.easytnt.ts.domain.model.school.position.*;
 import com.easytnt.ts.domain.model.school.staff.Staff;
 import com.easytnt.ts.domain.model.school.staff.StaffId;
 import com.easytnt.ts.domain.model.school.staff.StaffRepository;
+import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
+import com.easytnt.ts.domain.model.school.term.TermRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +44,8 @@ public class ClazzApplicationService {
 
     private StaffRepository staffRepository;
 
+    private TermRepository termRepository;
+
     public void newClazz(String schoolId, NewClazzCommand command){
         logger.debug("New Clazz {} for school{}",command,schoolId);
 
@@ -50,9 +55,9 @@ public class ClazzApplicationService {
                 new StudyYear(command.getYear()));
         ClazzAdiminType type = ClazzAdiminType.fromName(command.getType());
         WLType wl = WLType.fromName(command.getWlType());
-        TermId termId = new TermId(command.getTermId());
+        Term term = termRepository.loadOfId(new TermId(command.getTermId()));
         Clazz newClazz = new Clazz(school.schoolId(),clazzId,command.getName(),command.getClazzNo(),
-                command.getCreateDate(),grade,type,wl,termId);
+                command.getCreateDate(),grade,type,wl,term);
         clazzRepository.save(newClazz);
     }
 
@@ -94,11 +99,22 @@ public class ClazzApplicationService {
             }
         });
 
+        AssertionConcerns.assertArgumentNotNull(position,command.getName()+"老师没有教授" +
+                command.getCourseName());
         Teacher teacher = (Teacher)position;
-        ClazzTeacher clazzTeacher = teacher.transfer(new TeacherToClazzTeacherTranslater(clazz,
-                new Period(command.getStarts(),command.getEnds()),new Grade(null,null,null)));
+        Period period = new Period(command.getStarts(), command.getEnds());
+        Grade grade = clazz.periodGrade(period);
+        AssertionConcerns.assertArgumentNotNull(grade,period.formatString() +"没有找到" +
+                clazz.name());
 
-        staff.addPosition(teacher);
+        ClazzTeacher clazzTeacher = teacher.transfer(new TeacherToClazzTeacherTranslater(clazz,
+                new Period(command.getStarts(),command.getEnds()),grade));
+
+        staff.addPosition(clazzTeacher);
         staffRepository.save(staff);
+    }
+
+    public void addStudent(String schoolId,NewStudentCommand command){
+
     }
 }

@@ -5,6 +5,7 @@
 package com.easytnt.ts.domain.model.school.term;
 
 import com.easytnt.commons.domain.EntityRepository;
+import com.easytnt.ts.domain.model.school.common.Period;
 
 /**
  * @author Liguiqing
@@ -13,4 +14,5 @@ import com.easytnt.commons.domain.EntityRepository;
 
 public interface TermRepository extends EntityRepository<Term,TermId> {
 
+    Term findBy(Period period);
 }

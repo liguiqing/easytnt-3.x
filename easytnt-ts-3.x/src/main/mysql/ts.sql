@@ -200,6 +200,8 @@ CREATE TABLE `ts_clazz_term_history` (
   `yearName` varchar(32) NOT NULL COMMENT '学年',
   `yearStarts` SMALLINT (4) NOT NULL COMMENT '学年起始年度',
   `yearEnds` SMALLINT(4) NOT NULL COMMENT '学年结束年度',
+  `starts` DATE  COMMENT '开始时间，与学期开学时间一致',
+  `ends` DATE  COMMENT '结束时间，与学期结束时间一致',
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_history_clazzId` (`clazzId`),
   KEY `x_ts_clazz_history_termId` (`termId`)

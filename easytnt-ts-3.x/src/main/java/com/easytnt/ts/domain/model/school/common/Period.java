@@ -34,11 +34,15 @@ public class Period {
     }
 
     public boolean gratherThan(Date ends){
-        return DateUtilWrapper.greaterThanYYMMDD(this.ends,ends);
+        return DateUtilWrapper.largeThanYYMMDD(this.ends,ends);
     }
 
     public boolean isBetween(Date aDate){
-        return DateUtilWrapper.lessThan(this.ends,ends) && DateUtilWrapper.greaterThanYYMMDD(this.starts,aDate);
+        return DateUtilWrapper.lseThanYYMMDD(this.ends,aDate) && DateUtilWrapper.lgeThanYYMMDD(this.starts,aDate);
+    }
+
+    public boolean contains(Period aPeriod){
+        return this.isBetween(aPeriod.ends) && this.isBetween(aPeriod.starts);
     }
 
     @Override
@@ -63,6 +67,11 @@ public class Period {
                 .toString();
     }
 
+    public String formatString(){
+        return DateUtilWrapper.toString(this.starts,"yyyy-MM-dd") + "-" +
+                DateUtilWrapper.toString(this.starts,"yyyy-MM-dd");
+    }
+
     public Date starts() {
         return starts;
     }
@@ -74,6 +83,6 @@ public class Period {
     public boolean isOver() {
         if(this.ends == null )
             return false;
-        return DateUtilWrapper.greaterThanYYMMDD(this.ends,DateUtilWrapper.today());
+        return DateUtilWrapper.largeThanYYMMDD(this.ends,DateUtilWrapper.today());
     }
 }

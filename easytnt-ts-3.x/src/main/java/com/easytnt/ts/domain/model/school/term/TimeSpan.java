@@ -38,7 +38,7 @@ public class TimeSpan extends ValueObject{
         if(DateUtilWrapper.equalsYYMMDD(date,this.starts) || DateUtilWrapper.equalsYYMMDD(date,this.ends)){
             return true;
         }
-        return DateUtilWrapper.lessThanYYMMDD(date,this.ends) && DateUtilWrapper.greaterThanYYMMDD(date,this.starts);
+        return DateUtilWrapper.lessThanYYMMDD(date,this.ends) && DateUtilWrapper.largeThanYYMMDD(date,this.starts);
     }
 
     /**
