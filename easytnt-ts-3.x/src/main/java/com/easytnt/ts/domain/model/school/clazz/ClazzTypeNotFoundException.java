@@ -11,20 +11,20 @@ import com.easytnt.commons.lang.BusinessException;
  * @since V3.0
  */
 
-public class ClazzAdminTypeNotFoundException extends BusinessException {
+public class ClazzTypeNotFoundException extends BusinessException {
 
-    public ClazzAdminTypeNotFoundException() {
+    public ClazzTypeNotFoundException() {
     }
 
-    public ClazzAdminTypeNotFoundException(String message) {
+    public ClazzTypeNotFoundException(String message) {
         super(message);
     }
 
-    public ClazzAdminTypeNotFoundException(String message, Throwable cause) {
+    public ClazzTypeNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ClazzAdminTypeNotFoundException(Throwable cause) {
+    public ClazzTypeNotFoundException(Throwable cause) {
         super(cause);
     }
 }

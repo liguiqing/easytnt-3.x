@@ -4,7 +4,6 @@
 
 package com.easytnt.ts.application.school.command;
 
-import com.easytnt.ts.domain.model.school.clazz.ClazzAdiminType;
 import com.easytnt.ts.domain.model.school.common.WLType;
 import com.google.common.base.MoreObjects;
 
@@ -119,7 +118,7 @@ public class NewClazzCommand {
     }
 
     public String getType() {
-        return type == null?ClazzAdiminType.Union.name():type;
+        return type;
     }
 
     public void setType(String type) {

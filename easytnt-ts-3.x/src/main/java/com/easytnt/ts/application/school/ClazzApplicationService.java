@@ -10,10 +10,7 @@ import com.easytnt.ts.application.school.command.NewClazzMasterCommand;
 import com.easytnt.ts.application.school.command.NewClazzTeacherCommand;
 import com.easytnt.ts.application.school.command.NewStudentCommand;
 import com.easytnt.ts.domain.model.school.*;
-import com.easytnt.ts.domain.model.school.clazz.Clazz;
-import com.easytnt.ts.domain.model.school.clazz.ClazzAdiminType;
-import com.easytnt.ts.domain.model.school.clazz.ClazzId;
-import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
+import com.easytnt.ts.domain.model.school.clazz.*;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.WLType;
 import com.easytnt.ts.domain.model.school.position.*;
@@ -46,6 +43,7 @@ public class ClazzApplicationService {
 
     private TermRepository termRepository;
 
+
     public void newClazz(String schoolId, NewClazzCommand command){
         logger.debug("New Clazz {} for school{}",command,schoolId);
 
@@ -53,11 +51,12 @@ public class ClazzApplicationService {
         ClazzId clazzId = clazzRepository.nextIdentity();
         Grade grade = new Grade(command.getGradeName(),GradeLevel.fromName(command.getGradeLevel()),
                 new StudyYear(command.getYear()));
-        ClazzAdiminType type = ClazzAdiminType.fromName(command.getType());
+
         WLType wl = WLType.fromName(command.getWlType());
         Term term = termRepository.loadOfId(new TermId(command.getTermId()));
-        Clazz newClazz = new Clazz(school.schoolId(),clazzId,command.getName(),command.getClazzNo(),
-                command.getCreateDate(),grade,type,wl,term);
+
+        Clazz newClazz = ClazzFactory.newClazz(school.schoolId(),clazzId,command.getName(),command.getClazzNo(),
+                command.getCreateDate(),grade,command.getType(),wl,term);
         clazzRepository.save(newClazz);
     }
 

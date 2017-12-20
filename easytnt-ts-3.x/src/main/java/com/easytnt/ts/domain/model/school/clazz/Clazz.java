@@ -29,7 +29,7 @@ import java.util.Set;
  * @since V3.0
  */
 
-public class Clazz extends Entity {
+public abstract class Clazz extends Entity {
     private SchoolId schoolId;
 
     private ClazzId clazzId;
@@ -40,43 +40,35 @@ public class Clazz extends Entity {
 
     private String createDate; //建班日期，使用时格式为YYYY-mm
 
-    private ClazzAdiminType adminType;
-
     private Set<ClazzCatagory> catagories;
 
     private Set<ClazzHistory> histories;
 
     public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
-                 Grade grade, Term term) {
-        this(schoolId,clazzId,name,clazzNo,createDate,grade,ClazzAdiminType.Union,term);
+                 Grade grade,Term term) {
+        this(schoolId,clazzId,name,clazzNo,createDate,grade,WLType.None,term);
     }
 
-    public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
-                 Grade grade, ClazzAdiminType adminType, Term term) {
-        this(schoolId,clazzId,name,clazzNo,createDate,grade,adminType,WLType.None,term);
-    }
 
     public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, Date createDate,
-                 Grade grade, ClazzAdiminType adminType, WLType wl, Term term) {
+                 Grade grade, WLType wl, Term term) {
         this(schoolId,clazzId,name,clazzNo,DateUtilWrapper.toString(createDate,"yyyyy-MM"),
-                grade,adminType,wl,term);
+                grade,wl,term);
     }
 
     public Clazz(SchoolId schoolId, ClazzId clazzId, String name, String clazzNo, String createDate,
-                 Grade grade, ClazzAdiminType adminType, WLType wl, Term term) {
+                 Grade grade,  WLType wl, Term term) {
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识");
         AssertionConcerns.assertArgumentNotNull(clazzId,"请提供班级唯一标识");
         AssertionConcerns.assertArgumentNotNull(name,"请提供班级名称");
         AssertionConcerns.assertArgumentNotNull(createDate,"请提供班级创建日期");
         AssertionConcerns.assertArgumentNotNull(grade,"请提供班级所属年级");
-        AssertionConcerns.assertArgumentNotNull(adminType,"请提供班级管理类型");
 
         this.schoolId = schoolId;
         this.clazzId = clazzId;
         this.name = name;
         this.clazzNo = clazzNo;
         this.createDate = createDate;
-        this.adminType = adminType;
         this.histories = Sets.newTreeSet();
 
         if(term != null){
@@ -85,10 +77,6 @@ public class Clazz extends Entity {
             ClazzHistory aHistory = new ClazzHistory(clazzId,term,order,grade,wl);
             this.histories.add(aHistory);
         }
-    }
-
-    public boolean canBeStudyAndTeachIn(){
-        return this.canBeManaged() && this.canBeStudied();
     }
 
     public Grade termGrade(Term term){
@@ -141,12 +129,15 @@ public class Clazz extends Entity {
         this.catagories.add(aCatagory);
     }
 
-    public boolean canBeManaged(){
-        return this.adminType.canBeManaged();
-    }
 
-    public boolean canBeStudied(){
-        return this.adminType.canBeStudied();
+    public abstract boolean canBeStudyAndTeachIn();
+
+    public abstract boolean canBeManaged();
+
+    public abstract boolean canBeStudied();
+
+    protected boolean classOf(String clazzName) {
+        return this.getClass().getSimpleName().equals(clazzName);
     }
 
     public SchoolId schoolId() {
@@ -169,10 +160,6 @@ public class Clazz extends Entity {
         return createDate;
     }
 
-    public ClazzAdiminType adminType() {
-        return adminType;
-    }
-
     public Set<ClazzCatagory> catagories() {
         return ImmutableSet.copyOf(catagories);
     }
@@ -182,7 +169,7 @@ public class Clazz extends Entity {
     }
 
     protected Clazz(){
-        //Only 4 persistent
+
     }
 
 }
