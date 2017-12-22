@@ -89,4 +89,7 @@ public class Term extends Entity {
     public SchoolId schoolId() {
         return schoolId;
     }
+
+    protected Term() {
+    }
 }

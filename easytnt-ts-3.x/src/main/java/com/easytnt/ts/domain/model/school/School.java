@@ -122,4 +122,7 @@ public class School extends Entity {
     public String alias() {
         return alias;
     }
+
+    protected School() {
+    }
 }
