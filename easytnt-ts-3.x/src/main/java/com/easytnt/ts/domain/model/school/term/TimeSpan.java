@@ -77,4 +77,8 @@ public class TimeSpan extends ValueObject{
     public Date ends() {
         return ends;
     }
+
+    protected TimeSpan(){
+
+    }
 }

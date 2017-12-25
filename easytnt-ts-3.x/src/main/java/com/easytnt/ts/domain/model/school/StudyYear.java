@@ -92,4 +92,11 @@ public class StudyYear extends ValueObject {
     public int endsYear() {
         return endsYear;
     }
+
+    public String name(){
+        return this.name;
+    }
+
+    protected StudyYear() {
+    }
 }

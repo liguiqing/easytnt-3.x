@@ -85,4 +85,7 @@ public class Period {
             return false;
         return DateUtilWrapper.largeThanYYMMDD(this.ends,DateUtilWrapper.today());
     }
+
+    protected Period() {
+    }
 }

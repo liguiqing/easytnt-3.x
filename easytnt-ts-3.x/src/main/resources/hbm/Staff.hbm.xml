@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.easytnt.ts.domain.model.school.staff.Staff" table="ts_staff" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <component name="schoolId" class="com.easytnt.ts.domain.model.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+        <component name="staffId" class="com.easytnt.ts.domain.model.school.staff.StaffId">
+            <property name="id" column="staffId" type="java.lang.String"/>
+        </component>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="gender" column="gender" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.easytnt.ts.domain.model.school.common.Gender</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <set name="identity" table="ts_staff_identity">
+            <key column="staffId"></key>
+            <one-to-many class="com.easytnt.ts.domain.model.school.common.Identity"/>
+        </set>
+        <component name="period" class="com.easytnt.ts.domain.model.school.common.Period">
+            <property name="starts" column="periodStarts" type="java.util.Date"/>
+            <property name="ends" column="periodEnds" type="java.util.Date"/>
+        </component>
+
+    </class>
+
+    <class name="com.easytnt.ts.domain.model.school.common.Identity" table="ts_staff_identity" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <property name="value" column="identity" type="java.lang.String"/>
+        <property name="type" column="identityType" >
+            <type name="org.hibernate.type.EnumType" >
+                <param name="enumClass">com.easytnt.ts.domain.model.school.common.IdentityType</param>
+                <param name="usedName">true</param>
+            </type>
+        </property>
+    </class>
+</hibernate-mapping>

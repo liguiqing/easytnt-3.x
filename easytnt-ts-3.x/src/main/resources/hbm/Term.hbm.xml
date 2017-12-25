@@ -10,9 +10,12 @@
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="identity" />
         </id>
+        <component name="termId" class="com.easytnt.ts.domain.model.school.term.TermId">
+            <property name="id" column="termId" type="java.lang.String"/>
+        </component>
         <property name="name" column="name" type="java.lang.String"/>
         <component name="termYear" class="com.easytnt.ts.domain.model.school.StudyYear">
-            <property name="name" column="yearName" type="java.lang.String"/>
+            <property name="name" column="yearName" type="java.lang.String" />
             <property name="startsYear" column="startsYear" type="java.lang.Integer"/>
             <property name="endsYear" column="endsYear" type="java.lang.Integer"/>
         </component>

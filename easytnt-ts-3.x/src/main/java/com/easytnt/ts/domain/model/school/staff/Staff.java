@@ -41,6 +41,10 @@ public  class Staff extends Entity {
 
     private Set<Position> positions;
 
+    public Staff(SchoolId schoolId,StaffId staffId,String name, Period period) {
+        this(schoolId,staffId,name, Gender.Unknow, null, period);
+    }
+
     public Staff(SchoolId schoolId,StaffId staffId,String name,Identity identity, Period period) {
         this(schoolId,staffId,name, Gender.Unknow, identity, period);
     }
@@ -177,5 +181,7 @@ public  class Staff extends Entity {
         return period;
     }
 
+    protected Staff(){
 
+    }
 }

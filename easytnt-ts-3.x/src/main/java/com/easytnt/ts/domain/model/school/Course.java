@@ -54,4 +54,8 @@ public class Course extends ValueObject {
                 .add("subjectId", subjectId)
                 .toString();
     }
+
+    protected Course(){
+        
+    }
 }

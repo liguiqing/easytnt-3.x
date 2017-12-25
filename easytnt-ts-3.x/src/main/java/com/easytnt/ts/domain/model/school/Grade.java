@@ -84,4 +84,8 @@ public class Grade extends ValueObject implements Comparable<Grade>{
     public int compareTo(Grade o) {
         return this.seq.getSeq() - o.seq.getSeq();
     }
+
+    protected Grade() {
+
+    }
 }
