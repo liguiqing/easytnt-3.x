@@ -48,8 +48,7 @@ CREATE TABLE `ts_staff_identity` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `staffId` varchar(36) NOT NULL COMMENT '教职工唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
   `identity` varchar(32) NOT NULL COMMENT '教职工身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '教职工身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教职工身份证件名，与identityType保持一致',
+  `identityType` varchar (8) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 学籍号, 学号,教育云标识,QQ,微信,港澳台证件号, 考号,其他',
   PRIMARY KEY (`id`),
   KEY `x_ts_staff_staffId` (`staffId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='教职工身份标识表';
@@ -250,8 +249,7 @@ CREATE TABLE `ts_student_identity` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `studentId` varchar(36) NOT NULL COMMENT '学生唯一标识，关联表ts_student_study.studentId',
   `identity` varchar(32) NOT NULL COMMENT '学生身份证件号',
-  `identityType` SMALLINT (2) DEFAULT 1  COMMENT '学生身份证件号类型：身份证-1, 学籍号-2, 学号-3,教育云标识-4,QQ-5,微信-6,港澳台证件号-7, 考号-8,其他-99',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '学生身份证件名，与identityType保持一致',
+  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 学籍号, 学号,教育云标识,QQ,微信,港澳台证件号, 考号,其他',
   PRIMARY KEY (`id`),
   KEY `ts_student_identity_studentId` (`studentId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学生身份标识表';
