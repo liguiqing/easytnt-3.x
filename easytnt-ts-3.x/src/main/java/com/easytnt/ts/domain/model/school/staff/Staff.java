@@ -8,7 +8,6 @@ import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Gender;
-import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.position.Position;
 import com.easytnt.ts.domain.model.school.position.PositionFilter;
@@ -35,7 +34,7 @@ public  class Staff extends Entity {
 
     private Gender gender;
 
-    private Set<Identity> identity; //唯一标识,可以是学校的工号，也可以由系统自动生成
+    private Set<StaffIdentity> identity; //唯一标识,可以是学校的工号，也可以由系统自动生成
 
     private Period period;
 
@@ -45,22 +44,27 @@ public  class Staff extends Entity {
         this(schoolId,staffId,name, Gender.Unknow, null, period);
     }
 
-    public Staff(SchoolId schoolId,StaffId staffId,String name,Identity identity, Period period) {
-        this(schoolId,staffId,name, Gender.Unknow, identity, period);
+    public Staff(SchoolId schoolId,StaffId staffId,String name,Gender gender, Period period) {
+        this(schoolId,staffId,name, gender, null, period);
     }
 
-    public Staff(SchoolId schoolId,StaffId staffId,String name,Gender gender,Identity identity, Period period) {
+    public Staff(SchoolId schoolId,StaffId staffId,String name,StaffIdentity StaffIdentity, Period period) {
+        this(schoolId,staffId,name, Gender.Unknow, StaffIdentity, period);
+    }
+
+    public Staff(SchoolId schoolId,StaffId staffId,String name,Gender gender,StaffIdentity StaffIdentity, Period period) {
         this.schoolId = schoolId;
         this.staffId = staffId;
         this.name = name;
         this.gender = gender;
-        this.identity = Sets.newHashSet();
-        this.addIdentity(identity);
         this.period = period;
+        this.identity = Sets.newHashSet();
+        if(StaffIdentity != null)
+            this.addIdentity(StaffIdentity);
     }
 
-    public void addIdentity(Identity identity){
-        this.identity.add(identity);
+    public void addIdentity(StaffIdentity StaffIdentity){
+        this.identity.add(StaffIdentity);
     }
 
     public void addPosition(Position aPosition){
@@ -173,7 +177,7 @@ public  class Staff extends Entity {
         return gender;
     }
 
-    public Set<Identity> identity() {
+    public Set<StaffIdentity> identity() {
         return identity;
     }
 

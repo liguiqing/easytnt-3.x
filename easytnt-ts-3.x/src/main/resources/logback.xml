@@ -56,11 +56,6 @@
 		<appender-ref ref="ASYNC" />
 	</logger>
 
-	<logger name="org.hibernate" additivity="false">
-		<level value="${logger.org.hibernate}" />
-		<appender-ref ref="ASYNC" />
-	</logger>
-
 	<logger name="org.hibernate.type.descriptor.sql.BasicBinder"
 		additivity="false">
 		<level value="${logger.org.hibernate.type.descriptor.sql.BasicBinder}" />

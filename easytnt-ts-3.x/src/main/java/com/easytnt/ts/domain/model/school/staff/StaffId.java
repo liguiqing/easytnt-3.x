@@ -17,6 +17,6 @@ public class StaffId extends AbstractId {
         super(anId);
     }
 
-    public StaffId() {
+    protected StaffId() {
     }
 }

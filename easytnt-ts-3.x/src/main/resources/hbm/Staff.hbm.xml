@@ -10,20 +10,24 @@
         <component name="schoolId" class="com.easytnt.ts.domain.model.school.SchoolId">
             <property name="id" column="schoolId" type="java.lang.String"/>
         </component>
+
         <component name="staffId" class="com.easytnt.ts.domain.model.school.staff.StaffId">
             <property name="id" column="staffId" type="java.lang.String"/>
         </component>
+
         <property name="name" column="name" type="java.lang.String"/>
         <property name="gender" column="gender" >
-            <type name="org.hibernate.type.EnumType">
+            <type name="com.easytnt.commons.port.adapter.persistence.hibernate.FieldEnumType">
                 <param name="enumClass">com.easytnt.ts.domain.model.school.common.Gender</param>
-                <param name="useNamed">true</param>
+                <param name="field">name</param>
             </type>
         </property>
-        <set name="identity" table="ts_staff_identity">
-            <key column="staffId"></key>
-            <one-to-many class="com.easytnt.ts.domain.model.school.common.Identity"/>
+
+        <set name="identity" table="ts_staff_identity" cascade="all" order-by="id" fetch="join" lazy="false">
+            <key column="staffId" property-ref="staffId" />
+            <one-to-many class="com.easytnt.ts.domain.model.school.staff.StaffIdentity"/>
         </set>
+
         <component name="period" class="com.easytnt.ts.domain.model.school.common.Period">
             <property name="starts" column="periodStarts" type="java.util.Date"/>
             <property name="ends" column="periodEnds" type="java.util.Date"/>
@@ -31,16 +35,26 @@
 
     </class>
 
-    <class name="com.easytnt.ts.domain.model.school.common.Identity" table="ts_staff_identity" lazy="true">
+
+    <class name="com.easytnt.ts.domain.model.school.staff.StaffIdentity" table="ts_staff_identity" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="identity" />
         </id>
+        <component name="entityId" class="com.easytnt.ts.domain.model.school.staff.StaffId">
+            <property name="id" column="staffId" type="java.lang.String"/>
+        </component>
         <property name="value" column="identity" type="java.lang.String"/>
-        <property name="type" column="identityType" >
-            <type name="org.hibernate.type.EnumType" >
+        <property name="type" column="identityTypeName" >
+            <type name="com.easytnt.commons.port.adapter.persistence.hibernate.FieldEnumType">
                 <param name="enumClass">com.easytnt.ts.domain.model.school.common.IdentityType</param>
-                <param name="usedName">true</param>
+                <param name="field">name</param>
             </type>
         </property>
+
+        <component name="validity" class="com.easytnt.ts.domain.model.school.common.Period">
+            <property name="starts" column="validityStarts" type="java.util.Date"/>
+            <property name="ends" column="validityEnds" type="java.util.Date"/>
+        </component>
     </class>
+
 </hibernate-mapping>

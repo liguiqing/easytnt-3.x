@@ -13,7 +13,8 @@ package com.easytnt.ts.domain.model.school.common;
 
 public enum IdentityType {
     IDCard("身份证", 1), StudyNumber("学籍号", 2), SchoolNumber("学号", 3),EduID("教育云标识",4),
-    QQ("QQ号",5),Weixin("微信",6), HKMATWIDCard("港澳台证件号", 7), JobNo("考号", 8),Other("其他", 99),Systems("系统生成",100);
+    QQ("QQ号",5),Weixin("微信",6), HKMATWIDCard("港澳台证件号", 7),
+    JobNo("工号", 8),ExamNo("考号", 9),Other("其他", 99),Systems("系统生成",100);
 
     private final String name;
 

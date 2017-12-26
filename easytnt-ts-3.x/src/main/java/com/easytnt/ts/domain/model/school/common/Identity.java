@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.domain.model.school.common;
 
+import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.IdentifiedValueObject;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -15,33 +16,52 @@ import com.google.common.base.Objects;
  * @since V3.0
  */
 
-public class Identity extends IdentifiedValueObject{
+public abstract class Identity extends IdentifiedValueObject{
+
+    private AbstractId entityId;
+
     private IdentityType type;
 
     private String value;
 
-    public Identity(IdentityType type, String value) {
+    private Period validity;//有效期，为空表示一直有效
+
+    public Identity(AbstractId entityId,IdentityType type, String value) {
+        this.entityId = entityId;
         this.type = type;
         this.value = value;
     }
 
+    public Identity(AbstractId entityId,IdentityType type, String value,Period validity) {
+        this.entityId = entityId;
+        this.type = type;
+        this.value = value;
+        this.validity = validity;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.type, this.value);
+        return Objects.hashCode(this.entityId,this.type, this.value);
     }
 
     @Override
     public boolean equals(Object o) {
         if (o != null && o instanceof Identity) {
             Identity that = (Identity) o;
-            return Objects.equal(this.type, that.type) && Objects.equal(this.value, that.value);
+            return Objects.equal(this.entityId, that.entityId)
+                    && Objects.equal(this.type, that.type)
+                    && Objects.equal(this.value, that.value);
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("type", this.type).add("value", this.value).toString();
+        return MoreObjects.toStringHelper(this)
+                .add("entityId",this.entityId)
+                .add("type", this.type)
+                .add("value", this.value)
+                .add("validity",this.validity).toString();
     }
 
     public IdentityType type() {
@@ -51,4 +71,14 @@ public class Identity extends IdentifiedValueObject{
     public String value() {
         return value;
     }
+
+    public Period validity() {
+        return validity;
+    }
+
+    public AbstractId entityId() {
+        return entityId;
+    }
+
+    protected Identity(){}
 }

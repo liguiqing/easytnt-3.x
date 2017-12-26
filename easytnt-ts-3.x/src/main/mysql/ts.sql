@@ -47,8 +47,10 @@ DROP TABLE IF EXISTS `ts_staff_identity`;
 CREATE TABLE `ts_staff_identity` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `staffId` varchar(36) NOT NULL COMMENT '教职工唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
-  `identity` varchar(32) NOT NULL COMMENT '教职工身份证件号',
-  `identityType` varchar (8) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 学籍号, 学号,教育云标识,QQ,微信,港澳台证件号, 考号,其他',
+  `identity` varchar(36) NOT NULL COMMENT '教职工身份证件号',
+  `identityTypeName` varchar (16) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 教育云标识,QQ,微信,港澳台证件号, 工号,其他',
+  `validityStarts` DATE  COMMENT '证件有效开始时间',
+  `validityEnds` DATE  COMMENT '证件有效结束时间,为空时一直有效',
   PRIMARY KEY (`id`),
   KEY `x_ts_staff_staffId` (`staffId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='教职工身份标识表';
@@ -248,8 +250,10 @@ DROP TABLE IF EXISTS `ts_student_identity`;
 CREATE TABLE `ts_student_identity` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `studentId` varchar(36) NOT NULL COMMENT '学生唯一标识，关联表ts_student_study.studentId',
-  `identity` varchar(32) NOT NULL COMMENT '学生身份证件号',
-  `identityTypeName` varchar (8) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 学籍号, 学号,教育云标识,QQ,微信,港澳台证件号, 考号,其他',
+  `identity` varchar(36) NOT NULL COMMENT '学生身份证件号',
+  `identityTypeName` varchar (16) DEFAULT '身份证'  COMMENT '学生身份证件名，身份证, 学籍号, 学号,教育云标识,QQ,微信,港澳台证件号, 考号,其他',
+  `validityStarts` DATE  COMMENT '证件有效开始时间',
+  `validityEnds` DATE  COMMENT '证件有效结束时间,为空时一直有效',
   PRIMARY KEY (`id`),
   KEY `ts_student_identity_studentId` (`studentId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学生身份标识表';

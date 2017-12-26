@@ -8,7 +8,6 @@ import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.ts.application.school.command.*;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
-import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.IdentityType;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.position.HeadMaster;
@@ -17,6 +16,7 @@ import com.easytnt.ts.domain.model.school.position.PositionFilter;
 import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.staff.Staff;
 import com.easytnt.ts.domain.model.school.staff.StaffId;
+import com.easytnt.ts.domain.model.school.staff.StaffIdentity;
 import com.easytnt.ts.domain.model.school.staff.StaffRepository;
 import com.easytnt.ts.domain.model.school.term.*;
 import org.slf4j.Logger;
@@ -63,9 +63,9 @@ public class SchoolApplicationService {
      */
     public void addStaffTo(String schoolId,NewStaffCommand command){
         logger.debug("Add Staff {} to school {}  ",schoolId,command);
-
-        Staff staff = new Staff(new SchoolId(schoolId),staffRepository.nextIdentity(),command.getName(),
-                new Identity(IdentityType.EduID.Other,command.getIdentity()),
+        StaffId newId = staffRepository.nextIdentity();
+        Staff staff = new Staff(new SchoolId(schoolId),newId,command.getName(),
+                new StaffIdentity(newId,IdentityType.EduID.Other,command.getIdentity()),
                 new Period(command.getStarts(), command.getEnds()));
         staffRepository.save(staff);
     }
@@ -119,12 +119,12 @@ public class SchoolApplicationService {
 
     public void addTeacher(String schoolId,NewTeacherCommand command){
         logger.debug("Teacher {} join school {} ",command,schoolId);
-
-        Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
+        StaffId staffId = new StaffId(command.getIdentity());
+        Staff staff = staffRepository.loadOfId(staffId);
         SchoolId schoolId1 = new SchoolId(schoolId);
         if(staff == null){
             staff = new Staff(schoolId1,staffRepository.nextIdentity(),command.getName(),
-                        new Identity(IdentityType.EduID.Other,command.getIdentity()),
+                        new StaffIdentity(staffId,IdentityType.EduID.Other,command.getIdentity()),
                         new Period(command.getStarts(), command.getEnds()));
         }
 
