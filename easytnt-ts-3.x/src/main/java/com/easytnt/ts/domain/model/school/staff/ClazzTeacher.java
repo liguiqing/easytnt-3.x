@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.position;
+package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.ts.domain.model.school.Grade;
@@ -28,7 +28,7 @@ public class ClazzTeacher extends Position{
     private Teacher teacher;
 
 
-    public ClazzTeacher(SchoolId schoolId, Clazz clazz,String name, String identity,
+    protected ClazzTeacher(SchoolId schoolId, Clazz clazz,String name, String identity,
                         Period period, Teacher teacher,Grade grade) {
         super(schoolId, name, identity, period);
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供班级");
@@ -63,7 +63,7 @@ public class ClazzTeacher extends Position{
         return newTeacher;
     }
 
-    protected ClazzTeacher(SchoolId schoolId,String name, String identity, Period period){
+    private ClazzTeacher(SchoolId schoolId,String name, String identity, Period period){
         super(schoolId, name, identity, period);
     }
 

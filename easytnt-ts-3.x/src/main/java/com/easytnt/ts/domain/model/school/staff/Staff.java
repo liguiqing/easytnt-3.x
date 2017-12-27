@@ -9,8 +9,6 @@ import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.position.Position;
-import com.easytnt.ts.domain.model.school.position.PositionFilter;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
@@ -74,6 +72,11 @@ public  class Staff extends Entity {
             this.positions.remove(aPosition);
         }
         this.positions.add(aPosition);
+    }
+
+    public void actTo(Act act,Period period){
+        Position newPosition = act.actTo(this,period);
+        this.addPosition(newPosition);
     }
 
     public Position positionOf(PositionFilter positionFilter){
@@ -183,6 +186,10 @@ public  class Staff extends Entity {
 
     public Period period() {
         return period;
+    }
+
+    public Set<Position> positions() {
+        return positions;
     }
 
     protected Staff(){

@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.position;
+package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Period;
@@ -16,7 +16,9 @@ import com.easytnt.ts.domain.model.school.common.Period;
 
 public class HeadMaster extends Position {
 
-    public HeadMaster(SchoolId schoolId,String name, String identity, Period period) {
+    private String post = "校长";
+
+    protected HeadMaster(SchoolId schoolId,String name, String identity, Period period) {
         super(schoolId,name, identity, period);
     }
 
@@ -32,7 +34,7 @@ public class HeadMaster extends Position {
 
     @Override
     public String positionName() {
-        return "校长";
+        return this.post;
     }
 
 }

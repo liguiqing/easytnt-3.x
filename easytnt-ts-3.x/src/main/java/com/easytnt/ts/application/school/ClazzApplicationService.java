@@ -13,10 +13,7 @@ import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.*;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.WLType;
-import com.easytnt.ts.domain.model.school.position.*;
-import com.easytnt.ts.domain.model.school.staff.Staff;
-import com.easytnt.ts.domain.model.school.staff.StaffId;
-import com.easytnt.ts.domain.model.school.staff.StaffRepository;
+import com.easytnt.ts.domain.model.school.staff.*;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermRepository;
@@ -60,27 +57,19 @@ public class ClazzApplicationService {
         clazzRepository.save(newClazz);
     }
 
-    public void addClassMaster(String schoolId,NewClazzMasterCommand command){
+    public void addClassMaster(NewClazzMasterCommand command){
         logger.debug("ClazzMaster {} for clazz {}",command.getName(),command.getClazzId());
 
-        School school = schoolApplicationService.getSchool(schoolId);
         Clazz clazz = clazzRepository.loadOfId(new ClazzId(command.getClazzId()));
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供班级");
 
-        Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
-        AssertionConcerns.assertArgumentNotNull(staff,"请提供老师");
-
-        ClazzMaster clazzMaster = new ClazzMaster(clazz.clazzId(),school.schoolId(),command.getName(),
-                command.getIdentity(),new Period(command.getStarts(),command.getEnds()));
-
-        staff.addPosition(clazzMaster);
-        staffRepository.save(staff);
+        schoolApplicationService.staffActToAndSave(new StaffId(command.getIdentity()),new ActClazzMaster(clazz),
+                new Period(command.getStarts(),command.getEnds()));
     }
 
-    public void addClassTeacher(String schoolId, final NewClazzTeacherCommand command){
+    public void addClassTeacher(final NewClazzTeacherCommand command){
         logger.debug("Clazzteacher {} for clazz {}",command.getName(),command.getClazzId());
 
-        School school = schoolApplicationService.getSchool(schoolId);
         Clazz clazz = clazzRepository.loadOfId(new ClazzId(command.getClazzId()));
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供班级");
 

@@ -13,11 +13,10 @@ import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.easytnt.ts.domain.model.school.staff.Teacher;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.cglib.core.Converter;
 
 import java.util.Date;
 

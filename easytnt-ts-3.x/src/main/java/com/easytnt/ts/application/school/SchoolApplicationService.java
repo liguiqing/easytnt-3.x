@@ -10,14 +10,7 @@ import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.ClazzRepository;
 import com.easytnt.ts.domain.model.school.common.IdentityType;
 import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.position.HeadMaster;
-import com.easytnt.ts.domain.model.school.position.Position;
-import com.easytnt.ts.domain.model.school.position.PositionFilter;
-import com.easytnt.ts.domain.model.school.position.Teacher;
-import com.easytnt.ts.domain.model.school.staff.Staff;
-import com.easytnt.ts.domain.model.school.staff.StaffId;
-import com.easytnt.ts.domain.model.school.staff.StaffIdentity;
-import com.easytnt.ts.domain.model.school.staff.StaffRepository;
+import com.easytnt.ts.domain.model.school.staff.*;
 import com.easytnt.ts.domain.model.school.term.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,10 +72,8 @@ public class SchoolApplicationService {
     public void headMasterTo(String schoolId,NewHeaderMasterCommand command){
         logger.debug("New school {} master is ",schoolId,command);
 
-        HeadMaster master = new HeadMaster(new SchoolId(schoolId),command.getName(),command.getIdentity(),new Period(command.getStarts(),command.getEnds()));
-        Staff staff = staffRepository.loadOfId(new StaffId(command.getIdentity()));
-        staff.addPosition(master);
-        staffRepository.save(staff);
+        Period period = new Period(command.getStarts(),command.getEnds());
+        staffActToAndSave(new StaffId(command.getIdentity()),new ActHeadMaster(), period);
     }
 
 
@@ -117,7 +108,7 @@ public class SchoolApplicationService {
         termRepository.save(term);
     }
 
-    public void addTeacher(String schoolId,NewTeacherCommand command){
+    public void addTeacherTo(String schoolId,NewTeacherCommand command){
         logger.debug("Teacher {} join school {} ",command,schoolId);
         StaffId staffId = new StaffId(command.getIdentity());
         Staff staff = staffRepository.loadOfId(staffId);
@@ -126,20 +117,42 @@ public class SchoolApplicationService {
             staff = new Staff(schoolId1,staffRepository.nextIdentity(),command.getName(),
                         new StaffIdentity(staffId,IdentityType.EduID.Other,command.getIdentity()),
                         new Period(command.getStarts(), command.getEnds()));
+            staffRepository.save(staff);
         }
 
-        Teacher teacher = new Teacher(schoolId1,command.getName(), command.getIdentity(), new Period(command.getStarts(), command.getEnds()),
-                new Course(command.getCourseName(), command.getSubjectId()));
-        staff.addPosition(teacher);
-        staffRepository.save(staff);
+        Period period = new Period(command.getStarts(),command.getEnds());
+        staffActToAndSave(new StaffId(command.getIdentity()),
+                new ActTeacher(new Course(command.getCourseName(), command.getSubjectId())), period);
     }
 
+
+    public void addGradMasterTo(String schoolId,NewTeacherCommand command){
+        logger.debug("Teacher {} join school {} ",command,schoolId);
+        //TODO
+    }
+
+    public void addSubjectMasterTo(String schoolId,NewTeacherCommand command){
+        logger.debug("Teacher {} join school {} ",command,schoolId);
+        //TODO
+    }
+
+    public void addTeachMasterTo(String schoolId,NewTeacherCommand command){
+        logger.debug("Teacher {} join school {} ",command,schoolId);
+        //TODO
+    }
 
     protected School getSchool(String schoolId){
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校唯一标识:"+schoolId);
         School school = schoolRepository.loadOfId(new SchoolId(schoolId));
         AssertionConcerns.assertArgumentNotNull(school,"无法读取学校数据:"+schoolId);
         return school;
+    }
+
+    protected void staffActToAndSave(StaffId staffId,Act act,Period period){
+        Staff staff = staffRepository.loadOfId(staffId);
+        AssertionConcerns.assertArgumentNotNull(staff,"无效的教职工唯一标识：" + staffId.id());
+        staff.actTo(act,period);
+        staffRepository.save(staff);
     }
 
     public void setSchoolRepository(SchoolRepository schoolRepository) {

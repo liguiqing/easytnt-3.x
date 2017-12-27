@@ -27,6 +27,18 @@ public class NewTeacherCommand {
 
     private String subjectId;
 
+    public NewTeacherCommand(String name, String identity, Date starts, Date ends, String courseName, String subjectId) {
+        this.name = name;
+        this.identity = identity;
+        this.starts = starts;
+        this.ends = ends;
+        this.courseName = courseName;
+        this.subjectId = subjectId;
+    }
+
+    public NewTeacherCommand() {
+    }
+
     public String getName() {
         return name;
     }

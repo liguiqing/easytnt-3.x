@@ -2,10 +2,10 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.position;
+package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.commons.AssertionConcerns;
-import com.easytnt.commons.domain.ValueObject;
+import com.easytnt.commons.domain.IdentifiedValueObject;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.Objects;
@@ -18,7 +18,7 @@ import com.google.common.base.Objects;
  * @since V3.0
  */
 
-public abstract class Position extends ValueObject implements Comparable<Position> {
+public abstract class Position extends IdentifiedValueObject implements Comparable<Position> {
 
     private SchoolId schoolId;
 
@@ -28,7 +28,7 @@ public abstract class Position extends ValueObject implements Comparable<Positio
 
     private String identity; //唯一身份标识，关联到staff.Staff时就是Staff.staffId
 
-    public Position(SchoolId schoolId, String name, String identity, Period period) {
+    protected Position(SchoolId schoolId, String name, String identity, Period period) {
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学校");
         AssertionConcerns.assertArgumentNotNull(name,"请提供姓名");
         AssertionConcerns.assertArgumentNotNull(identity,"请提供教职工唯一标识");

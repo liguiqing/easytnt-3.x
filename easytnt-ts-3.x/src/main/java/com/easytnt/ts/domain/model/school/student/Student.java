@@ -12,7 +12,7 @@ import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.Person;
-import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.easytnt.ts.domain.model.school.staff.Teacher;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;

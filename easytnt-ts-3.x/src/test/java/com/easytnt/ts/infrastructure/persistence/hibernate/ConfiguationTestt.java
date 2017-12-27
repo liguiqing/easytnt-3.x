@@ -9,9 +9,7 @@ import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.IdentityType;
 import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.staff.Staff;
-import com.easytnt.ts.domain.model.school.staff.StaffId;
-import com.easytnt.ts.domain.model.school.staff.StaffIdentity;
+import com.easytnt.ts.domain.model.school.staff.*;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;
@@ -114,19 +112,33 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
                 Gender.Female, new Period(DateUtilWrapper.today(), DateUtilWrapper.tomorrow()));
         staff1.addIdentity(new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.JobNo, "12345678995456"));
         staff1.addIdentity(new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.QQ, "3215647899"));
+        Period period = new Period(DateUtilWrapper.today(), DateUtilWrapper.tomorrow());
+        staff1.actTo(new ActHeadMaster(),period);
+        staff1.actTo(new ActTeacher(new Course("语文","isd-102345678")),period);
+        //staff1.actTo(new ActClazzMaster(new Course("语文","isd-102345678")),period);
+
         session.save(staff1);
 
-        query = session.createQuery("from Staff where schoolId=?");
-        query.setParameter(0, new SchoolId("SchoolId-12345678"));
+        query = session.createQuery("from Staff where staffId=?");
+        query.setParameter(0, new StaffId("StaffId-12345678"));
         l1 = query.list();
         Staff staff1_ = (Staff) l1.get(0);
         assertNotNull(staff1_);
         assertEquals(staff1_.gender(), Gender.Female);
         assertTrue(staff1_.identity().size() > 0);
-        Iterator it = staff1_.identity().iterator();
-        assertEquals(it.next(), new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.JobNo, "12345678995456"));
-        assertEquals(it.next(), new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.QQ, "3215647899"));
-
+        assertTrue(staff1_.positions().size() > 0);
+        assertTrue(staff1_.identity().contains(new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.JobNo, "12345678995456")));
+        //assertTrue(staff1_.positions().contains(new ActTeacher(new Course("语文", "isd-102345678")).actTo(staff1,period)));
+        //Iterator it = staff1_.identity().iterator();
+        //assertEquals(it.next(), new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.JobNo, "12345678995456"));
+        //assertEquals(it.next(), new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.QQ, "3215647899"));
+        Iterator it = staff1_.positions().iterator();
+        int i = 0;
+        while(it.hasNext()){
+            it.next();
+            i++;
+        }
+        assertEquals(i,2);
         SQLQuery sqlQuery = session.createSQLQuery("select schoolId, staffId, name, gender, periodStarts, periodEnds from ts_staff where staffId='StaffId-12345678'");
         List ll = sqlQuery.list();
         assertNotNull(ll);

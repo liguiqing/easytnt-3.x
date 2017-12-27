@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
+  -->
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.easytnt.ts.domain.model.school.clazz.Clazz" abstract="true" table="ts_clazz" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
+        <discriminator column="adminType" type="string"></discriminator>
+        <component name="clazzId" class="com.easytnt.ts.domain.model.school.clazz.ClazzId">
+            <property name="id" column="clazzId" type="java.lang.String"/>
+        </component>
+        <property name="name" column="name" type="java.lang.String" />
+        <property name="clazzNo" column="clazzNo" type="java.lang.String"/>
+        <property name="createDate" column="createDate" type="java.util.Date"/>
+
+        <subclass name="com.easytnt.ts.domain.model.school.clazz.AdminClazz" discriminator-value="Admin" />
+        <subclass name="com.easytnt.ts.domain.model.school.clazz.TeachClazz" discriminator-value="Teach"/>
+        <subclass name="com.easytnt.ts.domain.model.school.clazz.MixtureClazz" discriminator-value="Mixture"/>
+    </class>
+</hibernate-mapping>

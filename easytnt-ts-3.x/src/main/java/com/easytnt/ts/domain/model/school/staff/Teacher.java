@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.position;
+package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.Course;
@@ -23,7 +23,7 @@ public class Teacher extends Position {
 
     private Course course;
 
-    public Teacher(SchoolId schoolId, String name, String identity, Period period, Course course) {
+    protected Teacher(SchoolId schoolId,String name, String identity, Period period, Course course) {
         super(schoolId,identity,name, period);
         this.course = course;
     }
@@ -73,5 +73,8 @@ public class Teacher extends Position {
     @Override
     public int hashCode() {
         return Objects.hashCode(super.hashCode(), course);
+    }
+
+    protected Teacher() {
     }
 }

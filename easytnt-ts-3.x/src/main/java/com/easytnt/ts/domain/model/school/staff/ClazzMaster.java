@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.position;
+package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
@@ -20,7 +20,7 @@ public class ClazzMaster extends Position {
 
     private ClazzId clazzId;
 
-    public ClazzMaster(ClazzId clazzId,SchoolId schoolId,String name, String identity, Period period) {
+    protected ClazzMaster(ClazzId clazzId,SchoolId schoolId,String name, String identity, Period period) {
         super(schoolId,name, identity, period);
         this.clazzId = clazzId;
     }

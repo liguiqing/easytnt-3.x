@@ -11,7 +11,7 @@ import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.StudyYear;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
-import com.easytnt.ts.domain.model.school.position.Teacher;
+import com.easytnt.ts.domain.model.school.staff.Teacher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

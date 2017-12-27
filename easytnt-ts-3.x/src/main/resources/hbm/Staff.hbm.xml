@@ -5,7 +5,7 @@
 <hibernate-mapping default-access="field" default-cascade="all" >
     <class name="com.easytnt.ts.domain.model.school.staff.Staff" table="ts_staff" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
-            <generator class="identity" />
+            <generator class="native" />
         </id>
         <component name="schoolId" class="com.easytnt.ts.domain.model.school.SchoolId">
             <property name="id" column="schoolId" type="java.lang.String"/>
@@ -23,8 +23,8 @@
             </type>
         </property>
 
-        <set name="identity" table="ts_staff_identity" cascade="all" order-by="id" fetch="join" lazy="false">
-            <key column="staffId" property-ref="staffId" />
+        <set name="identity"  cascade="all" fetch="join" lazy="true" order-by="id">
+            <key column="staffId" property-ref="staffId" update="false"/>
             <one-to-many class="com.easytnt.ts.domain.model.school.staff.StaffIdentity"/>
         </set>
 
@@ -32,6 +32,11 @@
             <property name="starts" column="periodStarts" type="java.util.Date"/>
             <property name="ends" column="periodEnds" type="java.util.Date"/>
         </component>
+
+        <set name="positions" cascade="all"  fetch="join" lazy="true">
+            <key column="identity" property-ref="staffId" update="false"/>
+            <one-to-many class="com.easytnt.ts.domain.model.school.staff.Position"/>
+        </set>
 
     </class>
 
@@ -56,5 +61,4 @@
             <property name="ends" column="validityEnds" type="java.util.Date"/>
         </component>
     </class>
-
 </hibernate-mapping>

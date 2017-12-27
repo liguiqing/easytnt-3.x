@@ -8,7 +8,7 @@
 <hibernate-mapping default-access="field" default-cascade="all" >
     <class name="com.easytnt.ts.domain.model.school.term.Term" table="ts_term" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
-            <generator class="identity" />
+            <generator class="native" />
         </id>
         <component name="termId" class="com.easytnt.ts.domain.model.school.term.TermId">
             <property name="id" column="termId" type="java.lang.String"/>

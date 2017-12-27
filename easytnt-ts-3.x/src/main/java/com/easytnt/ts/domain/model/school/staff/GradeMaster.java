@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.ts.domain.model.school.position;
+package com.easytnt.ts.domain.model.school.staff;
 
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
@@ -19,7 +19,7 @@ import com.google.common.base.Objects;
 public class GradeMaster extends Position {
     private Grade grade;
 
-    public GradeMaster(SchoolId schoolId, Grade grade, String name, String identity, Period period) {
+    protected GradeMaster(SchoolId schoolId, Grade grade, String name, String identity, Period period) {
         super(schoolId,name, identity, period);
         this.grade = grade;
     }

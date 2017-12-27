@@ -8,8 +8,6 @@ import com.easytnt.commons.domain.ValueObject;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.WLType;
-import com.easytnt.ts.domain.model.school.position.ClazzMaster;
-import com.easytnt.ts.domain.model.school.position.Teacher;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;

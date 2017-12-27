@@ -14,7 +14,6 @@ import java.util.Date;
  */
 
 public class NewHeaderMasterCommand {
-    private String name;
 
     private String identity;
 
@@ -22,12 +21,13 @@ public class NewHeaderMasterCommand {
 
     private Date ends;
 
-    public String getName() {
-        return name;
+    public NewHeaderMasterCommand(String identity, Date starts, Date ends) {
+        this.identity = identity;
+        this.starts = starts;
+        this.ends = ends;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public NewHeaderMasterCommand() {
     }
 
     public String getIdentity() {
@@ -57,7 +57,6 @@ public class NewHeaderMasterCommand {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("name", name)
                 .add("identity", identity)
                 .add("starts", starts)
                 .add("ends", ends)
