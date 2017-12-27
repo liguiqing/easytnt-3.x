@@ -32,7 +32,7 @@ CREATE TABLE `ts_term` (
 DROP TABLE IF EXISTS `ts_staff`;
 CREATE TABLE `ts_staff` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `staffId` varchar(36) NOT NULL COMMENT '教职工唯一标识，系统中所有人员是唯一的',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `gender` varchar(4) DEFAULT '无' COMMENT '教职工性别',
@@ -46,7 +46,7 @@ CREATE TABLE `ts_staff` (
 DROP TABLE IF EXISTS `ts_staff_identity`;
 CREATE TABLE `ts_staff_identity` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `staffId` varchar(36) NOT NULL COMMENT '教职工唯一标识，系统中所有人员是唯一的，如果有两个值相同，表示同一个人员',
+  `staffId` varchar(36) NOT NULL COMMENT '教职工唯一标识，与表ts_staff.staffId关联',
   `identity` varchar(36) NOT NULL COMMENT '教职工身份证件号',
   `identityTypeName` varchar (16) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 教育云标识,QQ,微信,港澳台证件号, 工号,其他',
   `validityStarts` DATE  COMMENT '证件有效开始时间',
@@ -57,8 +57,8 @@ CREATE TABLE `ts_staff_identity` (
 
 DROP TABLE IF EXISTS `ts_teacher`;
 CREATE TABLE `ts_teacher` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `id` varchar(32)  NOT NULL,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.staffId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '任教时间',
@@ -74,8 +74,8 @@ CREATE TABLE `ts_teacher` (
 
 DROP TABLE IF EXISTS `ts_leader`;
 CREATE TABLE `ts_leader` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `id` varchar(32)  NOT NULL,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.staffId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间',
@@ -88,14 +88,13 @@ CREATE TABLE `ts_leader` (
 
 DROP TABLE IF EXISTS `ts_grade_master`;
 CREATE TABLE `ts_grade_master` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `id` varchar(32)  NOT NULL,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.staffId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间职',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `gradeName` varchar (8)   COMMENT '年级名称',
-  `gradeLevel` varchar (8)   COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
   `gradeSeq` SMALLINT (2)   COMMENT '年级序列，数字1到12',
   `yearName` varchar(32) NOT NULL COMMENT '任职时学年',
   `yearStarts` SMALLINT (4) NOT NULL COMMENT '任职时学年起始年度',
@@ -107,8 +106,8 @@ CREATE TABLE `ts_grade_master` (
 
 DROP TABLE IF EXISTS `ts_subject_master`;
 CREATE TABLE `ts_subject_master` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `id` varchar(32)  NOT NULL,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.staffId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间',
@@ -123,8 +122,8 @@ CREATE TABLE `ts_subject_master` (
 
 DROP TABLE IF EXISTS `ts_clazz_master`;
 CREATE TABLE `ts_clazz_master` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `id` varchar(32)  NOT NULL,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `clazzId` varchar(36) NOT NULL COMMENT '负责班级唯一标识',
   `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.staffId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
@@ -138,8 +137,8 @@ CREATE TABLE `ts_clazz_master` (
 
 DROP TABLE IF EXISTS `ts_clazz_teacher`;
 CREATE TABLE `ts_clazz_teacher` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `id` varchar(32)  NOT NULL,
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识,与表ts_school.schoolId关联',
   `clazzId` varchar(36) NOT NULL COMMENT '负责班级唯一标识',
   `identity` varchar(36) NOT NULL COMMENT '人员唯一标识，与表ts_staff.staffId关联',
   `name` varchar(36) NOT NULL COMMENT '姓名',
@@ -174,7 +173,7 @@ CREATE TABLE `ts_clazz` (
   `clazzNo` varchar(16) NOT NULL COMMENT '班级编号',
   `name` varchar (8)  NOT NULL COMMENT '班级名称',
   `createDate` varchar (8)  NOT NULL COMMENT '班级创建日期 YYYY-mm',
-  `adminType` varchar (8) NOT NULL  COMMENT '班级管理类型：Manage-行政班,Study-教学班,Union-不分',
+  `adminType` varchar (8) NOT NULL  COMMENT '班级管理类型：Admin-行政班,Teach-教学班,Mixture-不分',
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_schoolId` (`schoolId`),
   KEY `x_ts_clazz_clazzId` (`clazzId`)
