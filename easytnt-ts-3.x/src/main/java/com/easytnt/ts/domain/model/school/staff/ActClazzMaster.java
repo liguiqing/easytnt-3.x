@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.domain.model.school.staff;
 
+import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.common.Period;
 
@@ -21,7 +22,8 @@ public class ActClazzMaster implements Act{
     }
 
     @Override
-    public Position actTo(Staff staff, Period period) {
+    public ClazzMaster actTo(Staff staff, Period period) {
+        AssertionConcerns.assertArgumentTrue(this.clazz.canBeManaged(),"教学班不能安排班主任");
         return new ClazzMaster(this.clazz.clazzId(),staff.schoolId(),staff.staffId().id(),staff.name(),period);
     }
 }

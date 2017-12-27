@@ -84,6 +84,15 @@ public abstract class Clazz extends Entity {
         throw new ClazzNotInTermException(term.toString());
     }
 
+    public WLType termWL(Term term){
+        for(ClazzHistory history:this.histories){
+            if(history.termId().equals(term.termId())){
+                return history.wl();
+            }
+        }
+        return WLType.None;
+    }
+
     public Grade periodGrade(Period period){
         for(ClazzHistory history:this.histories){
             if(history.isInPeriod(period)){

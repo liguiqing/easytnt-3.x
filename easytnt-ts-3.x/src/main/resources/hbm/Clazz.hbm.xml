@@ -12,12 +12,15 @@
         </id>
         <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
         <discriminator column="adminType" type="string"></discriminator>
+        <component name="schoolId" class="com.easytnt.ts.domain.model.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
         <component name="clazzId" class="com.easytnt.ts.domain.model.school.clazz.ClazzId">
             <property name="id" column="clazzId" type="java.lang.String"/>
         </component>
         <property name="name" column="name" type="java.lang.String" />
         <property name="clazzNo" column="clazzNo" type="java.lang.String"/>
-        <property name="createDate" column="createDate" type="java.util.Date"/>
+        <property name="createDate" column="createDate" type="java.lang.String"/>
 
         <subclass name="com.easytnt.ts.domain.model.school.clazz.AdminClazz" discriminator-value="Admin" />
         <subclass name="com.easytnt.ts.domain.model.school.clazz.TeachClazz" discriminator-value="Teach"/>

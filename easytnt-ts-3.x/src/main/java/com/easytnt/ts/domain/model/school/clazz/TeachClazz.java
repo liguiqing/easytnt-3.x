@@ -38,7 +38,7 @@ public class TeachClazz extends Clazz {
 
     @Override
     public boolean canBeStudyAndTeachIn() {
-        return false;
+        return true;
     }
 
     @Override

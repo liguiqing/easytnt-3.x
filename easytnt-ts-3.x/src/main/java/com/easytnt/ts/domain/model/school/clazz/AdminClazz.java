@@ -6,6 +6,7 @@ package com.easytnt.ts.domain.model.school.clazz;
 
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.SchoolId;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.WLType;
 import com.easytnt.ts.domain.model.school.term.Term;
 
@@ -33,6 +34,12 @@ public class AdminClazz extends Clazz {
     public AdminClazz(SchoolId schoolId, ClazzId clazzId, String name,
                       String clazzNo, String createDate, Grade grade, WLType wl, Term term) {
         super(schoolId, clazzId, name, clazzNo, createDate, grade, wl, term);
+    }
+
+    public MixtureClazz convertToMixture(Term term){
+        Grade grade = this.periodGrade(Period.now());
+        WLType wl = this.termWL(term);
+        return new MixtureClazz(this.schoolId(), this.clazzId(), this.name(), this.clazzNo(), this.createDate(), grade,wl, term);
     }
 
     @Override

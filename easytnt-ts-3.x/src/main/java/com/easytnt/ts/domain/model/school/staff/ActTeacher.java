@@ -21,7 +21,7 @@ public class ActTeacher implements Act {
     }
 
     @Override
-    public Position actTo(Staff staff, Period period) {
+    public Teacher actTo(Staff staff, Period period) {
         return new Teacher(staff.schoolId(), staff.staffId().id(), staff.name(), period, this.course);
     }
 }

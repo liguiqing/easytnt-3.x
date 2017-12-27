@@ -21,7 +21,7 @@ public class ActGradeMaster implements Act {
     }
 
     @Override
-    public Position actTo(Staff staff, Period period) {
+    public GradeMaster actTo(Staff staff, Period period) {
         return new GradeMaster(staff.schoolId(), this.grade,staff.staffId().id(),
                 staff.name(), period);
     }

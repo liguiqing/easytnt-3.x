@@ -23,7 +23,7 @@ public class ActSubjectMaster implements Act {
     }
 
     @Override
-    public Position actTo(Staff staff, Period period) {
+    public SubjectMaster actTo(Staff staff, Period period) {
         return new SubjectMaster(staff.schoolId(), staff.staffId().id(),
                 staff.name(), period, this.subjectName, this.subjectId);
     }

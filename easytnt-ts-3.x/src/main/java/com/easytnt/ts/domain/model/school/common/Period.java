@@ -33,6 +33,10 @@ public class Period {
         this.ends = ends;
     }
 
+    public static Period now(){
+        return new Period(DateUtilWrapper.today(), DateUtilWrapper.today());
+    }
+
     public boolean gratherThan(Date ends){
         return DateUtilWrapper.largeThanYYMMDD(this.ends,ends);
     }

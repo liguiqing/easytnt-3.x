@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
  */
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(GradeNameGenerateStrategyFactory.class)
+@PrepareForTest({GradeNameGenerateStrategyFactory.class,GradeCourseableFactory.class})
 public class SchoolTest {
 
     @Rule
@@ -45,6 +45,11 @@ public class SchoolTest {
         SchoolId sid = new SchoolId("scid-12345678");
         PowerMockito.mockStatic(GradeNameGenerateStrategyFactory.class);
         PowerMockito.when(GradeNameGenerateStrategyFactory.lookup(sid)).thenReturn(nameGenerateStrategy);
+
+        GradeCourseable mockGc =  PowerMockito.mock(GradeCourseable.class);
+        PowerMockito.mockStatic(GradeCourseableFactory.class);
+        PowerMockito.when(GradeCourseableFactory.lookup(sid)).thenReturn(mockGc);
+
 
         PowerMockito.when(nameGenerateStrategy.genGradeName(GradeLevel.One)).thenReturn("一年级");
         PowerMockito.when(nameGenerateStrategy.genGradeName(GradeLevel.Two)).thenReturn("二年级");

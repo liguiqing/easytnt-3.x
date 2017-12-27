@@ -13,7 +13,7 @@ import com.easytnt.ts.domain.model.school.common.Period;
  * @since V3.0
  */
 
-public class ActClassTeacher implements  Act {
+public class ActClazzTeacher implements  Act {
 
     private Clazz clazz;
 
@@ -21,14 +21,14 @@ public class ActClassTeacher implements  Act {
 
     private Grade grade;
 
-    public ActClassTeacher(Clazz clazz, Teacher teacher, Grade grade) {
+    public ActClazzTeacher(Clazz clazz, Teacher teacher, Grade grade) {
         this.clazz = clazz;
         this.teacher = teacher;
         this.grade = grade;
     }
 
     @Override
-    public Position actTo(Staff staff, Period period) {
+    public ClazzTeacher actTo(Staff staff, Period period) {
         return  new ClazzTeacher(staff.schoolId() ,this.clazz, staff.staffId().id(),
                 staff.name(), period,this.teacher,this.grade);
     }

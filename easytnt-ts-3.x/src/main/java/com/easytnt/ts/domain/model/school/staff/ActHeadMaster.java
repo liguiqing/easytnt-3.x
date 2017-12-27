@@ -14,7 +14,7 @@ import com.easytnt.ts.domain.model.school.common.Period;
 public class ActHeadMaster implements Act {
 
     @Override
-    public Position actTo(Staff staff, Period period) {
+    public HeadMaster actTo(Staff staff, Period period) {
         return new HeadMaster(staff.schoolId(), staff.staffId().id(), staff.name(), period);
     }
 }
