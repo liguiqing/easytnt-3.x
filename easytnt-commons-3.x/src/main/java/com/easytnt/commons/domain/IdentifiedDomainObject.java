@@ -16,8 +16,11 @@ import java.io.Serializable;
 public abstract class IdentifiedDomainObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //持久化ID
+    //使用整型持久化
     private long id;
+
+    //使用字串持久化　,两者只能取其一
+    private String uuid;
 
     protected IdentifiedDomainObject() {
         super();
@@ -31,5 +34,13 @@ public abstract class IdentifiedDomainObject implements Serializable {
 
     protected void setId(long anId) {
         this.id = anId;
+    }
+
+    protected String getUuid() {
+        return uuid;
+    }
+
+    protected void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
