@@ -5,10 +5,7 @@
 package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.util.DateUtilWrapper;
-import com.easytnt.ts.domain.model.school.Grade;
-import com.easytnt.ts.domain.model.school.GradeLevel;
-import com.easytnt.ts.domain.model.school.SchoolId;
-import com.easytnt.ts.domain.model.school.StudyYear;
+import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.clazz.ClazzId;
 import com.easytnt.ts.domain.model.school.staff.Teacher;
@@ -16,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Date;
@@ -23,6 +21,7 @@ import java.util.Date;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
  * @author Liguiqing
@@ -30,6 +29,7 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(GradeCourseableFactory.class)
 public class StudentTest {
 
     @Rule
@@ -81,17 +81,25 @@ public class StudentTest {
 
     @Test
     public void testAddStudy()throws Exception{
-        Student s1 = new Student(new SchoolId("12345678"), new StudentId("12345678"), "name", "1234");
+        SchoolId schoolId = new SchoolId("12345678");
+        Student s1 = new Student(schoolId, new StudentId("12345678"), "name", "1234");
         Clazz c1 = mock(Clazz.class);
         ClazzId clazzId1 = new ClazzId("12345678");
         when(c1.clazzId()).thenReturn(clazzId1);
         when(c1.canBeStudied()).thenReturn(true);
-        Teacher teacher = mock(Teacher.class);
-        when(teacher.isTeaching()).thenReturn(true);
+        Course course = mock(Course.class);
+
         Date starts = DateUtilWrapper.today();
         Date ends = DateUtilWrapper.tomorrow();
 
-        s1.addStudy(c1,new Grade("七年级", GradeLevel.Seven,new StudyYear("2017-2018")),teacher,starts,ends);
+        Grade grade = mock(Grade.class);
+
+        GradeCourseable courseable = mock(GradeCourseable.class);
+        mockStatic(GradeCourseableFactory.class);
+
+        when(GradeCourseableFactory.lookup(schoolId)).thenReturn(courseable);
+        when(grade.canBeTeachOrStudyOfCourse(courseable, course)).thenReturn(true);
+        s1.addStudy(c1,grade,course,starts,ends);
         Study st1 = s1.studies().iterator().next();
         assertEquals(st1.period().ends(),ends);
     }

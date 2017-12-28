@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
-    <class name="com.easytnt.ts.domain.model.school.staff.Staff" table="ts_staff" lazy="true">
+    <class name="com.easytnt.ts.domain.model.school.staff.Staff" table="ts_staff" lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>

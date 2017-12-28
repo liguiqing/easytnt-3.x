@@ -155,15 +155,23 @@ CREATE TABLE `ts_clazz_teacher` (
 DROP TABLE IF EXISTS `ts_course`;
 CREATE TABLE `ts_course` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `gradeName` varchar (8)   COMMENT '年级名称,为空表示全年级通过，如语文，英语，数学',
+  `gradeName` varchar (8)   COMMENT '年级名称,为空表示全年级通用，如语文，英语，数学',
   `gradeLevel` SMALLINT (2)  COMMENT '年级序列，数字1到12',
   `name` varchar (8) NOT NULL  COMMENT '课程名称，如语文，英语，数学',
-  `subjectId` varchar (8) NOT NULL  COMMENT '课程名称',
+  `subjectId` varchar (36) NOT NULL  COMMENT '课程科目唯一标识',
   `schoolId` varchar(36)  COMMENT '开设学校唯一标识，如果为空，表示通用',
   PRIMARY KEY (`id`),
   KEY `x_ts_course_subjectId` (`subjectId`),
   KEY `x_ts_course_schoolId` (`schoolId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='课程信息表';
+insert into `ts_course`(`name`,`subjectId`) values('语文','Easytnt_SBID_001'),('数学','Easytnt_SBID_002'),('英语','Easytnt_SBID_003');
+insert into `ts_course`(`gradeName`,`gradeLevel`,`name`,`subjectId`) values('七年级',7,'政治','Easytnt_SBID_004'),('七年级',7,'历史','Easytnt_SBID_005'),('七年级',7,'地理','Easytnt_SBID_006'),('七年级',7,'生物','Easytnt_SBID_009');
+insert into `ts_course`(`gradeName`,`gradeLevel`,`name`,`subjectId`) values('八年级',8,'政治','Easytnt_SBID_004'),('八年级',8,'历史','Easytnt_SBID_005'),('八年级',8,'地理','Easytnt_SBID_006'),('八年级',8,'物理','Easytnt_SBID_007'),('八年级',8,'生物','Easytnt_SBID_009');
+insert into `ts_course`(`gradeName`,`gradeLevel`,`name`,`subjectId`) values('九年级',9,'政治','Easytnt_SBID_004'),('九年级',9,'物理','Easytnt_SBID_007'),('九年级',9,'化学','Easytnt_SBID_008');
+insert into `ts_course`(`gradeName`,`gradeLevel`,`name`,`subjectId`) values('高一',10,'政治','Easytnt_SBID_004'),('高一',10,'历史','Easytnt_SBID_005'),('高一',10,'地理','Easytnt_SBID_006'),('高一',10,'物理','Easytnt_SBID_007'),('高一',10,'化学','Easytnt_SBID_008'),('高一',10,'生物','Easytnt_SBID_009');
+insert into `ts_course`(`gradeName`,`gradeLevel`,`name`,`subjectId`) values('高二',11,'政治','Easytnt_SBID_004'),('高二',11,'历史','Easytnt_SBID_005'),('高二',11,'物理','Easytnt_SBID_007'),('高二',11,'化学','Easytnt_SBID_008'),('高二',11,'生物','Easytnt_SBID_009');
+insert into `ts_course`(`gradeName`,`gradeLevel`,`name`,`subjectId`) values('高三',12,'政治','Easytnt_SBID_004'),('高三',12,'历史','Easytnt_SBID_005'),('高三',12,'地理','Easytnt_SBID_006'),('高三',12,'物理','Easytnt_SBID_007'),('高三',12,'化学','Easytnt_SBID_008'),('高三',12,'生物','Easytnt_SBID_009');
+
 
 DROP TABLE IF EXISTS `ts_clazz`;
 CREATE TABLE `ts_clazz` (
@@ -196,10 +204,11 @@ CREATE TABLE `ts_clazz_term_history` (
   `termId` varchar(36) NOT NULL COMMENT '学期唯一标识,与表ts_term.termId关联',
   `termName` varchar(8) NOT NULL COMMENT '学期名称：First-上学期，Second-下学期',
   `gradeName` varchar (8)   COMMENT '年级名称',
-  `gradeLevel` varchar (8)   COMMENT '年级序列，英文1到12：One,Two,Three...Twelve',
+  `gradeSeq` SMALLINT (2)   COMMENT '年级序列，数字1到12',
   `yearName` varchar(32) NOT NULL COMMENT '学年',
   `yearStarts` SMALLINT (4) NOT NULL COMMENT '学年起始年度',
   `yearEnds` SMALLINT(4) NOT NULL COMMENT '学年结束年度',
+  `wl` SMALLINT DEFAULT 0  COMMENT '文理分科：0－不分；2-理科；1-文科',
   `starts` DATE  COMMENT '开始时间，与学期开学时间一致',
   `ends` DATE  COMMENT '结束时间，与学期结束时间一致',
   PRIMARY KEY (`id`),
@@ -224,7 +233,8 @@ CREATE TABLE `ts_student` (
 DROP TABLE IF EXISTS `ts_student_belong`;
 CREATE TABLE `ts_student_belong` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `clazzId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `clazzId` varchar(36) NOT NULL COMMENT '所属班级唯一标识',
   `studentId` varchar(36) NOT NULL COMMENT '学生唯一标识，系统中所有学生是唯一的',
   `joinDate` DATE  COMMENT '入校时间',
   `leafDate` DATE  COMMENT '离校时间,为空时表示一直在校',
@@ -236,10 +246,18 @@ CREATE TABLE `ts_student_belong` (
 DROP TABLE IF EXISTS `ts_student_study`;
 CREATE TABLE `ts_student_study` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `clazzId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
+  `clazzId` varchar(36) NOT NULL COMMENT '所属班级唯一标识',
   `studentId` varchar(36) NOT NULL COMMENT '学生唯一标识，系统中所有学生是唯一的',
-  `joinDate` DATE  COMMENT '入校时间',
-  `leafDate` DATE  COMMENT '离校时间,为空时表示一直在校',
+  `gradeName` varchar (8)   COMMENT '年级名称',
+  `gradeSeq` SMALLINT (2)   COMMENT '年级序列，数字1到12',
+  `yearName` varchar(32) NOT NULL COMMENT '学年',
+  `yearStarts` SMALLINT (4) NOT NULL COMMENT '学年起始年度',
+  `yearEnds` SMALLINT(4) NOT NULL COMMENT '学年结束年度',
+  `subjectId` varchar(36) NOT NULL COMMENT '学习课程的学科唯一标识',
+  `courseName` varchar(16) NOT NULL COMMENT '学习课程名称',
+  `starts` DATE  COMMENT '学习开始时间',
+  `ends` DATE  COMMENT '学习完成时间,为空时表示一直在校',
   PRIMARY KEY (`id`),
   KEY `x_ts_student_clazzId` (`clazzId`),
   KEY `x_ts_student_studentId` (`studentId`)

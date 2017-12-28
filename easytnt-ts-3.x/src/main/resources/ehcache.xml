@@ -22,4 +22,9 @@
 		overflowToDisk="false" statistics="true">
 	</cache>
 
+	<cache name="DefaultGradeCourseCache" maxEntriesLocalHeap="2000"
+		   eternal="false" timeToIdleSeconds="360000" timeToLiveSeconds="0"
+		   overflowToDisk="true" statistics="true">
+	</cache>
+
 </ehcache>

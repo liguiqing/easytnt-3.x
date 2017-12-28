@@ -15,5 +15,6 @@
        	http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task.xsd">
 
-
+    <bean class="com.easytnt.commons.spring.SpringContextUtil"></bean>
+    <bean class="com.easytnt.ts.infrastructure.strategy.DefaultGradeCourseable"></bean>
 </beans>

@@ -11,7 +11,6 @@ import com.easytnt.ts.domain.model.school.clazz.Clazz;
 import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.Identity;
 import com.easytnt.ts.domain.model.school.common.Period;
-import com.easytnt.ts.domain.model.school.common.Person;
 import com.easytnt.ts.domain.model.school.staff.Teacher;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -35,11 +34,13 @@ public class Student extends Entity {
 
     private StudentId studentId;
 
-    private Person person;
+    private String name;
+
+    private Gender gender;
 
     private Period period;
 
-    private Set<Identity> ids;
+    private Set<StudentIdentity> ids;
 
     private Set<Study> studies;
 
@@ -61,27 +62,28 @@ public class Student extends Entity {
 
         this.schoolId = schoolId;
         this.studentId = studentId;
-        this.person = new Person(name,identity,gender);
+        this.name = name;
+        this.gender = gender;
         this.ids = Sets.newHashSet();
         this.studies = Sets.newHashSet();
         this.belongTos = Sets.newHashSet();
     }
 
-    public void addStudy(Clazz clazz, Grade grade,Teacher teacher, Date starts, Date ends){
-        checkCourseCanStudy(grade,teacher.course());
-        AssertionConcerns.assertArgumentFalse(isStuding(grade,teacher.course()),
-                grade.name()+teacher.course().name()+"正在其他班级学习");
+    public void addStudy(Clazz clazz, Grade grade,Course course, Date starts, Date ends){
+        checkCourseCanStudy(grade,course);
+        AssertionConcerns.assertArgumentFalse(isStuding(grade,course),
+                grade.name()+course.name()+"正在其他班级学习");
 
-        addStudy(new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends));
+        addStudy(new Study(this.studentId,this.schoolId, clazz, grade, course, starts, ends));
     }
 
-    public void changeStudyClazzOfCourse(Clazz clazz, Grade grade,Teacher teacher, Date starts, Date ends){
-        checkCourseCanStudy(grade,teacher.course());
-        Study old = getStudyOnLine(grade,teacher.course());
+    public void changeStudyClazzOfCourse(Clazz clazz, Grade grade,Course course, Date starts, Date ends){
+        checkCourseCanStudy(grade,course);
+        Study old = getStudyOnLine(grade,course);
         if(old != null){
             addStudy(old.overNow());
         }
-        addStudy(new Study(this.studentId,this.schoolId, clazz, grade, teacher, starts, ends));
+        addStudy(new Study(this.studentId,this.schoolId, clazz, grade, course, starts, ends));
     }
 
     private void addStudy(Study aStudy){
@@ -94,11 +96,18 @@ public class Student extends Entity {
     private boolean isStuding(Grade grade,Course course){
         Study study  = getStudyOnLine(grade,course);
         if(study != null)
-            return false;
-        return true;
+            return true;
+        return false;
     }
 
-    private Study getStudyOnLine(Grade grade,Course course){
+    /**
+     * 取某年级的学习某课程
+     *
+     * @param grade
+     * @param course
+     * @return
+     */
+    public Study getStudyOnLine(Grade grade,Course course){
         if(hasStudies()){
             Iterator<Study> it = this.studies.iterator();
             while(it.hasNext()){
@@ -130,7 +139,7 @@ public class Student extends Entity {
         this.belongTos.add(belongTo);
     }
 
-    public void addId(Identity sid) {
+    public void addId(StudentIdentity sid) {
         AssertionConcerns.assertArgumentNotNull(sid, "请提供学生唯一标识");
         this.ids.add(sid);
     }
@@ -155,7 +164,7 @@ public class Student extends Entity {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("name", this.person).add("id", this.studentId).toString();
+        return MoreObjects.toStringHelper(this).add("name", this.name).add("id", this.studentId).toString();
     }
 
     public SchoolId schoolId() {
@@ -166,11 +175,15 @@ public class Student extends Entity {
         return studentId;
     }
 
-    public Person person() {
-        return person;
+    public String name() {
+        return name;
     }
 
-    public Set<Identity> ids() {
+    public Gender gender() {
+        return gender;
+    }
+
+    public Set<StudentIdentity> ids() {
         return ImmutableSet.copyOf(ids);
     }
 

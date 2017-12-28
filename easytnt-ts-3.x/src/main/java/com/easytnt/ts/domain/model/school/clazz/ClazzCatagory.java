@@ -21,11 +21,14 @@ public class ClazzCatagory extends IdentifiedValueObject {
 
     private String name;
 
-    public ClazzCatagory(String code, String name) {
+    private ClazzId clazzId;
+
+    protected ClazzCatagory(ClazzId clazzId,String code, String name) {
         AssertionConcerns.assertArgumentNotNull(code,"班级分类代码不能为空");
         AssertionConcerns.assertArgumentNotNull(name,"班级分类名称不能为空");
         this.code = code;
         this.name = name;
+        this.clazzId = clazzId;
     }
 
     public boolean sameCodeOf(String code){
@@ -58,5 +61,12 @@ public class ClazzCatagory extends IdentifiedValueObject {
 
     public String name() {
         return name;
+    }
+
+    public ClazzId clazzId() {
+        return clazzId;
+    }
+
+    protected ClazzCatagory() {
     }
 }

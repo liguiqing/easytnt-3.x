@@ -68,22 +68,46 @@ public abstract class Clazz extends Entity {
         this.histories = Sets.newTreeSet();
 
         if(term != null){
-            Date date = DateUtilWrapper.toDate(createDate,"yyyy-MM");
-            TermOrder order = TermOrder.orderOf(date);
-            ClazzHistory aHistory = new ClazzHistory(clazzId,term,order,grade,wl);
-            this.histories.add(aHistory);
+            this.addHistory(term,grade,wl);
         }
     }
 
-    public Grade termGrade(Term term){
+    /**
+     * 增加班级的学期史
+     *
+     * @param term
+     * @param grade
+     * @param wl　Null时为 WLType.None
+     */
+    public void addHistory(Term term,Grade grade,WLType wl){
+        if(wl == null)
+            wl = WLType.None;
+
+        ClazzHistory aHistory = new ClazzHistory(this.clazzId,term,grade,wl);
+        this.histories.add(aHistory);
+    }
+
+    /**
+     * 取得班级某学期的年级
+     *
+     * @param aTerm
+     * @return
+     */
+    public Grade termGrade(Term aTerm){
         for(ClazzHistory history:this.histories){
-            if(history.termId().equals(term.termId())){
+            if(history.termId().equals(aTerm.termId())){
                 return history.grade();
             }
         }
-        throw new ClazzNotInTermException(term.toString());
+        throw new ClazzNotInTermException(aTerm.toString());
     }
 
+    /**
+     * 取得班级某学期的文理分类
+     *
+     * @param term
+     * @return
+     */
     public WLType termWL(Term term){
         for(ClazzHistory history:this.histories){
             if(history.termId().equals(term.termId())){
@@ -93,6 +117,12 @@ public abstract class Clazz extends Entity {
         return WLType.None;
     }
 
+    /**
+     * 取得班级某个时间范围的年级
+     *
+     * @param period
+     * @return 如果找不到对应的年级，则返回为Null，客户端请自行处理 null值
+     */
     public Grade periodGrade(Period period){
         for(ClazzHistory history:this.histories){
             if(history.isInPeriod(period)){
@@ -119,19 +149,19 @@ public abstract class Clazz extends Entity {
 
         GradeNameGenerateStrategy nameGenerateStrategy = GradeNameGenerateStrategyFactory.lookup(this.schoolId);
         Grade nextGrade = top.grade().next(nameGenerateStrategy);
-        ClazzHistory newHistory = new ClazzHistory(clazzId,term,term.order(),nextGrade,top.wl());
-        this.histories.add(newHistory);
+        this.addHistory(term,nextGrade,top.wl());
     }
 
     /**
      * 增加班分类
      *
-     * @param aCatagory
+     * @param catagoryName
+     * @param catagoryCode
      */
-    public void addCatagory(ClazzCatagory aCatagory){
+    public void addCatagory(String catagoryName,String catagoryCode){
         if(this.catagories == null)
             this.catagories = Sets.newHashSet();
-        this.catagories.add(aCatagory);
+        this.catagories.add(new ClazzCatagory(this.clazzId,catagoryName,catagoryCode));
     }
 
 

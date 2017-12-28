@@ -72,6 +72,10 @@ public class Grade extends ValueObject implements Comparable<Grade>{
         return name;
     }
 
+    public String getName(){
+        return this.name();
+    }
+
     public GradeLevel seq() {
         return seq;
     }

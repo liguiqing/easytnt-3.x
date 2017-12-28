@@ -8,6 +8,8 @@ import com.easytnt.commons.domain.ValueObject;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import java.io.Serializable;
+
 /**
  * 课程
  *
@@ -15,7 +17,7 @@ import com.google.common.base.Objects;
  * @since V3.0
  */
 
-public class Course extends ValueObject {
+public class Course extends ValueObject implements Serializable{
 
     private String name;
 

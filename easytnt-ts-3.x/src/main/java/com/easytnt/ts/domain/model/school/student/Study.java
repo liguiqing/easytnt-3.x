@@ -5,7 +5,7 @@
 package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.AssertionConcerns;
-import com.easytnt.commons.domain.ValueObject;
+import com.easytnt.commons.domain.IdentifiedValueObject;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
@@ -27,7 +27,7 @@ import java.util.Date;
  * @since V3.0
  */
 
-public class Study extends ValueObject {
+public class Study extends IdentifiedValueObject {
 
     private StudentId studentId;
 
@@ -39,30 +39,35 @@ public class Study extends ValueObject {
 
     private Period period;
 
-    private Teacher teacher;
+    private Course course;
 
-    public Study(StudentId studentId, SchoolId schoolId, Clazz clazz, Grade grade,
-                 Teacher teacher,Date starts, Date ends) {
+
+    protected Study(StudentId studentId, SchoolId schoolId, Clazz clazz, Grade grade,
+                 Course course,Date starts, Date ends) {
         AssertionConcerns.assertArgumentNotNull(studentId,"请提供学生");
         AssertionConcerns.assertArgumentNotNull(schoolId,"请提供学习学校");
         AssertionConcerns.assertArgumentNotNull(clazz,"请提供学习班级");
-        AssertionConcerns.assertArgumentNotNull(teacher,"请提供授课老师");
+        AssertionConcerns.assertArgumentNotNull(course,"请提供学习课程");
         AssertionConcerns.assertArgumentTrue(clazz.canBeStudied(),"不能在非教学班级学习");
-        AssertionConcerns.assertArgumentTrue(teacher.isTeaching(),"课程老师已经离职");
+
         this.studentId = studentId;
         this.schoolId = schoolId;
         this.clazzId = clazz.clazzId();
         this.grade = grade;
         this.period = new Period(starts, ends);
-        this.teacher = teacher;
+        this.course = course;
     }
 
     public boolean sameGradeCourseOf(Grade grade, Course course){
-        return this.grade.equals(grade) && this.teacher.course().equals(course);
+        return this.grade.equals(grade) && this.course().equals(course);
     }
 
     public boolean sameGradeCourseOnLineOf(Grade grade, Course course){
         return this.sameGradeCourseOf(grade,course) && !this.period.isOver();
+    }
+
+    public boolean isOver(){
+        return this.period.isOver();
     }
 
     public Study overNow(){
@@ -86,12 +91,12 @@ public class Study extends ValueObject {
         return Objects.equal(studentId, study.studentId) &&
                 Objects.equal(clazzId, study.clazzId) &&
                 Objects.equal(grade, study.grade) &&
-                Objects.equal(teacher, study.teacher);
+                Objects.equal(course, study.course);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(studentId, clazzId, grade, teacher);
+        return Objects.hashCode(studentId, clazzId, grade, course);
     }
 
     @Override
@@ -100,7 +105,7 @@ public class Study extends ValueObject {
                 .add("studentId", studentId)
                 .add("clazzId", clazzId)
                 .add("grade", grade)
-                .add("teacher", teacher)
+                .add("course", course)
                 .toString();
     }
 
@@ -124,8 +129,8 @@ public class Study extends ValueObject {
         return period;
     }
 
-    public Teacher teacher() {
-        return teacher;
+    public Course course() {
+        return course;
     }
 
     protected Study(){

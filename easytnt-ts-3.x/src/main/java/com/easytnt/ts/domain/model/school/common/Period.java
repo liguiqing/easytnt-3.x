@@ -87,7 +87,7 @@ public class Period {
     public boolean isOver() {
         if(this.ends == null )
             return false;
-        return DateUtilWrapper.largeThanYYMMDD(this.ends,DateUtilWrapper.today());
+        return DateUtilWrapper.lgeThanYYMMDD(DateUtilWrapper.today(),this.ends);
     }
 
     protected Period() {

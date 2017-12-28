@@ -12,65 +12,19 @@ package com.easytnt.ts.domain.model.school;
  */
 
 public enum GradeLevel {
-    One,
-    Two{
-        public int getSeq(){
-            return 2;
-        }
-    },
-    Three{
-        public int getSeq(){
-            return 3;
-        }
-    },
-    Four{
-        public int getSeq(){
-            return 4;
-        }
-    },
-    Five{
-        public int getSeq(){
-            return 5;
-        }
-    },
-    Six{
-        public int getSeq(){
-            return 6;
-        }
-    },
-    Seven{
-        public int getSeq(){
-            return 7;
-        }
-    },
-    Eight{
-        public int getSeq(){
-            return 8;
-        }
-    },
-    Nine{
-        public int getSeq(){
-            return 9;
-        }
-    },
-    Ten{
-        public int getSeq(){
-            return 10;
-        }
-    },
-    Eleven{
-        public int getSeq(){
-            return 11;
-        }
-    },
-    Twelve{
-        public int getSeq(){
-            return 12;
-        }
-    };
+    One(1),Two(2), Three(3),
+    Four(4),Five(5),Six(6),
+    Seven(7),Eight(8),Nine(9),
+    Ten(10),Eleven(11),Twelve(12);
+
+    private int seq = 1;
+
+    GradeLevel(int seq){
+        this.seq = seq;
+    }
 
     public int getSeq(){
-        return 1;
+        return this.seq;
     }
 
     public GradeLevel next(){
@@ -88,7 +42,8 @@ public enum GradeLevel {
                 return aLevel;
         }
 
-        return null;
+        throw new GradeNotFoundException(level + "");
+
     }
 
     public static GradeLevel fromName(String name){
@@ -97,7 +52,8 @@ public enum GradeLevel {
                 return aLevel;
         }
 
-        return null;
+        throw new GradeNotFoundException(name + "");
+
     }
 
 }

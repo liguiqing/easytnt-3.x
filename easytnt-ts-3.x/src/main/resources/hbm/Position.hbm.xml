@@ -31,6 +31,17 @@
                 <property name="id" column="clazzId" type="java.lang.String"/>
             </component>
         </union-subclass>
+        <union-subclass name="com.easytnt.ts.domain.model.school.staff.ClazzTeacher" table="ts_clazz_teacher">
+            <component name="clazzId" class="com.easytnt.ts.domain.model.school.clazz.ClazzId">
+                <property name="id" column="clazzId" type="java.lang.String"/>
+            </component>
+            <component name="teacher" class="com.easytnt.ts.domain.model.school.staff.Teacher">
+                <component name="course" class="com.easytnt.ts.domain.model.school.Course">
+                    <property name="name" column="subjectName" type="java.lang.String"/>
+                    <property name="subjectId" column="subjectId" type="java.lang.String"/>
+                </component>
+            </component>
+        </union-subclass>
         <union-subclass name="com.easytnt.ts.domain.model.school.staff.HeadMaster" table="ts_leader">
             <property name="post" column="post" type="java.lang.String"/>
         </union-subclass>

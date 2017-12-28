@@ -11,21 +11,16 @@ import com.easytnt.ts.domain.model.school.common.Gender;
 import com.easytnt.ts.domain.model.school.common.IdentityType;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.staff.*;
+import com.easytnt.ts.domain.model.school.student.Student;
+import com.easytnt.ts.domain.model.school.student.StudentId;
+import com.easytnt.ts.domain.model.school.student.StudentIdentity;
+import com.easytnt.ts.domain.model.school.student.Study;
 import com.easytnt.ts.domain.model.school.term.Term;
 import com.easytnt.ts.domain.model.school.term.TermId;
 import com.easytnt.ts.domain.model.school.term.TermOrder;
 import com.easytnt.ts.domain.model.school.term.TimeSpan;
-import com.google.common.collect.Sets;
 import org.hibernate.*;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,16 +28,13 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -50,17 +42,12 @@ import static org.junit.Assert.*;
  * @author Liguiqing
  * @since V3.0
  */
-//@RunWith(PowerMockRunner.class)
-//@PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext-test-ds.xml", "classpath:applicationContext-ts.xml",
+@ContextConfiguration(locations = {"classpath:applicationContext-test-ds.xml",
+        "classpath:applicationContext-ts.xml","classpath:applicationContext-ts-app.xml",
         "classpath:applicationContext-ts-hb.xml"})
 @Transactional
 @Rollback
-@PrepareForTest({GradeCourseableFactory.class})
-@PowerMockIgnore("*")
-public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextTests {
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
+public class ConfiguationTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private DataSource ds;
@@ -82,14 +69,6 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
     public void test() throws Exception {
         SchoolId schoolId = new SchoolId("SchoolId-12345678");
         Grade g7 = new Grade("七年级",GradeLevel.Seven,StudyYear.yearOfNow());
-        Collection<Course> courses = PowerMockito.mock(Collection.class);
-
-        GradeCourseable mockGc =  PowerMockito.mock(GradeCourseable.class);
-        PowerMockito.when(mockGc.courseOf(g7)).thenReturn(courses);
-
-        PowerMockito.mockStatic(GradeCourseableFactory.class);
-        PowerMockito.when(GradeCourseableFactory.lookup(schoolId)).thenReturn(mockGc);
-
 
         Session session = sessionFactory.openSession();
         Transaction transaction = session.getTransaction();
@@ -98,15 +77,15 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
 
         assertNotNull(ds);
         assertNotNull(jdbcTemplate);
-//        List<String> xs = jdbcTemplate.query("SELECT 'x'", new RowMapper<String>() {
-//            @Override
-//            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                return rs.getString("x");
-//            }
-//        });
-//        assertNotNull(xs);
-//        assertTrue(xs.size() == 1);
-//        assertEquals(xs.get(0), "x");
+        List<String> xs = jdbcTemplate.query("SELECT 'x'", new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString("x");
+            }
+        });
+        assertNotNull(xs);
+        assertTrue(xs.size() == 1);
+        assertEquals(xs.get(0), "x");
 
         School s1 = new School(new TenantId("TenantId-12345678"), schoolId, "School1",
                 "s1", SchoolType.High);
@@ -134,13 +113,24 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
         assertEquals(t1_.termYear().name(), StudyYear.yearOfNow().name());
         session.delete(t1_);
 
-        Clazz clazz1 = new AdminClazz(schoolId,new ClazzId("ClazzId-12345678"),"Clazz1","171",DateUtilWrapper.today(),g7,t1_);
-        Clazz clazz2 = new TeachClazz(schoolId,new ClazzId("ClazzId-12345678"),"Clazz2","17hx1",DateUtilWrapper.today(),g7,t1_);
-        Clazz clazz3 = new MixtureClazz(schoolId,new ClazzId("ClazzId-12345678"),"Clazz3","173",DateUtilWrapper.today(),g7,t1_);
+        Clazz clazz1 = new AdminClazz(schoolId,new ClazzId("ClazzId-123456781"),"Clazz1","171",DateUtilWrapper.today(),g7,t1_);
+        Clazz clazz2 = new TeachClazz(schoolId,new ClazzId("ClazzId-123456782"),"Clazz2","17hx1",DateUtilWrapper.today(),g7,t1_);
+        Clazz clazz3 = new MixtureClazz(schoolId,new ClazzId("ClazzId-123456783"),"Clazz3","173",DateUtilWrapper.today(),g7,t1_);
+
+        clazz3.addCatagory("实验班","sy");
 
         session.save(clazz1);
         session.save(clazz2);
         session.save(clazz3);
+
+        query = session.createQuery("from Clazz where clazzId='ClazzId-123456783'");
+        l1 = query.list();
+        Clazz clazz3_ = (Clazz)l1.get(0);
+        assertNotNull(clazz3_);
+        assertEquals(clazz3,clazz3_);
+        assertTrue(clazz3_.histories().size() == 1);
+        assertTrue(clazz3_.catagories().size() == 1);
+
 
         Staff staff1 = new Staff(schoolId, new StaffId("StaffId-12345678"), "Staff1",
                 Gender.Female, new Period(DateUtilWrapper.today(), DateUtilWrapper.tomorrow()));
@@ -148,13 +138,13 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
         staff1.addIdentity(new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.QQ, "3215647899"));
         Period period = new Period(DateUtilWrapper.today(), DateUtilWrapper.tomorrow());
         staff1.actTo(new ActHeadMaster(),period);
-        staff1.actTo(new ActTeacher(new Course("语文","isd-102345678")),period);
+        staff1.actTo(new ActTeacher(new Course("语文","Easytnt_SBID_001")),period);
         staff1.actTo(new ActClazzMaster(clazz1),period);
         staff1.actTo(new ActClazzMaster(clazz3),period);
-        staff1.actTo(new ActClazzTeacher(clazz2,new ActTeacher(new Course("语文","isd-102345678")).actTo(staff1,period),g7),period);
-        staff1.actTo(new ActClazzTeacher(clazz3,new ActTeacher(new Course("语文","isd-102345678")).actTo(staff1,period),g7),period);
+        staff1.actTo(new ActClazzTeacher(clazz2,new ActTeacher(new Course("语文","Easytnt_SBID_001")).actTo(staff1,period),g7),period);
+        staff1.actTo(new ActClazzTeacher(clazz3,new ActTeacher(new Course("语文","Easytnt_SBID_001")).actTo(staff1,period),g7),period);
         staff1.actTo(new ActGradeMaster(g7),period);
-        staff1.actTo(new ActSubjectMaster("语文","isd-102345678"),period);
+        staff1.actTo(new ActSubjectMaster("语文","Easytnt_SBID_001"),period);
         staff1.actTo(new ActTeachingMaster("教导主任"),period);
 
         session.save(staff1);
@@ -168,7 +158,7 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
         assertTrue(staff1_.identity().size() > 0);
         assertTrue(staff1_.positions().size() > 0);
         assertTrue(staff1_.identity().contains(new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.JobNo, "12345678995456")));
-        //assertTrue(staff1_.positions().contains(new ActTeacher(new Course("语文", "isd-102345678")).actTo(staff1,period)));
+        //assertTrue(staff1_.positions().contains(new ActTeacher(new Course("语文", "Easytnt_SBID_001")).actTo(staff1,period)));
         //Iterator it = staff1_.identity().iterator();
         //assertEquals(it.next(), new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.JobNo, "12345678995456"));
         //assertEquals(it.next(), new StaffIdentity(new StaffId("StaffId-12345678"), IdentityType.QQ, "3215647899"));
@@ -184,6 +174,26 @@ public class ConfiguationTestt extends AbstractTransactionalJUnit4SpringContextT
         assertNotNull(ll);
         Object[] rs = (Object[]) ll.get(0);
         assertEquals(rs[3], "女");
+
+        StudentId studentId = new StudentId("StudentId-123456781");
+        Student student1 = new Student(schoolId,studentId,"Student1");
+        student1.addId(new StudentIdentity(studentId,IdentityType.StudyNumber,"456789899554556652"));
+        student1.changeManagedClazz(clazz1,DateUtilWrapper.today(),DateUtilWrapper.tomorrow());
+        student1.addStudy(clazz2,g7,new Course("语文","Easytnt_SBID_001"),DateUtilWrapper.today(),DateUtilWrapper.tomorrow());
+
+        session.save(student1);
+
+        query = session.createQuery("from Student where studentId=?");
+        query.setParameter(0, studentId);
+        l1 = query.list();
+
+        Student student1_ = (Student) l1.get(0);
+        assertNotNull(student1_);
+        assertEquals(student1, student1_);
+        assertTrue(student1_.belongTos().size() == 1);
+        assertTrue(student1_.studies().size() == 1);
+        Study study = student1_.getStudyOnLine(g7, new Course("语文", "Easytnt_SBID_001"));
+        assertNotNull(study);
 
         transaction.rollback();
 

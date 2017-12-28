@@ -7,6 +7,7 @@ package com.easytnt.ts.domain.model.school.term;
 import com.easytnt.commons.domain.Entity;
 import com.easytnt.ts.domain.model.school.SchoolId;
 import com.easytnt.ts.domain.model.school.StudyYear;
+import com.easytnt.ts.domain.model.school.common.Period;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
@@ -38,6 +39,10 @@ public class Term extends Entity {
         this.order = order;
         this.timeSpan = timeSpan;
         this.schoolId = schoolId;
+    }
+
+    public Period converToPeriod(){
+        return new Period(this.timeSpan().starts(), this.timeSpan().ends());
     }
 
     @Override

@@ -4,7 +4,7 @@
 
 package com.easytnt.ts.domain.model.school.clazz;
 
-import com.easytnt.commons.domain.ValueObject;
+import com.easytnt.commons.domain.IdentifiedValueObject;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.common.Period;
 import com.easytnt.ts.domain.model.school.common.WLType;
@@ -21,7 +21,7 @@ import com.google.common.base.Objects;
  * @since V3.0
  */
 
-public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory>{
+public class ClazzHistory extends IdentifiedValueObject implements Comparable<ClazzHistory>{
 
     private ClazzId clazzId;
 
@@ -35,13 +35,13 @@ public class ClazzHistory extends ValueObject implements Comparable<ClazzHistory
 
     private WLType wl;
 
-    protected ClazzHistory(ClazzId clazzId, Term term, TermOrder termOrder, Grade grade, WLType wl) {
+    protected ClazzHistory(ClazzId clazzId, Term term, Grade grade, WLType wl) {
         this.clazzId = clazzId;
         this.termId = term.termId();
-        this.period = new Period(term.timeSpan().starts(),term.timeSpan().ends());
+        this.period = term.converToPeriod();
         this.grade = grade;
         this.wl = wl;
-        this.termOrder = termOrder;
+        this.termOrder = term.order();
     }
 
     public boolean isInPeriod(Period aPeriod){
