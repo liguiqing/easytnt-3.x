@@ -7,9 +7,7 @@ package com.easytnt.ts.infrastructure.persistence.hibernate;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.domain.model.school.*;
 import com.easytnt.ts.domain.model.school.clazz.*;
-import com.easytnt.ts.domain.model.school.common.Gender;
-import com.easytnt.ts.domain.model.school.common.IdentityType;
-import com.easytnt.ts.domain.model.school.common.Period;
+import com.easytnt.ts.domain.model.school.common.*;
 import com.easytnt.ts.domain.model.school.staff.*;
 import com.easytnt.ts.domain.model.school.student.Student;
 import com.easytnt.ts.domain.model.school.student.StudentId;
@@ -195,6 +193,8 @@ public class ConfiguationTest extends AbstractTransactionalJUnit4SpringContextTe
         Study study = student1_.getStudyOnLine(g7, new Course("语文", "Easytnt_SBID_001"));
         assertNotNull(study);
 
+        SchoolConfig sc = new SchoolConfig(schoolId,new Configuation("c1","c1","c1"));
+        session.save(sc);
         transaction.rollback();
 
 

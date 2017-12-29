@@ -4,6 +4,7 @@
 
 package com.easytnt.ts.application.school;
 
+import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.ts.application.school.command.NewTermCommand;
 import com.easytnt.ts.domain.model.school.School;
 import com.easytnt.ts.domain.model.school.SchoolId;
@@ -16,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.Date;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -60,6 +63,9 @@ public class SchoolApplicationServiceTest {
     public void testNewTerm()throws Exception{
         NewTermCommand command = mock(NewTermCommand.class);
         when(command.getTermOrder()).thenReturn("First");
+        when(command.getStarts()).thenReturn(DateUtilWrapper.today());
+        when(command.getEnds()).thenReturn(DateUtilWrapper.tomorrow());
+        when(command.getYear()).thenReturn(DateUtilWrapper.thisYear()+"-"+DateUtilWrapper.nextYear(new Date()));
         School school = mock(School.class);
         SchoolId id = new SchoolId("123456789");
         when(school.schoolId()).thenReturn(id);

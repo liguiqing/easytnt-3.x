@@ -1,6 +1,9 @@
 package com.easytnt.ts.domain.model.school;
 
+import com.easytnt.ts.domain.model.school.common.WLTypeNotFondException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -11,6 +14,9 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class GradeLevelTest {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
 
     @Test
     public void testNext()throws Exception{
@@ -26,6 +32,7 @@ public class GradeLevelTest {
         assertTrue(one.next().next().next().next().next().next().next().next().next() == GradeLevel.Ten);
         assertTrue(one.next().next().next().next().next().next().next().next().next().next() == GradeLevel.Eleven);
         assertTrue(one.next().next().next().next().next().next().next().next().next().next().next() == GradeLevel.Twelve);
+
         assertNull(one.next().next().next().next().next().next().next().next().next().next().next().next() );
     }
 
@@ -43,11 +50,20 @@ public class GradeLevelTest {
         GradeLevel twelve = GradeLevel.fromLevel(12);
         assertTrue(twelve == GradeLevel.Twelve);
 
-        GradeLevel thirteen = GradeLevel.fromLevel(13);
-        assertNull(thirteen);
+    }
 
-        GradeLevel zero = GradeLevel.fromLevel(0);
-        assertNull(zero);
+    @Test
+    public void test0() throws Exception{
+        thrown.expect(GradeNotFoundException.class);
+        thrown.expectMessage("0" );
+        GradeLevel.fromLevel(0);
+    }
+
+    @Test
+    public void test13() throws Exception{
+        thrown.expect(GradeNotFoundException.class);
+        thrown.expectMessage("13" );
+        GradeLevel.fromLevel(13);
     }
 
     @Test
@@ -64,16 +80,21 @@ public class GradeLevelTest {
         GradeLevel twelve = GradeLevel.fromName("Twelve");
         assertTrue(twelve == GradeLevel.Twelve);
 
-        GradeLevel thirteen = GradeLevel.fromName("Thirteen");
-        assertNull(thirteen);
+    }
 
-        GradeLevel zero = GradeLevel.fromName("Zero");
-        assertNull(zero);
+    @Test
+    public void testNotName()throws Exception{
+        thrown.expect(GradeNotFoundException.class);
+        thrown.expectMessage("Zero" );
+        GradeLevel.fromName("Zero");
 
-        GradeLevel other = GradeLevel.fromName("asdfasdf");
-        assertNull(other);
+    }
 
-        GradeLevel Null = GradeLevel.fromName(null);
-        assertNull(Null);
+    @Test
+    public void testNull()throws Exception{
+        thrown.expect(GradeNotFoundException.class);
+        thrown.expectMessage("" );
+        GradeLevel thirteen = GradeLevel.fromName(null);
+
     }
 }

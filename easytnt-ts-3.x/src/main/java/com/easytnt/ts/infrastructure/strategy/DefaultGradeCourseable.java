@@ -7,6 +7,9 @@ package com.easytnt.ts.infrastructure.strategy;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.GradeCourseable;
+import com.easytnt.ts.domain.model.school.common.Configable;
+import com.easytnt.ts.domain.model.school.common.Configuation;
+import com.easytnt.ts.domain.model.school.common.ConfiguationFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,11 +20,23 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 /**
+ * 年级默认教学课程
+ *
  * @author Liguiqing
  * @since V3.0
  */
 
-public class DefaultGradeCourseable implements GradeCourseable {
+public class DefaultGradeCourseable implements GradeCourseable,Configable {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    private  Configuation configuation = new Configuation("年级默认教学课程",getClass().getName(),
+            "#link#defaultGradeCourse.html");
+
+    public DefaultGradeCourseable(){
+        ConfiguationFactory.register(this);
+    }
 
     @Override
     @Cacheable(value = "DefaultGradeCourseCache", key = "#grade.name")
@@ -37,8 +52,8 @@ public class DefaultGradeCourseable implements GradeCourseable {
         },new Object[]{grade.seq().getSeq()});
     }
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-
+    @Override
+    public Configuation config() {
+        return configuation;
+    }
 }

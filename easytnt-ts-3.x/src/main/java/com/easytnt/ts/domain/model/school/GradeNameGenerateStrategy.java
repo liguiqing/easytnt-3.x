@@ -13,7 +13,7 @@ package com.easytnt.ts.domain.model.school;
 
 public interface GradeNameGenerateStrategy {
 
-    String genGradeName(GradeLevel seq);
+    public final String configName = "年级名称";
 
-    String description();
+    String genGradeName(GradeLevel seq);
 }

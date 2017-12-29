@@ -8,6 +8,8 @@ import com.easytnt.ts.application.school.data.CourseData;
 import com.easytnt.ts.application.school.data.GradeData;
 import com.easytnt.ts.application.school.data.SchoolData;
 import com.easytnt.ts.domain.model.school.*;
+import com.easytnt.ts.domain.model.school.common.Configuation;
+import com.easytnt.ts.domain.model.school.common.SchoolConfig;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +102,33 @@ public class SchoolQueryService {
                 return new CourseData(rs.getString("name"),rs.getString("subjectId"),rs.getString("gradeName"));
             }
         }, new Object[]{schoolId});
+    }
+
+    /**
+     * 查询学校配置
+     *
+     * @param schoolId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Cacheable(value = "SchoolGradeNameCache", key = "#schoolId")
+    public List<SchoolConfig> schoolConfigs(final String schoolId){
+        logger.debug("Query school Configuations for {}",schoolId);
+
+        String sql = "select name,value,description from ts_configuation where schoolId=?";
+
+        List<SchoolConfig> l =   query.query(sql,new  RowMapper<SchoolConfig>(){
+
+            @Override
+            public SchoolConfig mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Configuation c = new Configuation(rs.getString("name"),
+                        rs.getString("value"),
+                        rs.getString("description"));
+                SchoolConfig sc = new SchoolConfig(new SchoolId(schoolId),c);
+                return sc;
+            }
+        });
+        return l;
     }
 
 }
