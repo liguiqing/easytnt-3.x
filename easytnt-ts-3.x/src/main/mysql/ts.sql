@@ -7,6 +7,8 @@ CREATE TABLE `ts_school` (
   `name` varchar(32) NOT NULL COMMENT '学校名称',
   `alias` varchar(32) NOT NULL COMMENT '学校简称',
   `type` varchar(16) NOT NULL COMMENT '学校类型:Primary-小学;Middle-初中;High-高中;PrimaryToMiddlel-小学到初中;MiddleToHigh-初中到高中；All-小学到高中',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_school_schoolId` (`schoolId`),
   KEY `x_ts_school_tenantId` (`tenantId`)
@@ -24,6 +26,8 @@ CREATE TABLE `ts_term` (
   `seq` varchar(8) NOT NULL COMMENT '学期序号：First-上学期Second-下学期',
   `starts` DATE  COMMENT '学期开始时间',
   `ends` DATE  COMMENT '学期结束时间',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_term_schoolId` (`schoolId`),
   KEY `x_ts_term_termId` (`termId`)
@@ -38,6 +42,8 @@ CREATE TABLE `ts_staff` (
   `gender` varchar(4) DEFAULT '无' COMMENT '教职工性别',
   `periodStarts` DATE  COMMENT '教职工入职时间',
   `periodEnds` DATE  COMMENT '教职工离职时间,为空时表示一直在职',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_staff_schoolId` (`schoolId`),
   KEY `x_ts_staff_staffId` (`staffId`)
@@ -51,6 +57,8 @@ CREATE TABLE `ts_staff_identity` (
   `identityTypeName` varchar (16) DEFAULT '身份证'  COMMENT '教职工身份证件号类型：身份证, 教育云标识,QQ,微信,港澳台证件号, 工号,其他',
   `validityStarts` DATE  COMMENT '证件有效开始时间',
   `validityEnds` DATE  COMMENT '证件有效结束时间,为空时一直有效',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_staff_staffId` (`staffId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='教职工身份标识表';
@@ -65,6 +73,8 @@ CREATE TABLE `ts_teacher` (
   `periodEnds` DATE  COMMENT '离任时间,为空时表示一直在职',
   `courseName` varchar(8) NOT NULL COMMENT '教学课程名称',
   `subjectId` varchar(36) NOT NULL COMMENT '教学课科目唯一标识，与外部系统保持一致',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_teacher_schoolId` (`schoolId`),
   KEY `x_ts_teacher_identity` (`identity`),
@@ -81,6 +91,8 @@ CREATE TABLE `ts_leader` (
   `periodStarts` DATE  COMMENT '入职时间',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `post` varchar (8)   COMMENT '职位，如教导主任，教务主任等',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_leader_schoolId` (`schoolId`),
   KEY `x_ts_leader_identity` (`identity`)
@@ -99,6 +111,8 @@ CREATE TABLE `ts_grade_master` (
   `yearName` varchar(32) NOT NULL COMMENT '任职时学年',
   `yearStarts` SMALLINT (4) NOT NULL COMMENT '任职时学年起始年度',
   `yearEnds` SMALLINT(4) NOT NULL COMMENT '任职时学年结束年度',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_grade_master_schoolId` (`schoolId`),
   KEY `x_ts_grade_master_identity` (`identity`)
@@ -114,6 +128,8 @@ CREATE TABLE `ts_subject_master` (
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `subjectId` varchar(36) NOT NULL COMMENT '负责学科唯一标识',
   `subjectName` varchar(16) NOT NULL COMMENT '负责学科名称',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_subject_master_schoolId` (`schoolId`),
   KEY `x_ts_subject_master_staffId` (`identity`),
@@ -129,6 +145,8 @@ CREATE TABLE `ts_clazz_master` (
   `name` varchar(36) NOT NULL COMMENT '姓名',
   `periodStarts` DATE  COMMENT '入职时间',
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_master_schoolId` (`schoolId`),
   KEY `x_ts_clazz_master_identity` (`identity`),
@@ -146,6 +164,8 @@ CREATE TABLE `ts_clazz_teacher` (
   `periodEnds` DATE  COMMENT '离职时间,为空时表示一直在职',
   `subjectId` varchar(36) NOT NULL COMMENT '负责学科唯一标识',
   `subjectName` varchar(16) NOT NULL COMMENT '负责学科名称',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_master_schoolId` (`schoolId`),
   KEY `x_ts_clazz_master_identity` (`identity`),
@@ -160,6 +180,8 @@ CREATE TABLE `ts_course` (
   `name` varchar (8) NOT NULL  COMMENT '课程名称，如语文，英语，数学',
   `subjectId` varchar (36) NOT NULL  COMMENT '课程科目唯一标识',
   `schoolId` varchar(36)  COMMENT '开设学校唯一标识，如果为空，表示通用',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_course_subjectId` (`subjectId`),
   KEY `x_ts_course_schoolId` (`schoolId`)
@@ -182,6 +204,8 @@ CREATE TABLE `ts_clazz` (
   `name` varchar (8)  NOT NULL COMMENT '班级名称',
   `createDate` varchar (8)  NOT NULL COMMENT '班级创建日期 YYYY-mm',
   `adminType` varchar (8) NOT NULL  COMMENT '班级管理类型：Admin-行政班,Teach-教学班,Mixture-不分',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_schoolId` (`schoolId`),
   KEY `x_ts_clazz_clazzId` (`clazzId`)
@@ -193,6 +217,8 @@ CREATE TABLE `ts_clazz_catagory` (
   `clazzId` varchar(36) NOT NULL COMMENT '班级唯一标识,与表ts_clazz.classId关联',
   `code` varchar (8)  NOT NULL COMMENT '班级分类代码',
   `name` varchar (8) NOT NULL  COMMENT '班级分类名称，如理科，文科，重点，普通，实验等',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_clazzId_catagory` (`clazzId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班级分类信息表，如理科班，文科班，重点班，普通班，实验班等';
@@ -211,6 +237,8 @@ CREATE TABLE `ts_clazz_term_history` (
   `wl` SMALLINT DEFAULT 0  COMMENT '文理分科：0－不分；2-理科；1-文科',
   `starts` DATE  COMMENT '开始时间，与学期开学时间一致',
   `ends` DATE  COMMENT '结束时间，与学期结束时间一致',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_clazz_history_clazzId` (`clazzId`),
   KEY `x_ts_clazz_history_termId` (`termId`)
@@ -225,6 +253,8 @@ CREATE TABLE `ts_student` (
   `gender` varchar(4) DEFAULT '无' COMMENT '学生性别',
   `joinDate` DATE  COMMENT '入校时间',
   `leafDate` DATE  COMMENT '离校时间,为空时表示一直在校',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_student_schoolId` (`schoolId`),
   KEY `x_ts_student_studentId` (`studentId`)
@@ -238,6 +268,8 @@ CREATE TABLE `ts_student_belong` (
   `studentId` varchar(36) NOT NULL COMMENT '学生唯一标识，系统中所有学生是唯一的',
   `joinDate` DATE  COMMENT '入校时间',
   `leafDate` DATE  COMMENT '离校时间,为空时表示一直在校',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_student_clazzId` (`clazzId`),
   KEY `x_ts_student_studentId` (`studentId`)
@@ -258,6 +290,8 @@ CREATE TABLE `ts_student_study` (
   `courseName` varchar(16) NOT NULL COMMENT '学习课程名称',
   `starts` DATE  COMMENT '学习开始时间',
   `ends` DATE  COMMENT '学习完成时间,为空时表示一直在校',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_student_clazzId` (`clazzId`),
   KEY `x_ts_student_studentId` (`studentId`)
@@ -271,6 +305,8 @@ CREATE TABLE `ts_student_identity` (
   `identityTypeName` varchar (16) DEFAULT '身份证'  COMMENT '学生身份证件名，身份证, 学籍号, 学号,教育云标识,QQ,微信,港澳台证件号, 考号,其他',
   `validityStarts` DATE  COMMENT '证件有效开始时间',
   `validityEnds` DATE  COMMENT '证件有效结束时间,为空时一直有效',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_student_identity_studentId` (`studentId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学生身份标识表';
@@ -282,7 +318,9 @@ CREATE TABLE `ts_configuation` (
   `schoolId` varchar(36) NOT NULL COMMENT '所属学校唯一标识',
   `name` varchar(36) NOT NULL COMMENT '系统配置名称',
   `value` varchar(255) NOT NULL COMMENT '系统配置值',
-  `description` varchar (1000) 　COMMENT '系统配置说明',
+  `description` varchar (1000) COMMENT '系统配置说明',
+  `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastUpdateTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `x_ts_school_configuation` (`schoolId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学校系统配置信息表';
