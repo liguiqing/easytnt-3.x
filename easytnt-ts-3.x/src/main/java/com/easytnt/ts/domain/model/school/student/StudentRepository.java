@@ -5,6 +5,9 @@
 package com.easytnt.ts.domain.model.school.student;
 
 import com.easytnt.commons.domain.EntityRepository;
+import com.easytnt.ts.domain.model.school.clazz.ClazzId;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -13,4 +16,5 @@ import com.easytnt.commons.domain.EntityRepository;
 
 public interface StudentRepository extends EntityRepository<Student,StudentId> {
 
+    List<Student> studentsOf(ClazzId clazzId);
 }
