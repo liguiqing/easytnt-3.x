@@ -4,9 +4,6 @@
 
 package com.easytnt.ts.domain.model.school.clazz;
 
-import com.easytnt.commons.event.progress.ProgressEvent;
-import com.easytnt.commons.event.progress.ProgressEventBus;
-import com.easytnt.commons.event.progress.ProgressListener;
 import com.easytnt.ts.domain.model.school.Course;
 import com.easytnt.ts.domain.model.school.Grade;
 import com.easytnt.ts.domain.model.school.GradeCourseable;
@@ -25,47 +22,36 @@ import java.util.List;
  * @since V3.0
  */
 
-public class ClazzUpgradeService implements ProgressListener {
+public class ClazzUpgradeService  {
 
     private ClazzRepository clazzRepository;
 
     private StudentRepository studentRepository;
 
-    private int i = 0;
-
-    public ClazzUpgradeService(){
-        ProgressEventBus.register(this);
+    public ClazzUpgradeService(ClazzRepository clazzRepository,StudentRepository studentRepository){
+        this.clazzRepository = clazzRepository;
+        this.studentRepository = studentRepository;
     }
 
     public void upGrade(Clazz clazz,Term term){
         clazz.upGrade(term);
+        if(!clazz.canBeStudied())
+            return;
         List<Student> students = this.studentRepository.studentsOf(clazz.clazzId());
         Grade grade = clazz.termGrade(term);
         GradeCourseable courseable = GradeCourseableFactory.lookup(clazz.schoolId());
         Collection<Course> gradeCourses = courseable.courseOf(grade);
-
         if(students != null){
             for(Student student:students){
-                //student.addStudy();
-
+                for(Course course : gradeCourses)
+                student.changeStudyClazzOfCourse(clazz,grade,course, term.timeSpan().starts(),term.timeSpan().ends());
+                studentRepository.save(student);
             }
         }
     }
 
-    @Override
-    public void update(ProgressEvent event) {
-        while(i>100){
-            i++;
-            try {
-                Thread.sleep(1000l);
-            } catch (InterruptedException e) {
-
-            }
-        }
+    public void upGrade(Grade grade,Term term){
+        List<Clazz> clazzes = clazzRepository.listGradeClazzes(grade,term);
     }
 
-    @Override
-    public void destry() {
-
-    }
 }
