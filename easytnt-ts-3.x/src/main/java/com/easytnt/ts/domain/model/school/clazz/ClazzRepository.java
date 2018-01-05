@@ -5,6 +5,10 @@
 package com.easytnt.ts.domain.model.school.clazz;
 
 import com.easytnt.commons.domain.EntityRepository;
+import com.easytnt.ts.domain.model.school.Grade;
+import com.easytnt.ts.domain.model.school.term.Term;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -13,4 +17,5 @@ import com.easytnt.commons.domain.EntityRepository;
 
 public interface ClazzRepository extends EntityRepository<Clazz,ClazzId> {
 
+    List<Clazz> listGradeClazzes(Grade grade, Term term);
 }

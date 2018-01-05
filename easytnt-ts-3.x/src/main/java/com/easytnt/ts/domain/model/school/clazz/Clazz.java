@@ -36,6 +36,8 @@ public abstract class Clazz extends Entity {
 
     private String createDate; //建班日期，使用时格式为YYYY-mm
 
+    private boolean finish = Boolean.FALSE;
+
     private Set<ClazzCatagory> catagories;
 
     private Set<ClazzHistory> histories;
@@ -72,6 +74,10 @@ public abstract class Clazz extends Entity {
         }
     }
 
+    public void graduate(){
+        this.finish = Boolean.TRUE;
+    }
+
     /**
      * 增加班级的学期史
      *
@@ -80,6 +86,9 @@ public abstract class Clazz extends Entity {
      * @param wl　Null时为 WLType.None
      */
     public void addHistory(Term term,Grade grade,WLType wl){
+        if(this.finish)
+            return;
+
         if(wl == null)
             wl = WLType.None;
 
@@ -141,6 +150,9 @@ public abstract class Clazz extends Entity {
     public void upGrade(Term term){
         if(this.histories == null || this.histories.size() == 0)
             return;
+        
+        if(this.finish)
+            return;
 
         ClazzHistory top = this.histories.iterator().next();
         AssertionConcerns.assertArgumentTrue(top.termOrder() == TermOrder.Second,"上学期不能升班");
@@ -149,7 +161,12 @@ public abstract class Clazz extends Entity {
 
         GradeNameGenerateStrategy nameGenerateStrategy = GradeNameGenerateStrategyFactory.lookup(this.schoolId);
         Grade nextGrade = top.grade().next(nameGenerateStrategy);
-        this.addHistory(term,nextGrade,top.wl());
+        if(nextGrade.equals(top.grade())){
+            this.graduate();
+        }else{
+            this.addHistory(term,nextGrade,top.wl());
+        }
+
     }
 
     /**
@@ -193,6 +210,10 @@ public abstract class Clazz extends Entity {
 
     public String createDate() {
         return createDate;
+    }
+
+    public boolean finish(){
+        return this.finish;
     }
 
     public Set<ClazzCatagory> catagories() {
