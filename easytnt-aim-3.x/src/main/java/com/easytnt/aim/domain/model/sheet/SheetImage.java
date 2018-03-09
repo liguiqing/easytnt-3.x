@@ -23,9 +23,51 @@ public class SheetImage extends ValueObject implements  Comparable<SheetImage>{
 
     private int page;
 
-    private int roate;
+    private int rotate;
 
     private Storage storage;
+
+    private String coordinate;//答题卡图片中坐标结构信息,一般为Json或者xml
+
+    public SheetImage(int width, int height, int page, Storage storage) {
+        this(width,height,page,0,storage);
+    }
+
+    public SheetImage(int width, int height, int page, int rotate, Storage storage) {
+        this.width = width;
+        this.height = height;
+        this.page = page;
+        this.rotate = rotate;
+        this.storage = storage;
+    }
+
+    public void updateCoordinate(String coordinate){
+        this.coordinate = coordinate;
+    }
+
+    public int width() {
+        return width;
+    }
+
+    public int height() {
+        return height;
+    }
+
+    public int page() {
+        return page;
+    }
+
+    public int rotate() {
+        return rotate;
+    }
+
+    public Storage storage() {
+        return storage;
+    }
+
+    public String coordinate() {
+        return coordinate;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -35,13 +77,13 @@ public class SheetImage extends ValueObject implements  Comparable<SheetImage>{
         return width == that.width &&
                 height == that.height &&
                 page == that.page &&
-                roate == that.roate &&
+                rotate == that.rotate &&
                 Objects.equal(storage, that.storage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(width, height, page, roate, storage);
+        return Objects.hashCode(width, height, page, rotate, storage);
     }
 
     @Override
@@ -50,7 +92,7 @@ public class SheetImage extends ValueObject implements  Comparable<SheetImage>{
                 .add("width", width)
                 .add("height", height)
                 .add("page", page)
-                .add("roate", roate)
+                .add("rotate", rotate)
                 .add("storage", storage)
                 .toString();
     }
