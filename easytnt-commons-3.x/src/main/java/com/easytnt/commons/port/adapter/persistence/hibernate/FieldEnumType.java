@@ -29,7 +29,7 @@ import java.util.Properties;
  * <pre>
  * <property name="gender" column="gender" >
        <type name="com.easytnt.commons.port.adapter.persistence.hibernate.FieldEnumType">
-           <param name="enumClass">com.easytnt.ts.domain.model.school.common.Gender</param>
+           <param name="enumClass">com.easytnt.ts.domain.exam.school.common.Gender</param>
            <param name="field">name</param>
        </type>
    </property>

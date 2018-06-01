@@ -27,6 +27,10 @@
             <artifactId>easytnt.commons</artifactId>
             <version>${easytnt.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>easytnt</groupId>
+            <artifactId>easytnt.cache</artifactId>
+            <version>${easytnt.version}</version>
+        </dependency>
     </dependencies>
 </project>

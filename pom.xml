@@ -16,8 +16,9 @@
 		<project.build.sourceVersion>1.7</project.build.sourceVersion>
 		<project.build.targetVersion>1.7</project.build.targetVersion>
 
-		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring.version>5.0.5.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
+        <mybatis.version>3.4.6</mybatis.version>
 		<powermock.version>1.7.1</powermock.version>
 		<commons.lang.version>3.4</commons.lang.version>
 		<shiro.version>1.2.3</shiro.version>
@@ -222,6 +223,15 @@
 				<artifactId>hibernate-ehcache</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
+
+			<!-- set mybatis -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+
 			<!-- set aspectj -->
 			<dependency>
 				<groupId>org.aspectj</groupId>
@@ -562,8 +572,16 @@
 		<module>easytnt-itembank-3.x</module>
 		<module>easytnt-as-3.x</module>
 		<module>easytnt-scan-3.x</module>
-		<module>easytnt-aim-3.x</module>
+		<module>easytnt-share-3.x</module>
+		<module>easytnt-exam-3.x</module>
+		<module>easytnt-examinee-3.x</module>
+		<module>easytnt-mark-3.x</module>
+		<module>easytnt-score-3.x</module>
+		<module>easytnt-sheet-3.x</module>
+		<module>easytnt-statis-3.x</module>
+		<!--<module>easytnt-aim-3.x</module>-->
 		<module>easytnt-report-3.x</module>
 		<module>easytnt-tss-3.x</module>
+		<module>easytnt-cache-3.x</module>
 	</modules>
 </project>

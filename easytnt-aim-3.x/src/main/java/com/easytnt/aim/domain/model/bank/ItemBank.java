@@ -5,6 +5,7 @@
 package com.easytnt.aim.domain.model.bank;
 
 import com.easytnt.aim.domain.model.sheet.MarkItemSpecId;
+import com.easytnt.commons.domain.Entity;
 
 /**
  * 评题仓库
@@ -13,6 +14,10 @@ import com.easytnt.aim.domain.model.sheet.MarkItemSpecId;
  * @since V3.0
  */
 
-public abstract class ItemBank {
+public abstract class ItemBank extends Entity{
     private MarkItemSpecId itemSpecId;
+
+    public boolean bankOf(MarkItemSpecId itemSpecId) {
+        return this.itemSpecId.equals(itemSpecId);
+    }
 }

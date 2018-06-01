@@ -14,4 +14,7 @@ package com.easytnt.aim.domain.model.bank;
 public class TestingItemBank extends ItemBank {
 
 
+    public static TestingItemBank nullBank(){
+        return new TestingItemBank();
+    }
 }

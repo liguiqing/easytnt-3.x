@@ -28,4 +28,28 @@ public abstract class MarkItemSpec extends Entity {
 
     private MarkItemSliceSpec[][] sliceSpecs;
 
+
+    public MarkItemSpecId markItemSpecId() {
+        return markItemSpecId;
+    }
+
+    public SheetSpecId sheetSpecId() {
+        return sheetSpecId;
+    }
+
+    public ExamSubjectId examSubjectId() {
+        return examSubjectId;
+    }
+
+    public String title() {
+        return title;
+    }
+
+    public MarkTimes markTimes() {
+        return markTimes;
+    }
+
+    public MarkItemSliceSpec[][] sliceSpecs() {
+        return sliceSpecs;
+    }
 }

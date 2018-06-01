@@ -11,7 +11,7 @@ package com.easytnt.commons.domain;
  * @since V3.0
  */
 
-public class Entity extends IdentifiedDomainObject{
+public abstract class Entity extends IdentifiedDomainObject{
     private static final long serialVersionUID = 1L;
 
     protected Entity() {

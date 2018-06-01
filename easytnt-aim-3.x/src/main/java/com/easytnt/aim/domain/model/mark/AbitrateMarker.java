@@ -2,16 +2,17 @@
  * Copyright (c) 2016,2018, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.aim.domain.model.mark.actor;
+package com.easytnt.aim.domain.model.mark;
 
 /**
- * 自动评分员
+ * 仲裁评卷员
+ * 多评时启用
  *
  * @author Liguiqing
  * @since V3.0
  */
 
-public class RobotMarker extends ItemMarker {
+public class AbitrateMarker extends HumanMaker {
 
 
 }

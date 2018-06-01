@@ -4,7 +4,7 @@
 
 package com.easytnt.aim.domain.model.shop.form;
 
-import com.easytnt.aim.domain.model.mark.actor.ItemMarkerId;
+import com.easytnt.aim.domain.model.mark.ItemMarkerId;
 import com.easytnt.aim.domain.model.sheet.MarkItemId;
 import com.easytnt.commons.domain.IdentifiedValueObject;
 

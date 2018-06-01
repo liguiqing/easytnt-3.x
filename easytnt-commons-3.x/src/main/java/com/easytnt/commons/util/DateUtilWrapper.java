@@ -21,6 +21,15 @@ import java.util.Date;
 public class DateUtilWrapper {
 
     /**
+     * 现在
+     *
+     * @return
+     */
+    public static Date now() {
+        return Calendar.getInstance().getTime();
+    }
+
+    /**
      * 今天
      *
      * @return

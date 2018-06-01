@@ -4,7 +4,7 @@
 
 package com.easytnt.aim.domain.model.shop.form.checkin;
 
-import com.easytnt.aim.domain.model.Scoredable;
+import com.easytnt.aim.domain.model.share.Scoredable;
 
 /**
  * 客观题表单内容

@@ -4,7 +4,7 @@
 
 package com.easytnt.aim.domain.model.sheet;
 
-import com.easytnt.aim.domain.model.Scoredable;
+import com.easytnt.aim.domain.model.share.Scoredable;
 
 /**
  * 可评分的评题
