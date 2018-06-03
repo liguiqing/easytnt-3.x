@@ -1,6 +1,5 @@
 package com.easytnt.scan.domain.batch;
 
-import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.domain.ValueObject;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -12,14 +11,14 @@ import com.google.common.base.Objects;
  * @since V3.0
  */
 
-public class ScanDoubts extends ValueObject {
+public class BatchScanDoubts extends ValueObject {
     private int examNumberDoubts ;//本批次中考号疑似错误卡数量
 
     private int kgDoubts;//本批次中客观题疑似错误卡数量
 
     private int zgOptionalDoubts;//本批次中选做题疑似错误卡数量
 
-    protected ScanDoubts(int examNumberDoubts, int kgDoubts, int zgOptionalDoubts) {
+    protected BatchScanDoubts(int examNumberDoubts, int kgDoubts, int zgOptionalDoubts) {
         this.examNumberDoubts = examNumberDoubts;
         this.kgDoubts = kgDoubts;
         this.zgOptionalDoubts = zgOptionalDoubts;
@@ -50,7 +49,7 @@ public class ScanDoubts extends ValueObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ScanDoubts that = (ScanDoubts) o;
+        BatchScanDoubts that = (BatchScanDoubts) o;
         return examNumberDoubts == that.examNumberDoubts &&
                 kgDoubts == that.kgDoubts &&
                 zgOptionalDoubts == that.zgOptionalDoubts;
@@ -61,5 +60,5 @@ public class ScanDoubts extends ValueObject {
         return Objects.hashCode(examNumberDoubts, kgDoubts, zgOptionalDoubts);
     }
 
-    protected ScanDoubts(){}
+    protected BatchScanDoubts(){}
 }

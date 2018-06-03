@@ -23,6 +23,10 @@ public class SheetScan extends Entity {
     private boolean zgOptionalDoubt ; //选择题错误疑似:0－无疑似错误；1－有疑似错误
 
 
+    public boolean sameBatchOf(BatchScan batchScan){
+        return this.batchScanId.equals(batchScan.batchScanId());
+    }
+
     public SheetScanId sheetScanId() {
         return sheetScanId;
     }

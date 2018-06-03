@@ -43,13 +43,13 @@ public class BatchScan extends Entity {
 
     private int actual; //实际扫描数
 
-    private ScanDoubts scanDoubts;//扫描怀疑
+    private BatchScanDoubts scanDoubts;//扫描怀疑
 
-    private Date committingTime; //开始提交时间
+    private Date submittingTime; //开始提交时间
 
-    private boolean examNumberDoubtsDone = Boolean.FALSE;//本批次中考号疑似错误是扫描时已经处理过,0－未处理；1－已处理;同一扫描批次中必须全部处理完成才算完成
+    private boolean examNumberDoubtsDone;//本批次中考号疑似错误是扫描时已经处理过,0－未处理；1－已处理;同一扫描批次中必须全部处理完成才算完成
 
-    private Date  committedTime; //提交完成时间
+    private Date  submittedTime; //提交完成时间
 
     private List<SheetScan> sheets;
 
@@ -71,7 +71,7 @@ public class BatchScan extends Entity {
 
 
     /**
-     * 不按考场扫描，也无计划扫描数
+     * 不按考场扫描，有计划扫描数
      *
      * @param examId 考试唯一标识
      * @param subjectId 考试科目唯一标识
@@ -136,15 +136,16 @@ public class BatchScan extends Entity {
 
         this.batchScanId = new BatchScanId();
         this.sheets = Lists.newArrayList();
+        this.examNumberDoubtsDone = Boolean.FALSE;
     }
 
     /**
      * 开始本批次扫描文件上传
      */
     public void submitting(){
-        AssertionConcerns.assertArgumentNull(this.committingTime,"扫描批次已开始上传！");
+        AssertionConcerns.assertArgumentNull(this.submittingTime,"扫描批次已开始上传！");
 
-        this.committingTime = DateUtilWrapper.now();
+        this.submittingTime = DateUtilWrapper.now();
         DomainEventPublisher.instance().publish(new BatchSubmitting(this.batchScanId));
     }
 
@@ -152,10 +153,10 @@ public class BatchScan extends Entity {
      * 完成本批次扫描件提交
      */
     public void submitted(){
-        AssertionConcerns.assertArgumentNotNull(this.committingTime,"扫描批次未开始提交！");
-        AssertionConcerns.assertArgumentNull(this.committedTime,"扫描批次已完成提交！");
+        AssertionConcerns.assertArgumentNotNull(this.submittingTime,"扫描批次未开始提交！");
+        AssertionConcerns.assertArgumentNull(this.submittedTime,"扫描批次已完成提交！");
 
-        this.committedTime = DateUtilWrapper.now();
+        this.submittedTime = DateUtilWrapper.now();
         this.countDoubts();
         DomainEventPublisher.instance().publish(new BatchSubmitted(this.batchScanId));
     }
@@ -166,20 +167,10 @@ public class BatchScan extends Entity {
      * @param sheets 某种格式的答题卡扫描数据，如JSON,XML等
      * @param parser 数据解析器
      */
-    public void submitSheets(String sheets,SheetParser parser,BatchScanActualExpectedAllowedStrategy allowedStrategy){
+    public void submitSheets(String sheets,SheetParser parser){
         List<SheetScan> sheetScans = parser.parse(sheets,this);
-        boolean allowed = allowedStrategy.allowed(this.examId,this.subjectId);
-        if(this.isScanOfRoom()){//按考场扫描，需要检查是否超量
-            if(this.expected < sheetScans.size()){
-                if(allowed){//允许超过计划扫描量
-                    DomainEventPublisher.instance().publish(new BatchScanActualLgExpectedSubmitted(this.batchScanId));
-                }else{
-                    AssertionConcerns.assertArgumentTrue(Boolean.FALSE,"实际扫描数量不能超过计划扫描数量!");
-                }
-            }
-        }
-
         this.checkCanUpload();
+        AssertionConcerns.assertArgumentTrue(sheetScans.size()+this.sizeOfSubmitted() <= this.actual,"提交的答题卡不能超过实际扫描量");
         this.sheets = sheetScans;
     }
 
@@ -190,13 +181,16 @@ public class BatchScan extends Entity {
      */
     public void submitSheet(SheetScan sheet){
         this.checkCanUpload();
+        AssertionConcerns.assertStateTrue(this.sizeOfSubmitted()+1 <= this.actual,"提交的答题卡不能超过实际扫描量");
+        AssertionConcerns.assertStateTrue(sheet.sameBatchOf(this),"不能提交非本批次扫描的答题卡");
         this.sheets.add(sheet);
     }
 
     private void checkCanUpload(){
-        if(!this.isCommitting())
+        if(!this.isSubmitting())
             this.submitting();
-        AssertionConcerns.assertArgumentFalse(this.isCommitted(),"扫描批次已完成上传，不能再上传");
+
+        AssertionConcerns.assertStateTrue(this.actual >= this.sheets.size(),"提交数量不能超过实际扫描数量!");
     }
 
     /**
@@ -216,7 +210,7 @@ public class BatchScan extends Entity {
             if(sheet.zgOptionalDoubt())
                 zgOptionalDoubts ++;
         }
-        this.scanDoubts = new ScanDoubts(examNumberDoubts,kgDoubts,zgOptionalDoubts);
+        this.scanDoubts = new BatchScanDoubts(examNumberDoubts,kgDoubts,zgOptionalDoubts);
     }
 
     /**
@@ -224,7 +218,7 @@ public class BatchScan extends Entity {
      *
      */
     public void doubtsDone(){
-        AssertionConcerns.assertArgumentNotNull(this.committedTime,"扫描批次未完成上传，不能结束怀疑处理！");
+        AssertionConcerns.assertStateTrue(this.submittedTime != null,"扫描批次未完成上传，不能结束怀疑处理！");
 
         this.examNumberDoubtsDone = Boolean.TRUE;
         DomainEventPublisher.instance().publish(new BatchDoubtsDone(this.batchScanId));
@@ -234,8 +228,8 @@ public class BatchScan extends Entity {
      * 是否开始上传
      * @return
      */
-    public boolean isCommitting(){
-        return this.committingTime != null;
+    public boolean isSubmitting(){
+        return this.submittingTime != null;
     }
 
     /**
@@ -243,8 +237,8 @@ public class BatchScan extends Entity {
      *
      * @return
      */
-    public boolean isCommitted(){
-        return this.committedTime != null;
+    public boolean isSubmitted(){
+        return this.submittedTime != null;
     }
 
     /**
@@ -252,21 +246,8 @@ public class BatchScan extends Entity {
      *
      * @return
      */
-    public int sizeOfCommitted(){
+    public int sizeOfSubmitted(){
         return this.sheets.size();
-    }
-
-    /**
-     * 实际完成数量是否大于计划扫描量
-     *
-     * @return
-     */
-    public boolean actualLargeThenExpected(){
-        if(this.expected == -1 && this.actual > 0){
-            return Boolean.TRUE;
-        }
-
-        return this.actual > this.expected;
     }
 
     /**
@@ -275,7 +256,7 @@ public class BatchScan extends Entity {
      * @return
      */
     public boolean isScanOfRoom(){
-        return this.expected > 0;
+        return this.room != null;
     }
 
     public BatchScanId batchScanId() {
@@ -318,20 +299,20 @@ public class BatchScan extends Entity {
         return actual;
     }
 
-    public ScanDoubts scanDoubts() {
+    public BatchScanDoubts scanDoubts() {
         return scanDoubts;
     }
 
-    public Date committingTime() {
-        return committingTime;
+    public Date submittingTime() {
+        return submittingTime;
     }
 
     public boolean examNumberDoubtsDone() {
         return examNumberDoubtsDone;
     }
 
-    public Date committedTime() {
-        return committedTime;
+    public Date submittedTime() {
+        return submittedTime;
     }
 
     @Override
@@ -355,4 +336,7 @@ public class BatchScan extends Entity {
     public int hashCode() {
         return Objects.hashCode(fileName);
     }
+
+    //Only 4 persistence
+    protected BatchScan(){}
 }
