@@ -5,9 +5,9 @@
 package com.easytnt.exam.application.exam;
 
 import com.easytnt.commons.util.DateUtilWrapper;
-import com.easytnt.exam.domain.exam.ExamId;
 import com.easytnt.exam.domain.exam.ExamRepository;
 import com.easytnt.exam.domain.exam.MarkingProjectRepository;
+import com.easytnt.share.domain.id.exam.ExamId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +44,7 @@ public class ExamApplicationServiceTest {
         ExamApplicationService examApplicationService = new ExamApplicationService(this.examRepository,
                 this.markingProjectRepository);
         Date starts = DateUtilWrapper.toDate("2018-06-01","yyyy-MM-dd");
-        Date ends = DateUtilWrapper.toDate("2018-06-01","yyyy-MM-dd");
+        Date ends = DateUtilWrapper.toDate("2018-06-02","yyyy-MM-dd");
         NewExamCommand command = new NewExamCommand("examName","一年级",starts,ends,1,1,
         "targetOrgId","creatorOrgId",1,"creatorId");
 

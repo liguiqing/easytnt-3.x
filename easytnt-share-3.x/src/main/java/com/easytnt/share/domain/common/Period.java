@@ -25,10 +25,10 @@ public class Period {
     private Date ends;
 
     public Period(Date starts, Date ends) {
-        AssertionConcerns.assertArgumentNotNull(starts,"com.easytnt.share.domain.common.Period.starts");
-        AssertionConcerns.assertArgumentNotNull(ends,"com.easytnt.share.domain.common.Period.ends");
-        boolean b = DateUtilWrapper.largeThan(ends, starts);
-        AssertionConcerns.assertArgumentTrue(b,"com.easytnt.share.domain.common.Period.valid");
+        AssertionConcerns.assertArgumentNotNull(starts,"无效的起始时间");
+        AssertionConcerns.assertArgumentNotNull(ends,"无效的终止时间");
+        boolean b = DateUtilWrapper.lessThan(ends, starts);
+        AssertionConcerns.assertArgumentTrue(!b,"起始时间不能大于终止时间");
         this.starts = starts;
         this.ends = ends;
     }
@@ -43,10 +43,7 @@ public class Period {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("starts", starts)
-                .add("ends", ends)
-                .toString();
+        return this.starts + "-" + this.ends;
     }
 
     @Override

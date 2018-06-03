@@ -6,6 +6,9 @@ package com.easytnt.exam.application.exam;
 
 import com.easytnt.exam.domain.exam.*;
 import com.easytnt.share.domain.common.Period;
+import com.easytnt.share.domain.id.exam.ExamId;
+import com.easytnt.share.domain.id.exam.ProjectId;
+import com.easytnt.share.domain.id.org.TargetOrgId;
 import com.easytnt.share.domain.school.Grade;
 import com.easytnt.share.domain.school.StudyYear;
 import org.slf4j.Logger;

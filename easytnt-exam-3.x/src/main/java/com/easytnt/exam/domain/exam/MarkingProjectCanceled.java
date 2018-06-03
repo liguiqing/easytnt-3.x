@@ -5,6 +5,7 @@
 package com.easytnt.exam.domain.exam;
 
 import com.easytnt.commons.domain.AbstractDomainEvent;
+import com.easytnt.share.domain.id.exam.ProjectId;
 
 /**
  * @author Liguiqing

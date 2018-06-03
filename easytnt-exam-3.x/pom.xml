@@ -8,19 +8,18 @@
         <artifactId>easytnt</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>easytnt.scan</artifactId>
+    <artifactId>easytnt.exam</artifactId>
 
-    <name>AnswerSheet And Paper Scanner</name>
+    <name>easytnt.exam</name>
     <url>http://maven.apache.org</url>
     <properties>
         <easytnt.version>3.0.0-SNAPSHOT</easytnt.version>
     </properties>
     <dependencies>
-
         <dependency>
-            <groupId>easytnt</groupId>
-            <artifactId>easytnt.test</artifactId>
-            <version>${easytnt.version}</version>
+        <groupId>easytnt</groupId>
+        <artifactId>easytnt.test</artifactId>
+        <version>${easytnt.version}</version>
         </dependency>
         <dependency>
             <groupId>easytnt</groupId>
@@ -30,8 +29,7 @@
         <dependency>
             <groupId>easytnt</groupId>
             <artifactId>easytnt.share</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>${easytnt.version}</version>
         </dependency>
-
     </dependencies>
 </project>

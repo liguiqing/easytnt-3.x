@@ -9,6 +9,9 @@ import com.easytnt.commons.domain.DomainEventPublisher;
 import com.easytnt.commons.domain.TracerEntity;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.share.domain.common.Period;
+import com.easytnt.share.domain.id.exam.ExamId;
+import com.easytnt.share.domain.id.exam.ProjectId;
+import com.easytnt.share.domain.id.org.TargetOrgId;
 import com.easytnt.share.domain.school.Grade;
 import com.google.common.base.MoreObjects;
 

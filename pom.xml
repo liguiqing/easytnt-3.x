@@ -13,8 +13,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.sourceVersion>1.7</project.build.sourceVersion>
-		<project.build.targetVersion>1.7</project.build.targetVersion>
+		<project.build.sourceVersion>1.8</project.build.sourceVersion>
+		<project.build.targetVersion>1.8</project.build.targetVersion>
 
 		<spring.version>5.0.5.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>

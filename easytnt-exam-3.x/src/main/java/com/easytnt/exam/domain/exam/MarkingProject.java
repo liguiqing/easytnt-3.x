@@ -6,6 +6,7 @@ package com.easytnt.exam.domain.exam;
 
 import com.easytnt.commons.domain.DomainEventPublisher;
 import com.easytnt.commons.domain.Entity;
+import com.easytnt.share.domain.id.exam.ProjectId;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 

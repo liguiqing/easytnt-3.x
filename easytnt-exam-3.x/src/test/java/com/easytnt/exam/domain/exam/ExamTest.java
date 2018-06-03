@@ -4,6 +4,9 @@
 
 package com.easytnt.exam.domain.exam;
 
+import com.easytnt.share.domain.id.exam.ExamId;
+import com.easytnt.share.domain.id.exam.ProjectId;
+import com.easytnt.share.domain.id.org.TargetOrgId;
 import com.easytnt.share.domain.school.Grade;
 import org.junit.Test;
 

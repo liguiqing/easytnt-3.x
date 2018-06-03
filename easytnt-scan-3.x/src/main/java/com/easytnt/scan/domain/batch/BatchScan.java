@@ -1,0 +1,358 @@
+package com.easytnt.scan.domain.batch;
+
+import com.easytnt.commons.AssertionConcerns;
+import com.easytnt.commons.domain.DomainEventPublisher;
+import com.easytnt.commons.domain.Entity;
+import com.easytnt.commons.util.DateUtilWrapper;
+import com.easytnt.share.domain.id.exam.ExamId;
+import com.easytnt.share.domain.id.scan.BatchScanId;
+import com.easytnt.share.domain.id.subject.AnswerSheetId;
+import com.easytnt.share.domain.id.subject.SubjectId;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 批次扫描
+ *
+ * @author Liguiqing
+ * @since V3.0
+ */
+
+public class BatchScan extends Entity {
+    private BatchScanId batchScanId;
+
+    private ExamId examId;
+
+    private SubjectId subjectId;
+
+    private AnswerSheetId answerSheetId;
+
+    private Scanner scanner;
+
+    private String name;
+
+    private String fileName;
+
+    private TestingRoom room; //考场扫描
+
+    private int expected = -1; //计划扫描人数,-1表示无计划扫描数
+
+    private int actual; //实际扫描数
+
+    private ScanDoubts scanDoubts;//扫描怀疑
+
+    private Date committingTime; //开始提交时间
+
+    private boolean examNumberDoubtsDone = Boolean.FALSE;//本批次中考号疑似错误是扫描时已经处理过,0－未处理；1－已处理;同一扫描批次中必须全部处理完成才算完成
+
+    private Date  committedTime; //提交完成时间
+
+    private List<SheetScan> sheets;
+
+    /**
+     * 不按考场扫描，也无计划扫描数
+     *
+     * @param examId 考试唯一标识
+     * @param subjectId 考试科目唯一标识
+     * @param answerSheetId 考试科目用答题卡唯一标识
+     * @param scanner 扫描人
+     * @param name 扫描批次名称
+     * @param fileName 扫描批次文件名
+     * @param actual 实际扫描数量
+     */
+    public BatchScan(ExamId examId, SubjectId subjectId, AnswerSheetId answerSheetId,
+                     Scanner scanner, String name, String fileName, int actual) {
+        this(null,examId,subjectId,answerSheetId,scanner,name,fileName,-1,actual);
+    }
+
+
+    /**
+     * 不按考场扫描，也无计划扫描数
+     *
+     * @param examId 考试唯一标识
+     * @param subjectId 考试科目唯一标识
+     * @param answerSheetId 考试科目用答题卡唯一标识
+     * @param scanner 扫描人
+     * @param name 扫描批次名称
+     * @param fileName 扫描批次文件名
+     * @param expected 计划扫描量
+     * @param actual 实际扫描数量
+     */
+    public BatchScan(ExamId examId, SubjectId subjectId, AnswerSheetId answerSheetId,
+                     Scanner scanner, String name, String fileName, int expected, int actual) {
+        this(null,examId,subjectId,answerSheetId,scanner,name,fileName,expected,actual);
+    }
+
+
+    /**
+     * 按考场扫描不限数量
+     *
+     * @param examId 考试唯一标识
+     * @param subjectId 考试科目唯一标识
+     * @param answerSheetId 考试科目用答题卡唯一标识
+     * @param scanner 扫描人
+     * @param name 扫描批次名称
+     * @param fileName 扫描批次文件名
+     * @param actual 实际扫描数量
+     */
+    public BatchScan(TestingRoom room,ExamId examId, SubjectId subjectId, AnswerSheetId answerSheetId,
+                     Scanner scanner, String name, String fileName, int actual) {
+        this(room,examId,subjectId,answerSheetId,scanner,name,fileName,-1,actual);
+    }
+
+    /**
+     * 按考场扫描，有计划扫描数量
+     *
+     * @param examId 考试唯一标识
+     * @param subjectId 考试科目唯一标识
+     * @param answerSheetId 考试科目用答题卡唯一标识
+     * @param scanner 扫描人
+     * @param name 扫描批次名称
+     * @param fileName 扫描批次文件名
+     * @param expected 计划扫描量
+     * @param actual 实际扫描数量
+     */
+    public BatchScan(TestingRoom room, ExamId examId, SubjectId subjectId, AnswerSheetId answerSheetId,
+                     Scanner scanner, String name, String fileName, int expected, int actual) {
+        AssertionConcerns.assertArgumentNotNull(examId,"无效的考试标识");
+        AssertionConcerns.assertArgumentNotNull(subjectId,"无效的科目标识");
+        AssertionConcerns.assertArgumentNotNull(answerSheetId,"无效的答题卡标识");
+        AssertionConcerns.assertArgumentNotNull(scanner,"无效的扫描人");
+        AssertionConcerns.assertArgumentTrue(actual >= 0,"无效的扫描数");
+
+        this.room = room;
+        this.examId = examId;
+        this.subjectId = subjectId;
+        this.answerSheetId = answerSheetId;
+        this.scanner = scanner;
+        this.name = name;
+        this.fileName = fileName;
+        this.expected = expected;
+        this.actual = actual;
+
+        this.batchScanId = new BatchScanId();
+        this.sheets = Lists.newArrayList();
+    }
+
+    /**
+     * 开始本批次扫描文件上传
+     */
+    public void submitting(){
+        AssertionConcerns.assertArgumentNull(this.committingTime,"扫描批次已开始上传！");
+
+        this.committingTime = DateUtilWrapper.now();
+        DomainEventPublisher.instance().publish(new BatchSubmitting(this.batchScanId));
+    }
+
+    /**
+     * 完成本批次扫描件提交
+     */
+    public void submitted(){
+        AssertionConcerns.assertArgumentNotNull(this.committingTime,"扫描批次未开始提交！");
+        AssertionConcerns.assertArgumentNull(this.committedTime,"扫描批次已完成提交！");
+
+        this.committedTime = DateUtilWrapper.now();
+        this.countDoubts();
+        DomainEventPublisher.instance().publish(new BatchSubmitted(this.batchScanId));
+    }
+
+    /**
+     * 批量提交答题卡扫描件
+     *
+     * @param sheets 某种格式的答题卡扫描数据，如JSON,XML等
+     * @param parser 数据解析器
+     */
+    public void submitSheets(String sheets,SheetParser parser,BatchScanActualExpectedAllowedStrategy allowedStrategy){
+        List<SheetScan> sheetScans = parser.parse(sheets,this);
+        boolean allowed = allowedStrategy.allowed(this.examId,this.subjectId);
+        if(this.isScanOfRoom()){//按考场扫描，需要检查是否超量
+            if(this.expected < sheetScans.size()){
+                if(allowed){//允许超过计划扫描量
+                    DomainEventPublisher.instance().publish(new BatchScanActualLgExpectedSubmitted(this.batchScanId));
+                }else{
+                    AssertionConcerns.assertArgumentTrue(Boolean.FALSE,"实际扫描数量不能超过计划扫描数量!");
+                }
+            }
+        }
+
+        this.checkCanUpload();
+        this.sheets = sheetScans;
+    }
+
+    /**
+     * 上传一份答题卡扫描件
+     *
+     * @param sheet
+     */
+    public void submitSheet(SheetScan sheet){
+        this.checkCanUpload();
+        this.sheets.add(sheet);
+    }
+
+    private void checkCanUpload(){
+        if(!this.isCommitting())
+            this.submitting();
+        AssertionConcerns.assertArgumentFalse(this.isCommitted(),"扫描批次已完成上传，不能再上传");
+    }
+
+    /**
+     * 计算怀疑数量
+     */
+    private void countDoubts(){
+        int examNumberDoubts = 0;
+        int kgDoubts = 0;
+        int zgOptionalDoubts = 0;
+        for(SheetScan sheet:this.sheets){
+            if(sheet.examNumberDoubt())
+                examNumberDoubts ++;
+
+            if(sheet.kgDoubt())
+                kgDoubts ++;
+
+            if(sheet.zgOptionalDoubt())
+                zgOptionalDoubts ++;
+        }
+        this.scanDoubts = new ScanDoubts(examNumberDoubts,kgDoubts,zgOptionalDoubts);
+    }
+
+    /**
+     * 完成本批次异常处理
+     *
+     */
+    public void doubtsDone(){
+        AssertionConcerns.assertArgumentNotNull(this.committedTime,"扫描批次未完成上传，不能结束怀疑处理！");
+
+        this.examNumberDoubtsDone = Boolean.TRUE;
+        DomainEventPublisher.instance().publish(new BatchDoubtsDone(this.batchScanId));
+    }
+
+    /**
+     * 是否开始上传
+     * @return
+     */
+    public boolean isCommitting(){
+        return this.committingTime != null;
+    }
+
+    /**
+     * 是否已经完成上传
+     *
+     * @return
+     */
+    public boolean isCommitted(){
+        return this.committedTime != null;
+    }
+
+    /**
+     * 已经完成的上传数量
+     *
+     * @return
+     */
+    public int sizeOfCommitted(){
+        return this.sheets.size();
+    }
+
+    /**
+     * 实际完成数量是否大于计划扫描量
+     *
+     * @return
+     */
+    public boolean actualLargeThenExpected(){
+        if(this.expected == -1 && this.actual > 0){
+            return Boolean.TRUE;
+        }
+
+        return this.actual > this.expected;
+    }
+
+    /**
+     * 是否按考场扫描
+     *
+     * @return
+     */
+    public boolean isScanOfRoom(){
+        return this.expected > 0;
+    }
+
+    public BatchScanId batchScanId() {
+        return batchScanId;
+    }
+
+    public ExamId examId() {
+        return examId;
+    }
+
+    public SubjectId subjectId() {
+        return subjectId;
+    }
+
+    public AnswerSheetId answerSheetId() {
+        return answerSheetId;
+    }
+
+    public Scanner scanner() {
+        return scanner;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public String fileName() {
+        return fileName;
+    }
+
+    public TestingRoom room() {
+        return room;
+    }
+
+    public int expected() {
+        return expected;
+    }
+
+    public int actual() {
+        return actual;
+    }
+
+    public ScanDoubts scanDoubts() {
+        return scanDoubts;
+    }
+
+    public Date committingTime() {
+        return committingTime;
+    }
+
+    public boolean examNumberDoubtsDone() {
+        return examNumberDoubtsDone;
+    }
+
+    public Date committedTime() {
+        return committedTime;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("scanner", scanner)
+                .add("name", name)
+                .add("fileName", fileName)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BatchScan batchScan = (BatchScan) o;
+        return Objects.equal(fileName, batchScan.fileName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(fileName);
+    }
+}
