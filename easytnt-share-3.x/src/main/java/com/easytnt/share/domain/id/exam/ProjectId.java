@@ -7,6 +7,8 @@ package com.easytnt.share.domain.id.exam;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.ProjectIdPrefix;
+
 /**
  * 阅卷项目唯一标识
  *
@@ -15,17 +17,14 @@ import com.easytnt.commons.domain.Identities;
  */
 
 public class ProjectId extends AbstractId {
-    private static String prefix  = "PRJ";
 
     public ProjectId(String anId) {
         super(anId);
     }
 
     public ProjectId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(ProjectIdPrefix));
     }
 
-    public static String prefix(){
-        return prefix;
-    }
+
 }

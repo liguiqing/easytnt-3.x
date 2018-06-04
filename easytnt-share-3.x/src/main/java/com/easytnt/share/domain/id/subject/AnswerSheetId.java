@@ -7,6 +7,8 @@ package com.easytnt.share.domain.id.subject;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.AnswerSheetIdPrefix;
+
 /**
  * 阅卷考试科目答题卡唯一标识
  *
@@ -15,17 +17,12 @@ import com.easytnt.commons.domain.Identities;
  */
 
 public class AnswerSheetId extends AbstractId {
-    private static String prefix = "ANS";
-
     public AnswerSheetId(String anId) {
         super(anId);
     }
 
     public AnswerSheetId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(AnswerSheetIdPrefix));
     }
 
-    public static  String prefix(){
-        return prefix;
-    }
 }

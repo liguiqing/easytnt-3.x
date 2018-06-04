@@ -7,6 +7,8 @@ package com.easytnt.share.domain.id.org;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.TargetOrgIdPrefix;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -19,7 +21,7 @@ public class TargetOrgId extends AbstractId {
     }
 
     public TargetOrgId() {
-        this(Identities.genIdDNone("TOG"));
+        this(Identities.genIdNone(TargetOrgIdPrefix));
     }
 
 }

@@ -26,7 +26,7 @@ public class IdentitiesTest {
 
     @Test
     public void testGenIdNone()throws Exception{
-        String id = Identities.genIdDNone("TST");
+        String id = Identities.genIdNone("TST");
         assertTrue(id.length()<36);
         assertTrue(id.startsWith("TST"));
     }

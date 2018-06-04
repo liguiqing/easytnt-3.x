@@ -7,7 +7,6 @@ package com.easytnt.exam.application.exam;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.exam.domain.exam.ExamRepository;
 import com.easytnt.exam.domain.exam.MarkingProjectRepository;
-import com.easytnt.share.domain.id.exam.ExamId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +14,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Date;
 
+import static com.easytnt.share.domain.id.IdPrefixes.ExamIdPrefix;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -50,7 +50,7 @@ public class ExamApplicationServiceTest {
 
         String examId = examApplicationService.newExamWithProject(command);
         assertNotNull(examId);
-        assertTrue(examId.startsWith(ExamId.prefix()));
+        assertTrue(examId.startsWith(ExamIdPrefix));
     }
 
 }

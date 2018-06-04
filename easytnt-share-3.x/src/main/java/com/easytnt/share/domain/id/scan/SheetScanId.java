@@ -3,6 +3,8 @@ package com.easytnt.share.domain.id.scan;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.SheetScanIdPrefix;
+
 /**
  * 答题卡扫描图像唯一标识
  *
@@ -12,17 +14,12 @@ import com.easytnt.commons.domain.Identities;
 
 public class SheetScanId extends AbstractId {
 
-    private static String prefix = "PAS";
-
     public SheetScanId(String anId) {
         super(anId);
     }
 
     public SheetScanId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(SheetScanIdPrefix));
     }
 
-    public static  String prefix(){
-        return prefix;
-    }
 }

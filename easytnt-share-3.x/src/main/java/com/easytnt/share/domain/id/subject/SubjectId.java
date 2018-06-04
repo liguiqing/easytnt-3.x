@@ -7,6 +7,8 @@ package com.easytnt.share.domain.id.subject;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.SubjectIdPrefix;
+
 /**
  * 阅卷考试科目唯一标识
  *
@@ -22,10 +24,7 @@ public class SubjectId extends AbstractId {
     }
 
     public SubjectId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(SubjectIdPrefix));
     }
 
-    public static  String prefix(){
-        return prefix;
-    }
 }

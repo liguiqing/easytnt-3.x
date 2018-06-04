@@ -7,6 +7,8 @@ package com.easytnt.share.domain.id.subject;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.PaperIdPrefix;
+
 /**
  * 阅卷考试科目所用试卷唯一标识
  *
@@ -15,17 +17,12 @@ import com.easytnt.commons.domain.Identities;
  */
 
 public class PaperId extends AbstractId {
-    private static String prefix = "PAP";
-
     public PaperId(String anId) {
         super(anId);
     }
 
     public PaperId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(PaperIdPrefix));
     }
 
-    public static  String prefix(){
-        return prefix;
-    }
 }

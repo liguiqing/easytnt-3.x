@@ -7,6 +7,8 @@ package com.easytnt.share.domain.id.exam;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.ExamIdPrefix;
+
 /**
  * 阅卷考试唯一标识
  *
@@ -15,17 +17,14 @@ import com.easytnt.commons.domain.Identities;
  */
 
 public class ExamId extends AbstractId {
-    private static String prefix = "EXM";
 
     public ExamId(String anId) {
         super(anId);
     }
 
     public ExamId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(ExamIdPrefix));
     }
 
-    public static  String prefix(){
-        return prefix;
-    }
+
 }

@@ -3,6 +3,8 @@ package com.easytnt.share.domain.id.scan;
 import com.easytnt.commons.domain.AbstractId;
 import com.easytnt.commons.domain.Identities;
 
+import static com.easytnt.share.domain.id.IdPrefixes.BatchScanIdPrefix;
+
 /**
  * 答题卡扫描批次唯一标识
  *
@@ -12,17 +14,13 @@ import com.easytnt.commons.domain.Identities;
 
 public class BatchScanId extends AbstractId {
 
-    private static String prefix = "BAS";
-
     public BatchScanId(String anId) {
         super(anId);
     }
 
     public BatchScanId() {
-        super(Identities.genIdDNone(prefix));
+        super(Identities.genIdNone(BatchScanIdPrefix));
     }
 
-    public static  String prefix(){
-        return prefix;
-    }
+
 }

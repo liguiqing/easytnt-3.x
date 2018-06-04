@@ -17,7 +17,7 @@ public class Identities {
 
     /**
      * 生成带前缀的id
-     * @param prefix
+     * @param prefix 前缀
      * @return
      */
     public static String genId(String prefix){
@@ -27,10 +27,10 @@ public class Identities {
 
     /**
      * 生成带前缀且不含"-"id
-     * @param prefix
+     * @param prefix 前缀
      * @return
      */
-    public static String genIdDNone(String prefix){
+    public static String genIdNone(String prefix){
         String uuid = UUID.randomUUID().toString();
         return prefix + uuid.replaceAll("-","");
     }
