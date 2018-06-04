@@ -47,8 +47,6 @@ public class BatchScan extends Entity {
 
     private Date submittingTime; //开始提交时间
 
-    private boolean examNumberDoubtsDone;//本批次中考号疑似错误是扫描时已经处理过,0－未处理；1－已处理;同一扫描批次中必须全部处理完成才算完成
-
     private Date  submittedTime; //提交完成时间
 
     private List<SheetScan> sheets;
@@ -136,7 +134,7 @@ public class BatchScan extends Entity {
 
         this.batchScanId = new BatchScanId();
         this.sheets = Lists.newArrayList();
-        this.examNumberDoubtsDone = Boolean.FALSE;
+
     }
 
     /**
@@ -150,7 +148,8 @@ public class BatchScan extends Entity {
     }
 
     /**
-     * 完成本批次扫描件提交
+     * 完成本批次扫描件提交，接收到所有扫描识别数据时视为上传完成
+     *
      */
     public void submitted(){
         AssertionConcerns.assertArgumentNotNull(this.submittingTime,"扫描批次未开始提交！");
@@ -200,6 +199,7 @@ public class BatchScan extends Entity {
         int examNumberDoubts = 0;
         int kgDoubts = 0;
         int zgOptionalDoubts = 0;
+        boolean examNumberDoubtsDone = Boolean.FALSE;
         for(SheetScan sheet:this.sheets){
             if(sheet.examNumberDoubt())
                 examNumberDoubts ++;
@@ -209,8 +209,11 @@ public class BatchScan extends Entity {
 
             if(sheet.zgOptionalDoubt())
                 zgOptionalDoubts ++;
+
+            if(sheet.examNumberDoubtDone())
+                examNumberDoubtsDone = Boolean.TRUE;
         }
-        this.scanDoubts = new BatchScanDoubts(examNumberDoubts,kgDoubts,zgOptionalDoubts);
+        this.scanDoubts = new BatchScanDoubts(examNumberDoubts,kgDoubts,zgOptionalDoubts,examNumberDoubtsDone);
     }
 
     /**
@@ -220,7 +223,6 @@ public class BatchScan extends Entity {
     public void doubtsDone(){
         AssertionConcerns.assertStateTrue(this.submittedTime != null,"扫描批次未完成上传，不能结束怀疑处理！");
 
-        this.examNumberDoubtsDone = Boolean.TRUE;
         DomainEventPublisher.instance().publish(new BatchDoubtsDone(this.batchScanId));
     }
 
@@ -305,10 +307,6 @@ public class BatchScan extends Entity {
 
     public Date submittingTime() {
         return submittingTime;
-    }
-
-    public boolean examNumberDoubtsDone() {
-        return examNumberDoubtsDone;
     }
 
     public Date submittedTime() {

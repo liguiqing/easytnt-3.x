@@ -18,10 +18,13 @@ public class BatchScanDoubts extends ValueObject {
 
     private int zgOptionalDoubts;//本批次中选做题疑似错误卡数量
 
-    protected BatchScanDoubts(int examNumberDoubts, int kgDoubts, int zgOptionalDoubts) {
+    private boolean examNumberDoubtsDone;//本批次中考号疑似错误是扫描时已经处理过,0－未处理；1－已处理;同一扫描批次中必须全部处理完成才算完成
+
+    protected BatchScanDoubts(int examNumberDoubts, int kgDoubts, int zgOptionalDoubts,boolean examNumberDoubtsDone) {
         this.examNumberDoubts = examNumberDoubts;
         this.kgDoubts = kgDoubts;
         this.zgOptionalDoubts = zgOptionalDoubts;
+        this.examNumberDoubtsDone = examNumberDoubtsDone;
     }
 
     public int examNumberDoubts() {
@@ -36,12 +39,17 @@ public class BatchScanDoubts extends ValueObject {
         return zgOptionalDoubts;
     }
 
+    public boolean examNumberDoubtsDone() {
+        return examNumberDoubtsDone;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("examNumberDoubts", examNumberDoubts)
                 .add("kgDoubts", kgDoubts)
                 .add("zgOptionalDoubts", zgOptionalDoubts)
+                .add("examNumberDoubtsDone", examNumberDoubtsDone)
                 .toString();
     }
 
@@ -52,12 +60,13 @@ public class BatchScanDoubts extends ValueObject {
         BatchScanDoubts that = (BatchScanDoubts) o;
         return examNumberDoubts == that.examNumberDoubts &&
                 kgDoubts == that.kgDoubts &&
-                zgOptionalDoubts == that.zgOptionalDoubts;
+                zgOptionalDoubts == that.zgOptionalDoubts &&
+                examNumberDoubtsDone == that.examNumberDoubtsDone;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(examNumberDoubts, kgDoubts, zgOptionalDoubts);
+        return Objects.hashCode(examNumberDoubts, kgDoubts, zgOptionalDoubts, examNumberDoubtsDone);
     }
 
     protected BatchScanDoubts(){}
