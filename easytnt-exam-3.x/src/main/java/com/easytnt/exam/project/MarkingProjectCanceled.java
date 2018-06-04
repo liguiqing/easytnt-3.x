@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2018, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.exam.domain.exam;
+package com.easytnt.exam.project;
 
 import com.easytnt.commons.domain.AbstractDomainEvent;
 import com.easytnt.share.domain.id.exam.ProjectId;
@@ -12,11 +12,11 @@ import com.easytnt.share.domain.id.exam.ProjectId;
  * @since V3.0
  */
 
-public class MarkingProjectFinished extends AbstractDomainEvent {
+public class MarkingProjectCanceled extends AbstractDomainEvent {
 
     private ProjectId projectId;
 
-    public MarkingProjectFinished(ProjectId projectId) {
+    public MarkingProjectCanceled(ProjectId projectId) {
         super();
         this.projectId = projectId;
     }

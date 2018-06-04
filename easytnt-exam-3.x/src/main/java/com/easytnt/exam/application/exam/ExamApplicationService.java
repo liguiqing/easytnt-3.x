@@ -5,6 +5,8 @@
 package com.easytnt.exam.application.exam;
 
 import com.easytnt.exam.domain.exam.*;
+import com.easytnt.exam.project.MarkingProject;
+import com.easytnt.exam.project.MarkingProjectRepository;
 import com.easytnt.share.domain.common.Period;
 import com.easytnt.share.domain.id.exam.ExamId;
 import com.easytnt.share.domain.id.exam.ProjectId;

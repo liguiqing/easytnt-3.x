@@ -6,7 +6,7 @@ package com.easytnt.exam.application.exam;
 
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.exam.domain.exam.ExamRepository;
-import com.easytnt.exam.domain.exam.MarkingProjectRepository;
+import com.easytnt.exam.project.MarkingProjectRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

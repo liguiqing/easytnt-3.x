@@ -1,5 +1,6 @@
 package com.easytnt.scan.domain.batch;
 
+import com.easytnt.share.domain.id.IdPrefixes;
 import com.easytnt.share.domain.id.exam.ExamId;
 import com.easytnt.share.domain.id.scan.BatchScanId;
 import com.easytnt.share.domain.id.subject.AnswerSheetId;
@@ -34,35 +35,35 @@ public class BatchScanTest {
         assertTrue(batchScan.isScanOfRoom());
         assertEquals(batchScan.actual(),100);
         assertEquals(batchScan.expected(),100);
-        assertTrue(batchScan.batchScanId().id().startsWith(BatchScanId.prefix()));
+        assertTrue(batchScan.batchScanId().id().startsWith(IdPrefixes.BatchScanIdPrefix));
 
         batchScan = new BatchScan(new TestingRoom("point","room"),new ExamId(),
                 new SubjectId(),new AnswerSheetId(),new Scanner(),"name","fileName",100);
         assertTrue(batchScan.isScanOfRoom());
         assertEquals(batchScan.actual(),100);
         assertEquals(batchScan.expected(),-1);
-        assertTrue(batchScan.batchScanId().id().startsWith(BatchScanId.prefix()));
+        assertTrue(batchScan.batchScanId().id().startsWith(IdPrefixes.BatchScanIdPrefix));
 
         batchScan = new BatchScan(new ExamId(), new SubjectId(),new AnswerSheetId(),new Scanner(),
                 "name","fileName",100);
         assertTrue(!batchScan.isScanOfRoom());
         assertEquals(batchScan.actual(),100);
         assertEquals(batchScan.expected(),-1);
-        assertTrue(batchScan.batchScanId().id().startsWith(BatchScanId.prefix()));
+        assertTrue(batchScan.batchScanId().id().startsWith(IdPrefixes.BatchScanIdPrefix));
 
         batchScan = new BatchScan(new ExamId(), new SubjectId(),new AnswerSheetId(),new Scanner(),
                 "name","fileName",100);
         assertTrue(!batchScan.isScanOfRoom());
         assertEquals(batchScan.actual(),100);
         assertEquals(batchScan.expected(),-1);
-        assertTrue(batchScan.batchScanId().id().startsWith(BatchScanId.prefix()));
+        assertTrue(batchScan.batchScanId().id().startsWith(IdPrefixes.BatchScanIdPrefix));
 
         batchScan = new BatchScan(new ExamId(), new SubjectId(),new AnswerSheetId(),new Scanner(),
                 "name","fileName",100,100);
         assertTrue(!batchScan.isScanOfRoom());
         assertEquals(batchScan.actual(),100);
         assertEquals(batchScan.expected(),100);
-        assertTrue(batchScan.batchScanId().id().startsWith(BatchScanId.prefix()));
+        assertTrue(batchScan.batchScanId().id().startsWith(IdPrefixes.BatchScanIdPrefix));
     }
 
     @Test
