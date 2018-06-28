@@ -574,6 +574,7 @@
 		<module>easytnt-scan-3.x</module>
 		<module>easytnt-share-3.x</module>
 		<module>easytnt-exam-3.x</module>
+		<module>easytnt-statics-3.x</module>
 		<module>easytnt-examinee-3.x</module>
 		<module>easytnt-mark-3.x</module>
 		<module>easytnt-score-3.x</module>

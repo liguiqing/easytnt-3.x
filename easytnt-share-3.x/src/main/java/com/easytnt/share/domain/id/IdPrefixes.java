@@ -32,4 +32,6 @@ public class IdPrefixes {
     public static final String PaperIdPrefix = "PAP";
 
     public static final String SubjectIdPrefix = "SUB";
+
+    public static final String MarkItemIdPrefix = "MIT";
 }
