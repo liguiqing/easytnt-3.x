@@ -13,7 +13,7 @@ package com.easytnt.statis.domain.mark;
 
 public interface StatisIndex {
 
-    void statis(MarkItemStatis target); //统计
+    void statis(ItemStatis target); //统计
 
     Number getValue();
 

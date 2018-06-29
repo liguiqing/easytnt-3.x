@@ -5,7 +5,7 @@
 package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.commons.util.NumberUtilWrapper;
-import com.easytnt.statis.domain.mark.MarkItemStatis;
+import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
 import com.easytnt.statis.domain.symbol.Symbol;
 
@@ -32,8 +32,8 @@ public class FinishedNoErrorsStatis extends AbstractStatisIndex {
     }
 
     @Override
-    protected void computer(MarkItemStatis target) {
-        this.total =  target.getTotal() - target.getErrors();
+    protected void computer(ItemStatis target) {
+        this.total =  target.getValids();
         if(target.hasTotalRequired()){
             this.totalRate = NumberUtilWrapper.rate(this.total,target.getTotalRequired());
         }

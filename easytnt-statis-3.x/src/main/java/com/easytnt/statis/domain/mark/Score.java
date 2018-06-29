@@ -2,7 +2,7 @@
  * Copyright (c) 2016,2018, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
  */
 
-package com.easytnt.statis.domain.score;
+package com.easytnt.statis.domain.mark;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -21,16 +21,19 @@ public class Score {
 
     private List<ScoreTimes> times = Lists.newArrayList();
 
-    public Score(double value) {
+    private double totalSpend = 0;
+
+    protected Score(double value) {
         this.value = value;
     }
 
-    public void newTimes(MarkScore markScore){
-
-        this.times.add(null);
+    protected void addTimes(MarkScore markScore){
+        ScoreTimes times = new ScoreTimes(markScore);
+        this.times.add(times);
+        this.totalSpend += times.speed();
     }
 
-    public boolean sameOf(double value){
+    protected boolean sameOf(double value){
         return this.value == value;
     }
 

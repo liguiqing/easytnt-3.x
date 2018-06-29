@@ -4,7 +4,7 @@
 
 package com.easytnt.statis.domain.mark.index;
 
-import com.easytnt.statis.domain.mark.MarkItemStatis;
+import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.StatisIndex;
 
 /**
@@ -30,14 +30,14 @@ public abstract class AbstractStatisIndex implements StatisIndex {
         return this;
     }
 
-    protected abstract  void computer(MarkItemStatis target);
+    protected abstract  void computer(ItemStatis target);
 
     public StatisIndex  getNext(){
         return this.next;
     }
 
     @Override
-    public void statis(MarkItemStatis target) {
+    public void statis(ItemStatis target) {
         computer(target);
     }
 

@@ -11,12 +11,12 @@ package com.easytnt.statis.domain.mark;
  * @since V3.0
  */
 
-public enum MarkScoreMode {
+public enum ScoreMode {
     Normal(1),Errored(2),Arbitrate(3),Sampling(4);
 
     private int way;
 
-    private MarkScoreMode(int way){
+    private ScoreMode(int way){
         this.way = way;
     }
 }

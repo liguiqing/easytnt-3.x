@@ -13,7 +13,7 @@ package com.easytnt.statis.domain.mark;
 
 public class StatisIndexBuilder {
 
-    public StatisIndex buildFor(MarkItemStatis statis){
+    public StatisIndex buildFor(ItemStatis statis){
         return null;
     }
 }
