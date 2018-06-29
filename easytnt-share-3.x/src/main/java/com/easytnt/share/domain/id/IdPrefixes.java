@@ -34,4 +34,8 @@ public class IdPrefixes {
     public static final String SubjectIdPrefix = "SUB";
 
     public static final String MarkItemIdPrefix = "MIT";
+
+    public static final String MarkerIdPrefix = "Mar";
+
+    public static final String MarkerTeamIdPrefix = "MTE";
 }
