@@ -148,4 +148,84 @@ public class DateUtilWrapperTest {
         int m3 = DateUtilWrapper.month(c.getTime());
         assertEquals(m3,7);
     }
+
+    @Test
+    public void testIncreamentSecondTo()throws Exception{
+        Date now = DateUtilWrapper.now();
+
+        Date lgNow = DateUtilWrapper.addSecondTo(now,0);
+        assertEquals(0*1000,(lgNow.getTime() - now.getTime()));
+
+        lgNow = DateUtilWrapper.addSecondTo(now,-1);
+        assertEquals(0*1000,(lgNow.getTime() - now.getTime()));
+
+        lgNow = DateUtilWrapper.addSecondTo(now,-105);
+        assertEquals(0*1000,(lgNow.getTime() - now.getTime()));
+
+        lgNow = DateUtilWrapper.addSecondTo(now,20);
+        assertEquals(20*1000,(lgNow.getTime() - now.getTime()));
+
+        lgNow = DateUtilWrapper.addSecondTo(now,1);
+        assertEquals(1*1000,(lgNow.getTime() - now.getTime()));
+
+        Date date = DateUtilWrapper.toDate("2018-06-29 12:12:12","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,1);
+        String s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 12:12:13",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,8);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 12:12:59",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,9);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 12:13:00",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,60);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 12:13:51",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,61);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 12:13:52",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,61);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 12:13:52",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,3600);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 13:12:51",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,3601);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 13:12:52",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 12:12:51","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,3599);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-29 13:12:50",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 23:59:59","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,1);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-30 00:00:00",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 23:59:59","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,2);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-30 00:00:01",s);
+
+        date = DateUtilWrapper.toDate("2018-06-29 23:59:59","yyyy-MM-dd HH:mm:ss");
+        lgNow = DateUtilWrapper.addSecondTo(date,60);
+        s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
+        assertEquals("2018-06-30 00:00:59",s);
+    }
 }

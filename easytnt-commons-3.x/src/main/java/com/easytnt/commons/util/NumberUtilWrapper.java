@@ -34,7 +34,7 @@ public class NumberUtilWrapper {
      * @return n.scale%
      */
     public static String formattedDecimalToPercentage(double decimal,int scale) {
-        if(scale >1)
+        if(scale < 1)
             scale = 1;
 
         NumberFormat nt = NumberFormat.getPercentInstance();

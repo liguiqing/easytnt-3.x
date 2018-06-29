@@ -289,4 +289,31 @@ public class DateUtilWrapper {
         return c.get(Calendar.MONTH)+1;
     }
 
+    /**
+     * 将时间增加second秒
+     * 如果是负数，返回原时间；如果需要将时间减少n秒，请使用<code>subSecondTo</code>
+     * @param date
+     * @param second
+     * @return
+     */
+    public static Date addSecondTo(Date date, int second){
+        if(second < 0 )
+            return date;
+        long time = date.getTime();
+        return new Date(time+second*1000);
+    }
+
+    /**
+     * 将时间减少second秒
+     * 如果是负数，返回原时间；如果需要将时间增加n秒，请使用<code>addSecondTo</code>
+     * @param date
+     * @param second
+     * @return
+     */
+    public static Date subSecondTo(Date date, int second){
+        if(second < 0 )
+            return date;
+        long time = date.getTime();
+        return new Date(time - second*1000);
+    }
 }
