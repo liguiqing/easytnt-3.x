@@ -31,11 +31,11 @@ public class TeamItemStatis extends ItemStatis {
         this.targetName(name);
     }
 
-    public PersonId getPersonId() {
+    public PersonId getTeamId() {
         return (PersonId) super.getTargetId();
     }
 
-    public String getName() {
+    public String getTeamName() {
         return super.getTargetName();
     }
 }

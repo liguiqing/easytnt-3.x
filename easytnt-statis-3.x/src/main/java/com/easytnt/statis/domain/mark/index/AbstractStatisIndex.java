@@ -6,6 +6,8 @@ package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.StatisIndex;
+import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
+import com.easytnt.statis.domain.symbol.Symbol;
 
 /**
  * @author Liguiqing
@@ -17,7 +19,11 @@ public abstract class AbstractStatisIndex implements StatisIndex {
 
     private StatisIndex next;
 
-    public AbstractStatisIndex(String name) {
+    private Symbol nodataSymbol ; 
+
+    public AbstractStatisIndex(String name,Symbol nodataSymbol) {
+        if(nodataSymbol == null)
+            this.nodataSymbol = new NoneDataSlashSymbol();
         this.name = name;
     }
 
@@ -59,5 +65,9 @@ public abstract class AbstractStatisIndex implements StatisIndex {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    public  String getNodataSymbol(){
+        return this.nodataSymbol.getSymbol();
     }
 }

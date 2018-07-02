@@ -467,5 +467,17 @@ public class MarkScoreTest {
 
         assertTrue(score.isOutOfError());
 
+        score = new MarkScore.Builder()
+                .score(10d)
+                .curTimes(2)
+                .error(3d)
+                .finalScore(7d)
+                .fetchTime(fetchTime)
+                .submitTime(submitTime)
+                .timesRequired(3)
+                .totalTimes(2)
+                .build();
+        assertTrue(score.isOutOfError());
+
     }
 }

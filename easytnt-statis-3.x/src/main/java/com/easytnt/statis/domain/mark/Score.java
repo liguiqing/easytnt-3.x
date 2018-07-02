@@ -28,6 +28,9 @@ public class Score {
     }
 
     protected void addTimes(MarkScore markScore){
+        if(!markScore.isScoreOf(this.value))
+            return;
+
         ScoreTimes times = new ScoreTimes(markScore);
         this.times.add(times);
         this.totalSpend += times.speed();
@@ -35,6 +38,26 @@ public class Score {
 
     protected boolean sameOf(double value){
         return this.value == value;
+    }
+
+    /**
+     * 计算分数相对于某数平方和
+     *
+     * @param decimal
+     * @return
+     */
+    public double quadraticSum(double decimal){
+        int total = this.times.size();
+        double sdSum = (this.value - decimal) * (this.value -decimal) * total;
+        return sdSum;
+    }
+
+    public double getTotalSpend() {
+        return totalSpend;
+    }
+
+    public double getValue() {
+        return this.value;
     }
 
     @Override

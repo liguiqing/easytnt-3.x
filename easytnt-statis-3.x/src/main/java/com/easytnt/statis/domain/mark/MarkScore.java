@@ -38,6 +38,10 @@ public class MarkScore {
 
     }
 
+    public boolean isScoreOf(double score){
+        return this.score == score;
+    }
+
     /**
      * 本次评卷过程耗时(秒)
      * @return
@@ -78,11 +82,13 @@ public class MarkScore {
      * @return
      */
     public boolean isOutOfError(){
-        //没有出分，不存在误差
-        if(this.finalScore == -1)
-            return false;
+
         //只有多评情况才存在误差
         if(this.timesRequired >= 3 && (this.totalTimes >= 2)){
+            //多评没有出分，肯定有误差
+            if(this.finalScore == -1)
+                return true;
+
             return Doubles.compare(this.error,Math.abs(this.finalScore - this.score)) <= 0;
         }
         return false;

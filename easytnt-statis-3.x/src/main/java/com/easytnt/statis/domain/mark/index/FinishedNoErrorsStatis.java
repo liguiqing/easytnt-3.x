@@ -22,13 +22,8 @@ public class FinishedNoErrorsStatis extends AbstractStatisIndex {
 
     private double totalRate = -1d;
 
-    private Symbol nodataSymbol ;
-
     public FinishedNoErrorsStatis(Symbol nodataSymbol) {
-        super("完成量统计");
-        this.nodataSymbol = nodataSymbol;
-        if(nodataSymbol == null)
-            this.nodataSymbol = new NoneDataSlashSymbol();
+        super("有效完成量",nodataSymbol);
     }
 
     @Override
@@ -53,6 +48,6 @@ public class FinishedNoErrorsStatis extends AbstractStatisIndex {
     public String getPercent() {
         if(this.totalRate != -1)
             return NumberUtilWrapper.formattedDecimalToPercentage(this.totalRate, 2);
-        return this.nodataSymbol.getSymbol();
+        return super.getNodataSymbol();
     }
 }

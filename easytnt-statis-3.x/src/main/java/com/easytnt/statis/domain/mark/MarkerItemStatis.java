@@ -34,7 +34,7 @@ public class MarkerItemStatis extends ItemStatis {
         return (PersonId) super.getTargetId();
     }
 
-    public String getName() {
+    public String getMarkerName() {
         return super.getTargetName();
     }
 }

@@ -18,7 +18,7 @@ public class ScoreTimes {
 
     protected ScoreTimes(MarkScore markScore){
         this.speed = markScore.spend();
-        this.valid = markScore.isOutOfError();
+        this.valid = !markScore.isOutOfError();
     }
 
     public double speed(){

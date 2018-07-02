@@ -6,6 +6,7 @@ package com.easytnt.statis.domain.mark;
 
 import com.easytnt.commons.domain.Identity;
 import com.easytnt.share.domain.id.mark.MarkItemId;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import java.util.Collections;
@@ -41,6 +42,8 @@ public abstract class ItemStatis {
 
     private double totalScore = 0d; //总分
 
+    private double totalSpend = 0d; //总耗时
+
     private StatisIndex statisIndex;//统计指标
 
     private List<Score> scores = Lists.newArrayList();
@@ -59,6 +62,10 @@ public abstract class ItemStatis {
         this.totalRequired = totalRequired;
     }
 
+    public boolean supports(MarkItemId markItemId){
+        return this.markItemId.equals(markItemId);
+    }
+
     public Score getAndIncrement(MarkScore markScore){
         if(markScore.isOutOf(this.fullScore)){
             return null;
@@ -72,6 +79,7 @@ public abstract class ItemStatis {
             this.errorsIncreament();
         }else{
             this.sumTotalScore(markScore.getScore());
+            this.sumTotalSpend(markScore.spend());
         }
 
         return score;
@@ -96,7 +104,6 @@ public abstract class ItemStatis {
 
     protected void targetId(Identity targetId) {
         this.targetId = targetId;
-
     }
 
     protected void targetName(String targetName) {
@@ -105,6 +112,10 @@ public abstract class ItemStatis {
 
     private void sumTotalScore(double score){
         this.totalScore += score;
+    }
+
+    private void sumTotalSpend(double spend){
+        this.totalSpend += spend;
     }
 
     public double getAvgScore(){
@@ -171,7 +182,30 @@ public abstract class ItemStatis {
         return targetId;
     }
 
+    public double getTotalSpend() {
+        return totalSpend;
+    }
+
+    public double getTotalScore() {
+        return totalScore;
+    }
+
     public List<Score> getScores() {
         return Collections.unmodifiableList(scores);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemStatis statis = (ItemStatis) o;
+        return Objects.equal(markItemId, statis.markItemId) &&
+                Objects.equal(targetId, statis.targetId) &&
+                Objects.equal(scores, statis.scores);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(markItemId, targetId);
     }
 }

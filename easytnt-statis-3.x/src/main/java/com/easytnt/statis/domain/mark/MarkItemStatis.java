@@ -17,22 +17,25 @@ import com.easytnt.share.domain.id.mark.MarkerTeamId;
 
 public class MarkItemStatis extends ItemStatis {
 
-    public MarkItemStatis(MarkItemId itemId, String name, MarkItemId markItemId, String itemName,
-                          int timesRequired, double fullScore, double error) {
-        super(markItemId, itemName, timesRequired, fullScore, error);
-        this.targetId(itemId);
-        this.targetName(name);
+    public MarkItemStatis(MarkItemId markItemId, String itemName,
+                          int timesRequired, double fullScore) {
+        this(markItemId, itemName, timesRequired, fullScore, 0);
     }
 
-    public MarkItemStatis(MarkItemId itemId, String name, MarkItemId markItemId, String itemName,
+    public MarkItemStatis(MarkItemId markItemId, String itemName,
+                          int timesRequired, double fullScore, double error) {
+        this(markItemId, itemName, timesRequired, fullScore, error,-1);
+    }
+
+    public MarkItemStatis(MarkItemId markItemId, String itemName,
                           int timesRequired, double fullScore, double error, int totalRequired) {
         super(markItemId, itemName, timesRequired, fullScore, error, totalRequired);
-        this.targetId(itemId);
-        this.targetName(name);
+        this.targetId(markItemId);
+        this.targetName(itemName);
     }
 
-    public PersonId getPersonId() {
-        return (PersonId) super.getTargetId();
+    public MarkItemId getMarkItemId() {
+        return (MarkItemId) super.getTargetId();
     }
 
     public String getName() {
