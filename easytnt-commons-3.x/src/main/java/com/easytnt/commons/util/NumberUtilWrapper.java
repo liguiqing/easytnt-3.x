@@ -54,4 +54,64 @@ public class NumberUtilWrapper {
 
         return (x*1d)/(y*1d);
     }
+
+    /**
+     * 生产两long类型数据间的随机数
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public static long randomBetween(long x,long y){
+        long rtn = x + (long) (Math.random() * (y - x));
+        if (rtn == x || rtn == y) {
+            return randomBetween(x, y);
+        }
+        return rtn;
+    }
+
+    /**
+     * 生产两int类型数据间的随机数
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public static int randomBetween(int x,int y){
+        int rtn = x + (int) (Math.random() * (y - x));
+        if (rtn == x || rtn == y) {
+            return randomBetween(x, y);
+        }
+        return rtn;
+    }
+
+    /**
+     * 生产两float类型数据间的随机数
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public static float randomBetween(float x,float y){
+        float rtn = x + (float) (Math.random() * (y - x));
+        if (rtn == x || rtn == y) {
+            return randomBetween(x, y);
+        }
+        return rtn;
+    }
+    /**
+     * 生产两double类型数据间的随机数
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public static double randomBetween(double x,double y){
+        double rtn = x + (double) (Math.random() * (y - x));
+        if (rtn == x || rtn == y) {
+            return randomBetween(x, y);
+        }
+        return rtn;
+    }
+
 }
