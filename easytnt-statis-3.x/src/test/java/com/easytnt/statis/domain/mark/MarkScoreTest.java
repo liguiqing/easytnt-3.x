@@ -480,4 +480,14 @@ public class MarkScoreTest {
         assertTrue(score.isOutOfError());
 
     }
+
+    @Test
+    public void isOutOf(){
+        MarkScore score = new MarkScore.Builder()
+                .score(10d)
+                .build();
+        assertFalse(score.isOutOf(10));
+        assertFalse(score.isOutOf(11));
+        assertTrue(score.isOutOf(9));
+    }
 }

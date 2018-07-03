@@ -22,6 +22,10 @@ public class SdScoreStatis extends AbstractStatisIndex {
 
     private double sd = 0d;
 
+    public SdScoreStatis() {
+        this(null);
+    }
+
     public SdScoreStatis(Symbol nodataSymbol) {
         super("平均分",nodataSymbol);
     }
@@ -34,9 +38,10 @@ public class SdScoreStatis extends AbstractStatisIndex {
 
         List<Score> scores = target.getScores();
         for(Score score:scores){
-            sum += score.quadraticSum(avg);
+            int total1 = score.size();
+            sum += Math.pow(score.getValue()-avg,2)*total1;
         }
-        this.sd = new BigDecimal(Math.sqrt(sum/(total-1))).setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+        this.sd = Math.sqrt(sum/(total-1));
     }
 
     @Override

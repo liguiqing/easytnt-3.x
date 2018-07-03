@@ -44,8 +44,6 @@ public abstract class ItemStatis {
 
     private double totalSpend = 0d; //总耗时
 
-    private StatisIndex statisIndex;//统计指标
-
     private List<Score> scores = Lists.newArrayList();
 
     public ItemStatis(MarkItemId markItemId, String itemName, int timesRequired, double fullScore, double error) {
@@ -96,6 +94,7 @@ public abstract class ItemStatis {
 
         if(newScore == null){
             newScore = new Score(markScore.getScore());
+            this.scores.add(newScore);
         }
 
         newScore.addTimes(markScore);
@@ -170,10 +169,6 @@ public abstract class ItemStatis {
         return this.total - this.errors;
     }
 
-    public StatisIndex getStatisIndex() {
-        return statisIndex;
-    }
-
     public String getTargetName() {
         return targetName;
     }
@@ -200,8 +195,7 @@ public abstract class ItemStatis {
         if (o == null || getClass() != o.getClass()) return false;
         ItemStatis statis = (ItemStatis) o;
         return Objects.equal(markItemId, statis.markItemId) &&
-                Objects.equal(targetId, statis.targetId) &&
-                Objects.equal(scores, statis.scores);
+                Objects.equal(targetId, statis.targetId);
     }
 
     @Override

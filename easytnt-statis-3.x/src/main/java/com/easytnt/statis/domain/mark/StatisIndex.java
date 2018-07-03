@@ -26,4 +26,6 @@ public interface StatisIndex {
     StatisIndex append(StatisIndex next);
 
     StatisIndex  getNext();
+
+    boolean hasNext();
 }

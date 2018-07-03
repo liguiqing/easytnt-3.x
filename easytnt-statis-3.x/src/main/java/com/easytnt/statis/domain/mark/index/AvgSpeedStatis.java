@@ -18,6 +18,10 @@ public class AvgSpeedStatis extends AbstractStatisIndex {
 
     private double avg = -1d;
 
+    public AvgSpeedStatis() {
+        this(null);
+    }
+
     public AvgSpeedStatis(Symbol nodataSymbol) {
         super("平均速度",nodataSymbol);
     }

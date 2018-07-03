@@ -29,7 +29,7 @@ public class ScoreTimesTest {
                 .totalTimes(1)
                 .build();
         ScoreTimes st = new ScoreTimes(score);
-        assertEquals(10,st.speed(),0);
+        assertEquals(10,st.spend(),0);
 
         fetchTime  = DateUtilWrapper.now();
         submitTime  = DateUtilWrapper.addSecondTo(fetchTime,0);
@@ -45,7 +45,7 @@ public class ScoreTimesTest {
                 .totalTimes(1)
                 .build();
         st = new ScoreTimes(score);
-        assertEquals(0,st.speed(),0);
+        assertEquals(0,st.spend(),0);
 
         fetchTime  = DateUtilWrapper.now();
         submitTime  = DateUtilWrapper.addSecondTo(fetchTime,1);
@@ -61,7 +61,7 @@ public class ScoreTimesTest {
                 .totalTimes(1)
                 .build();
         st = new ScoreTimes(score);
-        assertEquals(1,st.speed(),0);
+        assertEquals(1,st.spend(),0);
     }
 
     @Test

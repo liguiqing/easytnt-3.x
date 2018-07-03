@@ -45,6 +45,14 @@ public abstract class AbstractStatisIndex implements StatisIndex {
     @Override
     public void statis(ItemStatis target) {
         computer(target);
+        if(this.hasNext()){
+            this.next.statis(target);
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return this.next != null;
     }
 
     @Override

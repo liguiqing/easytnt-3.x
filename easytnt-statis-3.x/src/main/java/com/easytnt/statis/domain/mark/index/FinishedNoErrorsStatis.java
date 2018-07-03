@@ -22,6 +22,10 @@ public class FinishedNoErrorsStatis extends AbstractStatisIndex {
 
     private double totalRate = -1d;
 
+    public FinishedNoErrorsStatis() {
+        this(new NoneDataSlashSymbol());
+    }
+
     public FinishedNoErrorsStatis(Symbol nodataSymbol) {
         super("有效完成量",nodataSymbol);
     }

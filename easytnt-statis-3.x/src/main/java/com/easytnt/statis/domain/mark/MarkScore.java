@@ -73,7 +73,7 @@ public class MarkScore {
      * @return
      */
     public boolean isOutOf(double score){
-        return score >= this.score;
+        return Doubles.compare(this.score,score) > 0;
     }
 
     /**

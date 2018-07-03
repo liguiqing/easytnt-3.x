@@ -5,6 +5,7 @@
 package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.statis.domain.mark.ItemStatis;
+import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
 import com.easytnt.statis.domain.symbol.Symbol;
 
 /**
@@ -17,6 +18,10 @@ import com.easytnt.statis.domain.symbol.Symbol;
 public class AvgScoreStatis extends AbstractStatisIndex {
 
     private double avg = 0d;
+
+    public AvgScoreStatis() {
+        this(new NoneDataSlashSymbol());
+    }
 
     public AvgScoreStatis(Symbol nodataSymbol) {
         super("平均分",nodataSymbol);

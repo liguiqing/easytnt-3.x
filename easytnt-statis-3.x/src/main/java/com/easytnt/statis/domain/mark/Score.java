@@ -23,6 +23,7 @@ public class Score {
 
     private double totalSpend = 0;
 
+
     protected Score(double value) {
         this.value = value;
     }
@@ -33,23 +34,17 @@ public class Score {
 
         ScoreTimes times = new ScoreTimes(markScore);
         this.times.add(times);
-        this.totalSpend += times.speed();
+        this.totalSpend += times.spend();
     }
+
+
 
     protected boolean sameOf(double value){
         return this.value == value;
     }
 
-    /**
-     * 计算分数相对于某数平方和
-     *
-     * @param decimal
-     * @return
-     */
-    public double quadraticSum(double decimal){
-        int total = this.times.size();
-        double sdSum = (this.value - decimal) * (this.value -decimal) * total;
-        return sdSum;
+    public int size(){
+        return this.times.size();
     }
 
     public double getTotalSpend() {

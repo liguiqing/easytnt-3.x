@@ -12,17 +12,17 @@ package com.easytnt.statis.domain.mark;
  */
 
 public class ScoreTimes {
-    private double speed = 0f; //完成耗时
+    private double spend = 0f; //完成耗时
 
     private boolean valid = true; //是否有次的评次
 
     protected ScoreTimes(MarkScore markScore){
-        this.speed = markScore.spend();
+        this.spend = markScore.spend();
         this.valid = !markScore.isOutOfError();
     }
 
-    public double speed(){
-        return this.speed;
+    public double spend(){
+        return this.spend;
     }
 
     public boolean isValid(){

@@ -58,7 +58,7 @@ public class ScoreTest {
     }
 
     @Test
-    public void quadraticSum() {
+    public void size() {
         Score score = new Score(11d);
         Date fetchTime  = DateUtilWrapper.now();
         Date submitTime  = DateUtilWrapper.addSecondTo(fetchTime,10);
@@ -87,7 +87,7 @@ public class ScoreTest {
                 .build();
 
         score.addTimes(mscore);
-        assertEquals(0,score.quadraticSum(11),0);
+        assertEquals(1,score.size(),0);
         mscore = new MarkScore.Builder()
                 .score(11d)
                 .curTimes(1)
@@ -100,9 +100,6 @@ public class ScoreTest {
                 .build();
 
         score.addTimes(mscore);
-        assertEquals(2,score.quadraticSum(10),0);
-        assertEquals(2,score.quadraticSum(12),0);
-        assertEquals(8,score.quadraticSum(9),0);
-        assertEquals(8,score.quadraticSum(13),0);
+        assertEquals(2,score.size(),0);
     }
 }
