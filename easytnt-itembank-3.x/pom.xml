@@ -10,7 +10,7 @@
     </parent>
     <artifactId>easytnt.itembank</artifactId>
 
-    <name>AnswerSheet And Paper Scanner</name>
+    <name>Item Bank</name>
     <url>http://maven.apache.org</url>
     <properties>
         <easytnt.version>3.0.0-SNAPSHOT</easytnt.version>

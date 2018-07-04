@@ -8,9 +8,9 @@
         <artifactId>easytnt</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>easytnt.statis</artifactId>
+    <artifactId>easytnt.ts</artifactId>
 
-    <name>easytnt.statis</name>
+    <name>Easytnt Students and Teacher Management</name>
     <url>http://maven.apache.org</url>
     <properties>
         <easytnt.version>3.0.0-SNAPSHOT</easytnt.version>
