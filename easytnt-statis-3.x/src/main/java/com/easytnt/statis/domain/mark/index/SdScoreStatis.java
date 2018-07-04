@@ -6,6 +6,8 @@ package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.Score;
+import com.easytnt.statis.domain.mark.StatisResult;
+import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
 import com.easytnt.statis.domain.symbol.Symbol;
 
 import java.math.BigDecimal;
@@ -20,14 +22,12 @@ import java.util.List;
 
 public class SdScoreStatis extends AbstractStatisIndex {
 
-    private double sd = 0d;
-
     public SdScoreStatis() {
-        this(null);
+        this(new NoneDataSlashSymbol());
     }
 
     public SdScoreStatis(Symbol nodataSymbol) {
-        super("平均分",nodataSymbol);
+        super("标准差",nodataSymbol);
     }
 
     @Override
@@ -41,12 +41,8 @@ public class SdScoreStatis extends AbstractStatisIndex {
             int total1 = score.size();
             sum += Math.pow(score.getValue()-avg,2)*total1;
         }
-        this.sd = Math.sqrt(sum/(total-1));
-    }
+        double sd = Math.sqrt(sum/(total-1));
 
-    @Override
-    public Number getValue() {
-        return this.sd;
+        target.addStatisResult(new StatisResult(this.getName(),sd,0,percentOf(-1)));
     }
-
 }

@@ -15,12 +15,6 @@ public interface StatisIndex {
 
     void statis(ItemStatis target); //统计
 
-    Number getValue();
-
-    double getRate();
-
-    String getPercent(); //取统计的百分比值
-
     String getName(); //统计指标名称
 
     StatisIndex append(StatisIndex next);

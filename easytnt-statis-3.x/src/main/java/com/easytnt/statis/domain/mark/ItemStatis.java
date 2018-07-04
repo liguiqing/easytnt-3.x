@@ -46,12 +46,15 @@ public abstract class ItemStatis {
 
     private List<Score> scores = Lists.newArrayList();
 
+    private List<StatisResult> statisResults = Lists.newArrayList();
+
     public ItemStatis(MarkItemId markItemId, String itemName, int timesRequired, double fullScore, double error) {
         this.markItemId = markItemId;
         this.itemName = itemName;
         this.timesRequired = timesRequired;
         this.fullScore = fullScore;
         this.error = error;
+        this.init();
     }
 
     public ItemStatis(MarkItemId markItemId, String itemName, int timesRequired, double fullScore, double error,
@@ -83,6 +86,12 @@ public abstract class ItemStatis {
         return score;
     }
 
+    public void addStatisResult(StatisResult result){
+        if(this.statisResults.contains(result))
+            this.statisResults.remove(result);
+        this.statisResults.add(result);
+    }
+
     private Score getScore(MarkScore markScore){
         Score newScore = null;
         for(Score score:this.scores){
@@ -99,6 +108,11 @@ public abstract class ItemStatis {
 
         newScore.addTimes(markScore);
         return newScore;
+    }
+
+    private void init(){
+         this.scores = Lists.newArrayList();
+         this.statisResults = Lists.newArrayList();
     }
 
     protected void targetId(Identity targetId) {
@@ -183,6 +197,10 @@ public abstract class ItemStatis {
 
     public double getTotalScore() {
         return totalScore;
+    }
+
+    public List<StatisResult> getStatisResults() {
+        return statisResults;
     }
 
     public List<Score> getScores() {

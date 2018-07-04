@@ -7,6 +7,8 @@ import com.easytnt.statis.application.data.StatisQueryParamter;
 import com.easytnt.statis.domain.mark.ItemDataSet;
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.ItemStatisRepository;
+import com.easytnt.statis.domain.mark.StatisIndex;
+import com.easytnt.statis.domain.mark.index.StatisFactory;
 import com.easytnt.statis.domain.task.StatisTask;
 import com.easytnt.statis.domain.task.StatisTaskRepository;
 import org.slf4j.Logger;
@@ -45,7 +47,8 @@ public class StatisApplicationService {
         StatisTask task = taskRepository.loadOf(markItemId,paramter);
         if(task == null) {
             List<ItemStatis> itemStatis = itemStatisRepository.newItemStatisFor(markItemId);
-            task = new StatisTask(new MarkItemId(), dataSet,itemStatis);
+            StatisIndex index = StatisFactory.getDefaultsStatis();
+            task = new StatisTask(new MarkItemId(), dataSet,itemStatis,index);
             taskRepository.save(task,paramter);
         }
 

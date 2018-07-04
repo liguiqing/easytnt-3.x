@@ -4,6 +4,7 @@
 
 package com.easytnt.statis.domain.mark.index;
 
+import com.easytnt.commons.util.NumberUtilWrapper;
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.StatisIndex;
 import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
@@ -22,8 +23,7 @@ public abstract class AbstractStatisIndex implements StatisIndex {
     private Symbol nodataSymbol ; 
 
     public AbstractStatisIndex(String name,Symbol nodataSymbol) {
-        if(nodataSymbol == null)
-            this.nodataSymbol = new NoneDataSlashSymbol();
+        this.nodataSymbol=(nodataSymbol==null?new NoneDataSlashSymbol():nodataSymbol);
         this.name = name;
     }
 
@@ -37,6 +37,12 @@ public abstract class AbstractStatisIndex implements StatisIndex {
     }
 
     protected abstract  void computer(ItemStatis target);
+
+    protected String percentOf(double decimal) {
+        if(decimal != -1)
+            return NumberUtilWrapper.formattedDecimalToPercentage(decimal, 2);
+        return this.getNodataSymbol();
+    }
 
     public StatisIndex  getNext(){
         return this.next;
@@ -53,21 +59,6 @@ public abstract class AbstractStatisIndex implements StatisIndex {
     @Override
     public boolean hasNext() {
         return this.next != null;
-    }
-
-    @Override
-    public Number getValue() {
-        return 0;
-    }
-
-    @Override
-    public double getRate() {
-        return 0d;
-    }
-
-    @Override
-    public String getPercent() {
-        return "/";
     }
 
     @Override

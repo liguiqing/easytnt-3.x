@@ -5,6 +5,8 @@
 package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.statis.domain.mark.ItemStatis;
+import com.easytnt.statis.domain.mark.StatisResult;
+import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
 import com.easytnt.statis.domain.symbol.Symbol;
 
 /**
@@ -16,10 +18,8 @@ import com.easytnt.statis.domain.symbol.Symbol;
 
 public class AvgSpeedStatis extends AbstractStatisIndex {
 
-    private double avg = -1d;
-
     public AvgSpeedStatis() {
-        this(null);
+        this(new NoneDataSlashSymbol());
     }
 
     public AvgSpeedStatis(Symbol nodataSymbol) {
@@ -28,12 +28,8 @@ public class AvgSpeedStatis extends AbstractStatisIndex {
 
     @Override
     protected void computer(ItemStatis target) {
-        this.avg =  target.getTotalSpend()/target.getValids();
+        double avg =  target.getTotalSpend()/target.getValids();
+        StatisResult result = new StatisResult(this.getName(),avg,0,percentOf(-1));
+        target.addStatisResult(result);
     }
-
-    @Override
-    public Number getValue() {
-        return this.avg;
-    }
-
 }

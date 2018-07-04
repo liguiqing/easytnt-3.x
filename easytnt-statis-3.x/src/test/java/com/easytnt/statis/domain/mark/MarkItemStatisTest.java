@@ -2,10 +2,7 @@ package com.easytnt.statis.domain.mark;
 
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.share.domain.id.mark.MarkItemId;
-import com.easytnt.statis.domain.mark.index.AvgScoreStatis;
-import com.easytnt.statis.domain.mark.index.AvgSpeedStatis;
-import com.easytnt.statis.domain.mark.index.FinishedNoErrorsStatis;
-import com.easytnt.statis.domain.mark.index.SdScoreStatis;
+import com.easytnt.statis.domain.mark.index.*;
 import org.junit.Test;
 
 import java.util.Date;
@@ -100,16 +97,20 @@ public class MarkItemStatisTest {
         assertFalse(mistatis.hasTotalRequired());
         assertTrue(mistatis.getAvgScore()==times1.totalScore/times1.getTotal());
 
-        StatisIndex index = new FinishedNoErrorsStatis();
-        index.append(new AvgScoreStatis()).append(new AvgSpeedStatis()).append(new SdScoreStatis());
-        index.statis(mistatis);
+        StatisIndex noErrors = new FinishedNoErrorsStatis()
+                .append(new AvgScoreStatis()).append(new AvgSpeedStatis()).append(new SdScoreStatis());
 
-        assertTrue(index.getValue().intValue()==mistatis.getTotal());
-        StatisIndex avgIndex = index.getNext();
-        assertTrue(avgIndex.getValue().doubleValue() == times1.totalScore/times1.getTotal());
-        StatisIndex avgSpeed = avgIndex.getNext();
-        assertEquals((times1.totalSpend*1d)/(times1.getTotal()),avgSpeed.getValue());
-        StatisIndex sdIndex = avgSpeed.getNext();
-        assertEquals(times1.getSd(),sdIndex.getValue());
+        noErrors.statis(mistatis);
+
+        List<StatisResult> results = mistatis.getStatisResults();
+        StatisResult result1 = results.get(0);
+        assertTrue(result1.getValue().intValue() == mistatis.getTotal());
+        StatisResult result2 = results.get(1);
+        assertTrue(result2.getValue().doubleValue() == times1.totalScore/times1.getTotal());
+        StatisResult result3 = results.get(2);
+        assertTrue(result3.getValue().doubleValue() == (times1.totalSpend*1d)/(times1.getTotal()));
+        StatisResult result4 = results.get(3);
+        assertTrue(result4.getValue().doubleValue() == times1.getSd());
+
     }
 }

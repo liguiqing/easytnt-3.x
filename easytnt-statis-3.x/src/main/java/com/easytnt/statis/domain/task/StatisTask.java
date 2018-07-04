@@ -5,6 +5,7 @@ import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.statis.domain.mark.ItemDataSet;
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.MarkScore;
+import com.easytnt.statis.domain.mark.StatisIndex;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -28,13 +29,17 @@ public class StatisTask {
 
     private List<ItemStatis> statises;
 
+    private StatisIndex index;
+
     private boolean finished = false; //是否已经计算完成
 
-    public StatisTask(MarkItemId markItemId,ItemDataSet dataSet,List<ItemStatis> itemStatis) {
+    public StatisTask(MarkItemId markItemId,ItemDataSet dataSet,List<ItemStatis> itemStatis,StatisIndex index) {
         this.markItemId = markItemId;
         this.dataSet = dataSet;
         this.statises = Lists.newArrayList();
+        this.index = index;
         this.add(itemStatis);
+
     }
 
 
@@ -83,12 +88,16 @@ public class StatisTask {
     }
 
     private void statis(){
+        if(this.dataSet == null) {
+            return;
+        }
+
         if(this.isPauseOrShutdown()){
             return ;
         }
 
         Collection<MarkScore> scores = this.dataSet.next();
-        if(scores == null){
+        if(CollectionsUtilWrapper.isNullOrEmpty(scores)){
             this.finished = true;
             return;
         }

@@ -17,19 +17,19 @@ import java.util.List;
 
 public class Times1Data {
 
-    protected List<MarkScore> scoreList = Lists.newArrayList();
+    public List<MarkScore> scoreList = Lists.newArrayList();
 
-    protected MarkItemId markItemId = new MarkItemId("MarkerItemId9527");
+    public MarkItemId markItemId = new MarkItemId("MarkerItemId9527");
 
-    protected String itemName = "Item1"; //评题名称
+    public String itemName = "Item1"; //评题名称
 
-    protected int timesRequired = 1;//评次
+    public int timesRequired = 1;//评次
 
-    protected double fullScore = 10;//满分
+    public double fullScore = 10;//满分
 
-    protected int totalSpend = 0;
+    public int totalSpend = 0;
 
-    protected double totalScore = 0;
+    public double totalScore = 0;
 
     private int[] counts = {18632,25321,29354,32118,36132,40125,48564,51624,49524,55698,58975,65632,72135,78223,
             78563,80265,85632,85231,71235,60531,42310};
@@ -77,8 +77,32 @@ public class Times1Data {
                 MarkScore ms = new MarkScore.Builder().curTimes(1).score(score)
                         .finalScore(score).fetchTime(fetchTime).submitTime(submitTime).build();
                 mss.add(ms);
-                totalSpend += ms.spend();
-                totalScore += score;
+                this.totalSpend += ms.spend();
+                this.totalScore += score;
+            }
+        }
+
+        return mss;
+    }
+
+    public List<MarkScore> getMarkScore(int start,int size){
+        List<MarkScore> mss = new ArrayList<>(size);
+        int end = start * size;
+        if(end > this.scores.length){
+            end = this.scores.length;
+        }
+        for(int si=start;si<end;si++){
+            double score = this.scores[si];
+            int count = this.getCountOf(score);
+            for(int i=1;i<=count;i++){
+                Date fetchTime = getFetchTime();
+                int difference = NumberUtilWrapper.randomBetween(3, 30);
+                Date submitTime  = DateUtilWrapper.addSecondTo(fetchTime,difference);
+                MarkScore ms = new MarkScore.Builder().curTimes(1).score(score)
+                        .finalScore(score).fetchTime(fetchTime).submitTime(submitTime).build();
+                mss.add(ms);
+                this.totalSpend += ms.spend();
+                this.totalScore += score;
             }
         }
 

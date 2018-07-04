@@ -1,11 +1,14 @@
 package com.easytnt.statis.domain.mark.index;
 
-import com.easytnt.statis.domain.mark.ItemStatis;
-import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
+import com.easytnt.statis.domain.mark.MarkItemStatis;
+import com.easytnt.statis.domain.mark.MarkScore;
+import com.easytnt.statis.domain.mark.StatisResult;
+import com.easytnt.statis.domain.mark.Times1Data;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Liguiqing
@@ -15,28 +18,21 @@ import static org.mockito.Mockito.*;
 public class FinishedNoErrorsStatisTest {
 
     @Test
-    public void testStatis()throws Exception{
+    public void statis()throws Exception{
+        Times1Data times1 = new Times1Data();
+        List<MarkScore> mss = times1.toMarkScores();
+        MarkItemStatis itemStatis = new MarkItemStatis(times1.markItemId,times1.itemName,times1.timesRequired,times1.fullScore);
+        for(MarkScore ms:mss){
+            itemStatis.getAndIncrement(ms);
+        }
+
         FinishedNoErrorsStatis statis = new FinishedNoErrorsStatis(null);
-        ItemStatis itemStatis = mock(ItemStatis.class);
-        when(itemStatis.getValids()).thenReturn(100);
-        when(itemStatis.hasTotalRequired()).thenReturn(false);
-        statis.computer(itemStatis);
-        assertEquals(statis.getValue(),100);
-        assertEquals(statis.getRate(),-1d,0d);
-        assertEquals(statis.getPercent(),new NoneDataSlashSymbol().getSymbol());
 
-        when(itemStatis.hasTotalRequired()).thenReturn(true);
-        when(itemStatis.getTotalRequired()).thenReturn(100);
         statis.computer(itemStatis);
-        assertEquals(statis.getValue(),100);
-        assertEquals(statis.getRate(),1d,0d);
-        assertEquals(statis.getPercent(),"100.00%");
 
-        when(itemStatis.getTotalRequired()).thenReturn(130);
-        statis.computer(itemStatis);
-        assertEquals(statis.getValue(),100);
-        assertEquals(statis.getRate(),1d,0.7692307692307693d);
-        assertEquals("76.92%",statis.getPercent());
-
+        List<StatisResult> resultList = itemStatis.getStatisResults();
+        StatisResult aResult = resultList.get(0);
+        assertEquals(statis.getName(),aResult.getName());
+        assertEquals(times1.getTotal(),aResult.getValue().intValue(),0);
     }
 }

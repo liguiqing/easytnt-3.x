@@ -5,6 +5,7 @@
 package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.statis.domain.mark.ItemStatis;
+import com.easytnt.statis.domain.mark.StatisResult;
 import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
 import com.easytnt.statis.domain.symbol.Symbol;
 
@@ -17,8 +18,6 @@ import com.easytnt.statis.domain.symbol.Symbol;
 
 public class AvgScoreStatis extends AbstractStatisIndex {
 
-    private double avg = 0d;
-
     public AvgScoreStatis() {
         this(new NoneDataSlashSymbol());
     }
@@ -29,12 +28,8 @@ public class AvgScoreStatis extends AbstractStatisIndex {
 
     @Override
     protected void computer(ItemStatis target) {
-        this.avg =  target.getAvgScore();
-    }
-
-    @Override
-    public Number getValue() {
-        return this.avg;
+        double avg =  target.getAvgScore();
+        target.addStatisResult(new StatisResult(this.getName(),avg,0,percentOf(-1)));
     }
 
 }

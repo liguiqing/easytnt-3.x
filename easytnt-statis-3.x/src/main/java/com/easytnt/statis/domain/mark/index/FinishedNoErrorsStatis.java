@@ -6,6 +6,7 @@ package com.easytnt.statis.domain.mark.index;
 
 import com.easytnt.commons.util.NumberUtilWrapper;
 import com.easytnt.statis.domain.mark.ItemStatis;
+import com.easytnt.statis.domain.mark.StatisResult;
 import com.easytnt.statis.domain.symbol.NoneDataSlashSymbol;
 import com.easytnt.statis.domain.symbol.Symbol;
 
@@ -18,10 +19,6 @@ import com.easytnt.statis.domain.symbol.Symbol;
 
 public class FinishedNoErrorsStatis extends AbstractStatisIndex {
 
-    private int total;
-
-    private double totalRate = -1d;
-
     public FinishedNoErrorsStatis() {
         this(new NoneDataSlashSymbol());
     }
@@ -32,26 +29,11 @@ public class FinishedNoErrorsStatis extends AbstractStatisIndex {
 
     @Override
     protected void computer(ItemStatis target) {
-        this.total =  target.getValids();
+        int total =  target.getValids();
+        double totalRate = -1d;
         if(target.hasTotalRequired()){
-            this.totalRate = NumberUtilWrapper.rate(this.total,target.getTotalRequired());
+            totalRate = NumberUtilWrapper.rate(total,target.getTotalRequired());
         }
-    }
-
-    @Override
-    public Number getValue() {
-        return this.total;
-    }
-
-    @Override
-    public double getRate() {
-        return this.totalRate;
-    }
-
-    @Override
-    public String getPercent() {
-        if(this.totalRate != -1)
-            return NumberUtilWrapper.formattedDecimalToPercentage(this.totalRate, 2);
-        return super.getNodataSymbol();
+        target.addStatisResult(new StatisResult(this.getName(),total,totalRate,percentOf(totalRate)));
     }
 }
