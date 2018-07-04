@@ -16,6 +16,6 @@ public class CollectionsUtilWrapper {
     }
 
     public static <E> boolean hasElements(Collection<E> collection){
-        return (collection != null) || collection.size() > 0;
+        return (collection != null) && collection.size() > 0;
     }
 }
