@@ -13,10 +13,7 @@
 	
 	<name>Testing</name>
 	<url>http://maven.apache.org</url>
-	<properties>
-		<easytnt.version>3.0.0-SNAPSHOT</easytnt.version>
-		<powermock.version>1.7.1</powermock.version>
-	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
