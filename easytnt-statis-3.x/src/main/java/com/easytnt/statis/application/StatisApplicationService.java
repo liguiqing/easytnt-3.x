@@ -48,7 +48,7 @@ public class StatisApplicationService {
         if(task == null) {
             List<ItemStatis> itemStatis = itemStatisRepository.newItemStatisFor(markItemId);
             StatisIndex index = StatisFactory.getDefaultsStatis();
-            task = new StatisTask(new MarkItemId(), dataSet,itemStatis,index);
+            task = new StatisTask.Builder(new MarkItemId()).useDataSet(dataSet).statisFor(itemStatis).withIndex(index).build();
             taskRepository.save(task,paramter);
         }
 

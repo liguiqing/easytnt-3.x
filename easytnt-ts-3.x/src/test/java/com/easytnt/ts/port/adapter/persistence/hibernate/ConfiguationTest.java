@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  * @author Liguiqing
  * @since V3.0
  */
-@ContextConfiguration(locations = {"classpath:applicationContext-test-ds.xml",
+@ContextConfiguration(locations = {"classpath:applicationContext-ts-test-ds.xml",
         "classpath:applicationContext-ts.xml","classpath:applicationContext-ts-app.xml",
         "classpath:applicationContext-ts-hb.xml"})
 @Transactional

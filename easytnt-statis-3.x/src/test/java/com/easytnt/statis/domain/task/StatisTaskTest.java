@@ -2,17 +2,16 @@ package com.easytnt.statis.domain.task;
 
 import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.statis.domain.mark.*;
-import com.easytnt.statis.domain.mark.index.AvgScoreStatis;
-import com.easytnt.statis.domain.mark.index.AvgSpeedStatis;
-import com.easytnt.statis.domain.mark.index.FinishedNoErrorsStatis;
-import com.easytnt.statis.domain.mark.index.SdScoreStatis;
+import com.google.common.collect.Lists;
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 /**
@@ -25,21 +24,24 @@ public class StatisTaskTest {
     @Test
     public void testStart() throws Exception{
         ItemDataSet dataSet = mock(ItemDataSet.class);
-        DataPool dataPool = new DataPool();
-        int size = 10000;
-        int start = 0;
-        while(true){
-            List<MarkScore> scores = dataPool.getMarkScore(start,size);
-            if(scores == null)
-                break;
-            when(dataSet.next()).thenReturn(scores);
-            start = size + start;
-        }
-        StatisIndex mockIndex = PowerMockito.mock(StatisIndex.class);
+        MarkScore score = mock(MarkScore.class);
+        Collection<MarkScore> scores = mock(Collection.class);
+        Iterator<MarkScore> it = mock(Iterator.class);
+        when(dataSet.next()).thenReturn(scores);
+        when(scores.iterator()).thenReturn(it).thenReturn(it).thenReturn(null);
 
-        ItemStatis itemStatis = PowerMockito.mock(ItemStatis.class);
-        List<ItemStatis> itemStatises = PowerMockito.mock(List.class);
-        StatisTask task = new StatisTask(dataPool.times1.markItemId,dataSet,itemStatises,mockIndex);
+        when(it.next()).thenReturn(score).thenReturn(score);
+        ItemStatis itemStatis = mock(ItemStatis.class);
+
+        when(itemStatis.supports(any())).thenReturn(true);
+        when(itemStatis.getAndIncrement(any())).thenReturn(null);
+        List<ItemStatis> itemStatises = Lists.newArrayList();
+        itemStatises.add(itemStatis);
+        StatisIndex mockIndex = mock(StatisIndex.class);
+        doNothing().when(mockIndex).statis(itemStatis);
+        StatisTask task = new StatisTask.Builder(new MarkItemId("MarkerItemId9527"))
+                .useDataSet(dataSet).statisFor(itemStatises).withIndex(mockIndex).build();
+
         Random random = new Random(10);
         int length = 100;
 
@@ -50,7 +52,6 @@ public class StatisTaskTest {
                 public void run() {
                     try{
                         long k = Math.abs(random.nextInt(500));
-                        System.out.println(k);
                         Thread.sleep(k);
                     }catch (Exception e){
 
@@ -67,30 +68,11 @@ public class StatisTaskTest {
         for(int i=0;i<length;i++){
             threads[i].join();
         }
-
+        while(task.isFinished()){
+            break;
+        }
+        List<ItemStatis> statis = task.getStatises();
+        assertNotNull(statis);
     }
 
-    private static class DataPool{
-        private List<MarkScore> allScores;
-        private Times1Data times1 = new Times1Data();
-
-        public DataPool() {
-            allScores = times1.toMarkScores();
-        }
-
-        public List<MarkScore> getMarkScore(int start, int size) {
-            if(start > allScores.size())
-                return null;
-
-            List<MarkScore> mss = new ArrayList<>(size);
-            int end = start * size;
-            if (end > this.allScores.size()) {
-                end = this.allScores.size();
-            }
-            for(int i=size;i<end;i++){
-                mss.add(allScores.get(i));
-            }
-            return mss;
-        }
-    }
 }

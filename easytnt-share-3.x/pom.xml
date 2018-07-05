@@ -10,7 +10,7 @@
     </parent>
     <artifactId>easytnt.share</artifactId>
 
-    <name>easytnt.share</name>
+    <name>Domain Share</name>
     <url>http://maven.apache.org</url>
     <properties>
         <easytnt.version>3.0.0-SNAPSHOT</easytnt.version>

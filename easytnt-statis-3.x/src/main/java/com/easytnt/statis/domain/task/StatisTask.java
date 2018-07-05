@@ -1,5 +1,6 @@
 package com.easytnt.statis.domain.task;
 
+import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.util.CollectionsUtilWrapper;
 import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.statis.domain.mark.ItemDataSet;
@@ -33,24 +34,8 @@ public class StatisTask {
 
     private boolean finished = false; //是否已经计算完成
 
-    public StatisTask(MarkItemId markItemId,ItemDataSet dataSet,List<ItemStatis> itemStatis,StatisIndex index) {
-        this.markItemId = markItemId;
-        this.dataSet = dataSet;
-        this.statises = Lists.newArrayList();
-        this.index = index;
-        this.add(itemStatis);
+    private StatisTask(){
 
-    }
-
-
-    private void add(List<ItemStatis> itemStatis) {
-        if(CollectionsUtilWrapper.hasElements(itemStatis)){
-            for(ItemStatis is:itemStatis){
-                if(is.supports(this.markItemId) && !statises.contains(is)){
-                    this.statises.add(is);
-                }
-            }
-        }
     }
 
     public void start(){
@@ -73,6 +58,21 @@ public class StatisTask {
         this.running.set(false);
         this.clear();
     }
+
+    private void addAll(List<ItemStatis> itemStatis) {
+        if(CollectionsUtilWrapper.hasElements(itemStatis)){
+            for(ItemStatis is:itemStatis){
+                add(is);
+            }
+        }
+    }
+
+    private void add(ItemStatis statis){
+        if(statis.supports(this.markItemId) && !statises.contains(statis)){
+            this.statises.add(statis);
+        }
+    }
+
 
     private void clear(){
         this.dataSet.clear();
@@ -99,6 +99,9 @@ public class StatisTask {
         Collection<MarkScore> scores = this.dataSet.next();
         if(CollectionsUtilWrapper.isNullOrEmpty(scores)){
             this.finished = true;
+            for(ItemStatis aStatis:this.statises){
+                index.statis(aStatis);
+            }
             return;
         }
 
@@ -143,5 +146,42 @@ public class StatisTask {
     @Override
     public int hashCode() {
         return Objects.hashCode(markItemId);
+    }
+
+    public static class Builder{
+        private  StatisTask task;
+
+        public Builder(MarkItemId markItemId){
+            this.task = new StatisTask();
+            this.task.markItemId = markItemId;
+            this.task.statises = Lists.newArrayList();
+        }
+
+        public Builder useDataSet(ItemDataSet dataSet){
+            this.task.dataSet = dataSet;
+            return this;
+        }
+
+        public Builder statisFor(ItemStatis statis){
+            this.task.add(statis);
+            return this;
+        }
+
+        public Builder statisFor(List<ItemStatis> itemStatises){
+            this.task.addAll(itemStatises);
+            return this;
+        }
+
+        public Builder withIndex(StatisIndex index){
+            this.task.index = index;
+            return this;
+        }
+
+        public StatisTask build(){
+            AssertionConcerns.assertArgumentNotNull(this.task.markItemId,"统计评题标识不能为空");
+            AssertionConcerns.assertArgumentNotNull(this.task.dataSet,"统计评题数据不能为空");
+            AssertionConcerns.assertArgumentTrue(this.task.statises.size() > 0,"统计评题目标不能为空");
+            return this.task;
+        }
     }
 }
