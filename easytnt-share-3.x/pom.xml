@@ -9,7 +9,7 @@
         <version>3.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>easytnt.share</artifactId>
-
+    <packaging>jar</packaging>
     <name>Domain Share</name>
     <url>http://maven.apache.org</url>
     <properties>
