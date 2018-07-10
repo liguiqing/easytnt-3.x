@@ -6,6 +6,7 @@ package com.easytnt.statis.domain.mark;
 
 import com.easytnt.share.domain.id.PersonId;
 import com.easytnt.share.domain.id.mark.MarkItemId;
+import com.easytnt.share.domain.id.mark.MarkerId;
 
 /**
  * 评卷员评题统计
@@ -16,10 +17,10 @@ import com.easytnt.share.domain.id.mark.MarkItemId;
 
 public class MarkerItemStatis extends ItemStatis {
 
-    public MarkerItemStatis(PersonId personId,String name,MarkItemId markItemId, String itemName,
+    public MarkerItemStatis(MarkerId markerId, String name, MarkItemId markItemId, String itemName,
                             int timesRequired, double fullScore, double error) {
         super(markItemId, itemName, timesRequired, fullScore, error);
-        this.targetId(personId);
+        this.targetId(markerId);
         this.targetName(name);
     }
 
@@ -28,13 +29,5 @@ public class MarkerItemStatis extends ItemStatis {
         super(markItemId, itemName, timesRequired, fullScore, error, totalRequired);
         this.targetId(personId);
         this.targetName(name);
-    }
-
-    public PersonId getPersonId() {
-        return (PersonId) super.getTargetId();
-    }
-
-    public String getMarkerName() {
-        return super.getTargetName();
     }
 }

@@ -30,12 +30,4 @@ public class TeamItemStatis extends ItemStatis {
         this.targetId(teamId);
         this.targetName(name);
     }
-
-    public PersonId getTeamId() {
-        return (PersonId) super.getTargetId();
-    }
-
-    public String getTeamName() {
-        return super.getTargetName();
-    }
 }

@@ -3,18 +3,20 @@ package com.easytnt.statis.application;
 import com.easytnt.commons.util.CollectionsUtilWrapper;
 import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.share.domain.id.subject.SubjectId;
-import com.easytnt.statis.application.data.StatisQueryParamter;
-import com.easytnt.statis.domain.mark.ItemDataSet;
-import com.easytnt.statis.domain.mark.ItemStatis;
-import com.easytnt.statis.domain.mark.ItemStatisRepository;
-import com.easytnt.statis.domain.mark.StatisIndex;
+import com.easytnt.statis.domain.mark.*;
 import com.easytnt.statis.domain.mark.index.StatisFactory;
 import com.easytnt.statis.domain.task.StatisTask;
+import com.easytnt.statis.domain.task.StatisTaskId;
 import com.easytnt.statis.domain.task.StatisTaskRepository;
+import com.easytnt.statis.domain.task.StatisTastKeyService;
+import com.easytnt.statis.infrastructure.DefaultDataSetFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Liguiqing
@@ -28,39 +30,53 @@ public class StatisApplicationService {
 
     private ItemStatisRepository itemStatisRepository;
 
-    private ItemDataSet dataSet;
+    private ItemDataSetFactory dataSetFactory;
 
     public StatisApplicationService(StatisTaskRepository taskRepository,
-                                    ItemStatisRepository itemStatisRepository, ItemDataSet dataSet) {
+                                    ItemStatisRepository itemStatisRepository) {
+        this(taskRepository,itemStatisRepository,null);
+    }
+
+    public StatisApplicationService(StatisTaskRepository taskRepository,
+                                    ItemStatisRepository itemStatisRepository,
+                                    ItemDataSetFactory dataSetFactory) {
         this.taskRepository = taskRepository;
         this.itemStatisRepository = itemStatisRepository;
-        this.dataSet = dataSet;
+        this.dataSetFactory = dataSetFactory == null ?new DefaultDataSetFactory():dataSetFactory;
     }
 
-    public void statisForItem(String markItemId,StatisQueryParamter paramter){
-        this.statisForItem(new MarkItemId(markItemId),paramter);
+    public void statisForItem(String markItemId,Date startTime, Date endTime, DataSetFilter filter){
+        this.statisForItem(new MarkItemId(markItemId),startTime,endTime,filter);
     }
 
 
-    private void statisForItem(MarkItemId markItemId,StatisQueryParamter paramter){
+    private void statisForItem(MarkItemId markItemId,Date startTime, Date endTime, DataSetFilter filter){
         logger.debug("Statis Of Item :{} is starting",markItemId);
-        StatisTask task = taskRepository.loadOf(markItemId,paramter);
-        if(task == null) {
-            List<ItemStatis> itemStatis = itemStatisRepository.newItemStatisFor(markItemId);
-            StatisIndex index = StatisFactory.getDefaultsStatis();
-            task = new StatisTask.Builder(new MarkItemId()).useDataSet(dataSet).statisFor(itemStatis).withIndex(index).build();
-            taskRepository.save(task,paramter);
-        }
 
+        StatisTaskId taskId = new StatisTastKeyService().gen(markItemId,startTime,endTime);
+        StatisTask task = taskRepository.loadOf(taskId);
+        if(task != null)
+            return;
+
+        List<ItemStatis> itemStatis = itemStatisRepository.newItemStatisFor(markItemId);
+        itemStatis.removeIf(statis -> filter.containsOf(statis.getId()));
+        StatisIndex index = StatisFactory.getDefaultsStatis();
+        ItemDataSet dataSet = dataSetFactory.newDataSetOf(markItemId,startTime,endTime);
+        task = new StatisTask.Builder(taskId,new MarkItemId()).useDataSet(dataSet)
+                .statisFor(itemStatis).withIndex(index).build();
+        taskRepository.save(task);
         task.start();
     }
 
-    public void statisForSubject(String subjectId, StatisQueryParamter paramter){
+    public void statisForSubject(String subjectId, Date startTime, Date endTime, DataSetFilter filter){
         logger.debug("Statis Of Subject :{} is starting",subjectId);
-        List<MarkItemId> itemIds = itemStatisRepository.findMarkItemIdOf(new SubjectId(subjectId));
+
+        List<MarkItemId> itemIds = itemStatisRepository.findMarkItemIdOf(new SubjectId(subjectId))
+                .stream().filter(s-> filter.containsOf(s)).collect(Collectors.toList());
+
         if(CollectionsUtilWrapper.hasElements(itemIds)){
             for (MarkItemId itemId:itemIds){
-                this.statisForItem(itemId,paramter);
+                this.statisForItem(itemId,startTime,endTime,filter);
             }
         }
     }

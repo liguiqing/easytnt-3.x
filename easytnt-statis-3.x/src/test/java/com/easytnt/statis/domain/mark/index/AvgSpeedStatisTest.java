@@ -1,12 +1,15 @@
 package com.easytnt.statis.domain.mark.index;
 
+import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.statis.domain.mark.MarkItemStatis;
 import com.easytnt.statis.domain.mark.MarkScore;
 import com.easytnt.statis.domain.mark.StatisResult;
 import com.easytnt.statis.domain.mark.Times1Data;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,4 +36,5 @@ public class AvgSpeedStatisTest {
         assertEquals(statis.getName(),aResult.getName());
         assertEquals(times1.totalSpend*1d/times1.getTotal(),aResult.getValue().doubleValue(),0);
     }
+
 }

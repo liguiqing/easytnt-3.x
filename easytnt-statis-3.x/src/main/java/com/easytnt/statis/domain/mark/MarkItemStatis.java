@@ -33,12 +33,4 @@ public class MarkItemStatis extends ItemStatis {
         this.targetId(markItemId);
         this.targetName(itemName);
     }
-
-    public MarkItemId getMarkItemId() {
-        return (MarkItemId) super.getTargetId();
-    }
-
-    public String getName() {
-        return super.getTargetName();
-    }
 }

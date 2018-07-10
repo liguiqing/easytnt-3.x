@@ -1,12 +1,14 @@
 package com.easytnt.statis.port.adapter.persistence;
 
-import com.easytnt.share.domain.id.mark.MarkItemId;
-import com.easytnt.statis.application.data.StatisQueryParamter;
 import com.easytnt.statis.domain.task.StatisTask;
+import com.easytnt.statis.domain.task.StatisTaskId;
 import com.easytnt.statis.domain.task.StatisTaskRepository;
-import com.google.common.collect.Maps;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * StatisTaskRepository内存实现
@@ -16,23 +18,43 @@ import java.util.Map;
  */
 
 public class MemoryStatisTaskRepository implements StatisTaskRepository {
+    private static Logger logger = LoggerFactory.getLogger(MemoryStatisTaskRepository.class);
 
+    private Cache<StatisTaskId,StatisTask> runningTask;
 
-    private Map<String,StatisTask> tasks =  Maps.newConcurrentMap();
+    public MemoryStatisTaskRepository(){
+        this(0, 0);
+    }
 
-    @Override
-    public StatisTask loadOf(MarkItemId itemId,StatisQueryParamter paramter) {
-        return this.tasks.get(paramter.keyOf(itemId));
+    /**
+     * @param maxSize　最大统计任务数
+     * @param expire　任务驻留时长（秒）
+     */
+    public MemoryStatisTaskRepository(int maxSize,int expire) {
+        if(maxSize <= 0)
+            maxSize = 1000;
+        if(expire <= 0)
+            expire = 30;
+
+        this.runningTask = CacheBuilder.newBuilder()
+                .maximumSize(maxSize)
+                .expireAfterAccess(expire, TimeUnit.SECONDS)
+                .build();
     }
 
     @Override
-    public void save(StatisTask task,StatisQueryParamter paramter) {
-        this.tasks.put(paramter.keyOf(task.markItemId()), task);
+    public StatisTask loadOf(StatisTaskId taskId) {
+        try {
+            return this.runningTask.get(taskId, () -> {return null;});
+        }catch (Exception e){
+            logger.info("Statis Task of {} not found",taskId);
+        }
+        return null;
     }
 
     @Override
-    public void remove(StatisTask task,StatisQueryParamter paramter) {
-        task.shutdown();
-        this.tasks.remove(paramter.keyOf(task.markItemId()));
+    public void save(StatisTask task) {
+        this.runningTask.put(task.taskId(), task);
     }
+
 }

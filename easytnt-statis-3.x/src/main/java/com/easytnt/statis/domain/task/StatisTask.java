@@ -22,6 +22,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class StatisTask {
+    private StatisTaskId taskId;
+
     private MarkItemId markItemId;
 
     private AtomicBoolean running = new AtomicBoolean(false);
@@ -73,9 +75,7 @@ public class StatisTask {
         }
     }
 
-
     private void clear(){
-        this.dataSet.clear();
         this.statises.clear();
     }
 
@@ -135,6 +135,10 @@ public class StatisTask {
         return markItemId;
     }
 
+    public StatisTaskId taskId() {
+        return taskId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -151,8 +155,9 @@ public class StatisTask {
     public static class Builder{
         private  StatisTask task;
 
-        public Builder(MarkItemId markItemId){
+        public Builder(StatisTaskId taskId,MarkItemId markItemId){
             this.task = new StatisTask();
+            this.task.taskId = taskId;
             this.task.markItemId = markItemId;
             this.task.statises = Lists.newArrayList();
         }
@@ -178,9 +183,9 @@ public class StatisTask {
         }
 
         public StatisTask build(){
-            AssertionConcerns.assertArgumentNotNull(this.task.markItemId,"统计评题标识不能为空");
-            AssertionConcerns.assertArgumentNotNull(this.task.dataSet,"统计评题数据不能为空");
-            AssertionConcerns.assertArgumentTrue(this.task.statises.size() > 0,"统计评题目标不能为空");
+            AssertionConcerns.assertArgumentNotNull(this.task.markItemId,"评题标识不能为空");
+            AssertionConcerns.assertArgumentNotNull(this.task.dataSet,"评题数据不能为空");
+            AssertionConcerns.assertArgumentTrue(this.task.statises.size() > 0,"统计目标不能为空");
             return this.task;
         }
     }

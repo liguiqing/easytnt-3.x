@@ -1,17 +1,20 @@
 package com.easytnt.statis.domain.task;
 
 import com.easytnt.share.domain.id.mark.MarkItemId;
-import com.easytnt.statis.domain.mark.*;
+import com.easytnt.statis.domain.mark.ItemDataSet;
+import com.easytnt.statis.domain.mark.ItemStatis;
+import com.easytnt.statis.domain.mark.MarkScore;
+import com.easytnt.statis.domain.mark.StatisIndex;
 import com.google.common.collect.Lists;
 import org.junit.Test;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 /**
@@ -39,7 +42,7 @@ public class StatisTaskTest {
         itemStatises.add(itemStatis);
         StatisIndex mockIndex = mock(StatisIndex.class);
         doNothing().when(mockIndex).statis(itemStatis);
-        StatisTask task = new StatisTask.Builder(new MarkItemId("MarkerItemId9527"))
+        StatisTask task = new StatisTask.Builder(null,new MarkItemId("MarkerItemId9527"))
                 .useDataSet(dataSet).statisFor(itemStatises).withIndex(mockIndex).build();
 
         Random random = new Random(10);

@@ -183,11 +183,11 @@ public abstract class ItemStatis {
         return this.total - this.errors;
     }
 
-    public String getTargetName() {
+    public String getName() {
         return targetName;
     }
 
-    public Identity getTargetId() {
+    public Identity getId() {
         return targetId;
     }
 
