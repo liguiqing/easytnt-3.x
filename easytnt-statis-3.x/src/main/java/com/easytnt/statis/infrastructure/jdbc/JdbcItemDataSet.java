@@ -1,7 +1,6 @@
 package com.easytnt.statis.infrastructure.jdbc;
 
 import com.easytnt.commons.util.DateUtilWrapper;
-import com.easytnt.statis.domain.mark.DataSetFilter;
 import com.easytnt.statis.domain.mark.ItemDataSet;
 import com.easytnt.statis.domain.mark.MarkScore;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class JdbcItemDataSet implements ItemDataSet {
         this.jdbc = jdbc;
         this.markItemId = markItemId;
         this.startTime = startTime == null ? DateUtilWrapper.toDate("2000-01-01 00:00:00","yyyy-MM-dd HH:mm:ss"):startTime;
-        this.startTime = endTime == null ? DateUtilWrapper.now():endTime;
+        this.endTime = endTime == null ? DateUtilWrapper.now():endTime;
     }
 
 

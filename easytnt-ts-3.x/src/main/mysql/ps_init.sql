@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS `easytnt_paper_marking`;
-CREATE DATABASE `easytnt_paper_marking` CHARACTER SET utf8 ;
-USE `easytnt_paper_marking`;
+DROP DATABASE IF EXISTS `ez_paper_marking`;
+CREATE DATABASE `ez_paper_marking` CHARACTER SET utf8 ;
+USE `ez_paper_marking`;
 
 DROP TABLE IF EXISTS `t_ps_Dict`;
 CREATE TABLE `t_ps_Dict` (
@@ -62,10 +62,10 @@ CREATE TABLE `t_ps_Exam` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `examId` VARCHAR(36) NOT NULL COMMENT '考试唯一标识',
   `projectId` VARCHAR(36) NOT NULL COMMENT '阅卷项目唯一标识', 
-  `targetOrgId` VARCHAR(36) NOT NULL COMMENT '考试使用机构标识，值对应表t_ps_TestedOrg.orgId',  
+  `targetOrgId` VARCHAR(36) NOT NULL COMMENT '考试使用机构标识，值对应表t_ps_TestedOrg.orgId,校考是学校id;联考是主办学校id;统考是区县/地市id',
   `creatorOrgId` VARCHAR(36) NOT NULL COMMENT '考试创建机构标识',
-  `creatorOrgType` TINYINT(1) NOT NULL COMMENT '考试创建机构类型：1-学校；2-区县；3-地市',
-  `creatorId` VARCHAR(36) NOT NULL COMMENT '考试创建者标识',  
+  `targetOrgType` TINYINT(1) NOT NULL COMMENT '考试使用机构类型：1-学校;2-区县;3-地市；校考联考：1；区县级统考：2；地市级统考：3',
+  `creatorId` VARCHAR(36) NOT NULL COMMENT '考试创建者机构标识;操作用户所属性机构id;学校用户是所在学校id；区县/地市用户是区县/地市id;运营人员操作时为运营商id',
   `name` VARCHAR(128) NOT NULL COMMENT '考试名称',
   `gradeName` VARCHAR(16) NOT NULL COMMENT '考试年级名称',
   `studyYearStarts` SMALLINT(4) NOT NULL COMMENT '考试年级开始学年',
@@ -227,8 +227,8 @@ CREATE TABLE `t_ps_Examinee` (
   `personId` VARCHAR(36) NOT NULL COMMENT '考生唯一标识,源于外部系统',   
   `schoolId` VARCHAR(36)  COMMENT '考生所在学校唯一标识；源于ps_TestedOrg.targetOrgId',    
   `schoolName` VARCHAR(123) COMMENT '学校名称',
-  `clazzId` VARCHAR(36)  COMMENT '考生所在班级唯一标识；源于ps_TestedOrg.targetOrgId',  
-  `clazzName` INT(8)  COMMENT '考生所在班级名称',   
+  `clazzId` VARCHAR(36)  COMMENT '考生所在班级唯一标识；源于ps_TestedOrg.targetOrgId.走班制为行政班',  
+  `clazzName` VARCHAR(16)  COMMENT '考生所在班级名称.走班制为行政班',   
   `name` VARCHAR(128) NOT NULL COMMENT '考生姓名',    
   `examNumber` VARCHAR(32) NOT NULL COMMENT '考号',
   `point` VARCHAR(16)  COMMENT '考点号',  
@@ -242,25 +242,27 @@ CREATE TABLE `t_ps_Examinee` (
   KEY `x_ps_Examinee_examineeId` (`examineeId`),
   KEY `x_ps_Examinee_schoolId` (`schoolId`) , 
   KEY `x_ps_Examinee_clazzId` (`clazzId`) ,
-  KEY `x_ps_Examinee_examNumber` (`examNumber`) ,
-  KEY `x_ps_Examinee_room` (`room`)  
+  INDEX `x_ps_Examinee_examNumber` (`examNumber`) ,
+  INDEX `x_ps_Examinee_room` (`room`)  
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='阅卷－考生信息';
 
-DROP TABLE IF EXISTS `t_ps_SubjectRigister`;
-CREATE TABLE `t_ps_SubjectRigister` (
+DROP TABLE IF EXISTS `t_ps_SubjectRegister`;
+CREATE TABLE `t_ps_SubjectRegister` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `examId` VARCHAR(36) NOT NULL COMMENT '报考考试唯一标识',
   `examineeId` VARCHAR(36) NOT NULL COMMENT '考生唯一标识',   
   `subjectId` VARCHAR(36) NOT NULL COMMENT '报考科目唯一标识', 
+  `clazzId` VARCHAR(36)  COMMENT '考生所在教学班级唯一标识；源于ps_TestedOrg.targetOrgId,非走班制为行政班',  
+  `clazzName` VARCHAR(16)  COMMENT '考生所在教学班级名称,非走班制为行政班',  
   `attended` TINYINT(1) DEFAULT '2' COMMENT '参与标志：1－参考(YES)；2-缺卡(None)；3-缺考(No)；4－作弊(Cogged),默认缺卡,扫描及考号异常处理时更新',
   `lastUpdateTime` TIMESTAMP DEFAULT NOW() COMMENT '最后更新时间',
   `lastOperatorId` VARCHAR(36)  COMMENT '最后更新者唯一标识',
   `lastOperatorName` VARCHAR(64)  COMMENT '最后更新者姓名', 
   PRIMARY KEY (`id`), 
-  KEY `x_ps_SubjectRigister_examId` (`examId`),
-  KEY `x_ps_SubjectRigister_subjectId` (`subjectId`),
-  KEY `x_ps_SubjectRigister_examineeId` (`examineeId`) ,
-  KEY `x_ps_SubjectRigister_attended` (`attended`)
+  KEY `x_ps_SubjectRegister_examId` (`examId`),
+  KEY `x_ps_SubjectRegister_subjectId` (`subjectId`),
+  KEY `x_ps_SubjectRegister_examineeId` (`examineeId`) ,
+  INDEX `x_ps_SubjectRegister_attended` (`attended`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='阅卷－考生报考科目';
 
 /***考试答题卡**/
@@ -282,7 +284,7 @@ CREATE TABLE `t_ps_AnswerSheet` (
   KEY `x_ps_AnswerSheet_answerSheetId` (`answerSheetId`),
   KEY `x_ps_AnswerSheet_examId` (`examId`),
   KEY `x_ps_AnswerSheet_subjectId` (`subjectId`),
-  KEY `x_ps_AnswerSheet_designerId` (`designerId`)
+  INDEX `x_ps_AnswerSheet_designerId` (`designerId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='阅卷－科目答题卡';
 
 DROP TABLE IF EXISTS `t_ps_AnswerSheetPage`;
@@ -377,7 +379,6 @@ CREATE TABLE `t_ps_BatchScan` (
   `personId` VARCHAR(36) NOT NULL COMMENT '扫描员唯一标识,源于外部系统',  
   `scanner` VARCHAR(36)  COMMENT '扫描员姓名',  
   `name` VARCHAR(64)  COMMENT '扫描批次名称',
-  `fileName` VARCHAR(64)  COMMENT '扫描批次归档文件名称',
   `point` VARCHAR(16)  COMMENT '按考场扫描时-考点',  
   `room` VARCHAR(16)  COMMENT '按考场扫描时-考场号',
   `expected` SMALLINT(3) DEFAULT '-1' COMMENT '计划扫描人数,-1表示无计划扫描数',
@@ -385,11 +386,10 @@ CREATE TABLE `t_ps_BatchScan` (
   `examNumberDoubts` SMALLINT(3) COMMENT '本批次中考号疑似错误卡数量', 
   `kgDoubts` SMALLINT(3) COMMENT '本批次中客观题疑似错误卡数量',
   `zgOptionalDoubts` SMALLINT(3) COMMENT '本批次中选做题疑似错误卡数量', 
-  `submittingTime` TIMESTAMP DEFAULT NOW() COMMENT '开始提交时间',
+  `upLoadingTime` TIMESTAMP DEFAULT NOW() COMMENT '开始上传时间', 
   `examNumberDoubtsDone` TINYINT(1) DEFAULT '0' COMMENT '本批次中考号疑似错误是扫描时已经处理过,０－未处理；１－已处理;同一扫描批次中必须全部处理完成才算完成',  
-  `submittedTime` TIMESTAMP  COMMENT '提交完成时间',
-  `removed` TINYINT(1) DEFAULT(0) COMMENT '逻辑删除标志：0-未删除1-已经删除，所有的查询必须带上此条件',
-  PRIMARY KEY (`id`),
+  `upLoadedTime` TIMESTAMP  COMMENT '上传完成时间',    
+  PRIMARY KEY (`id`), 
   KEY `x_ps_BatchScan_batchId` (`batchId`),
   KEY `x_ps_BatchScan_examId` (`examId`),   
   KEY `x_ps_BatchScan_subjectId` (`subjectId`),  
@@ -401,8 +401,8 @@ CREATE TABLE `t_ps_SheetScan` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `sheetScanId` VARCHAR(36) NOT NULL COMMENT '扫描卡唯一标识',  
   `batchId` VARCHAR(36) NOT NULL COMMENT '扫描批次唯一标识',   
-  `sheet` TINYINT(2)  COMMENT '扫描卡张码',
-  `page` TINYINT(2)  COMMENT '扫描卡页码',
+  `sheets` TINYINT(2)  COMMENT '扫描卡张数',
+  `pages` TINYINT(2)  COMMENT '扫描卡页数',
   `features` TEXT  COMMENT '答题卡信息特征,默认JSON',  
   `examNumberFeatures` TEXT  COMMENT '考号特征,默认JSON',
   `kgFeatures` TEXT  COMMENT '客观题信息特征,默认JSON', 
@@ -411,7 +411,7 @@ CREATE TABLE `t_ps_SheetScan` (
   `examNumberDoubt` TINYINT(1) DEFAULT '0' COMMENT '考号错误疑似:0－无疑似错误；1－有疑似错误', 
   `kgDoubt` TINYINT(1) DEFAULT '0' COMMENT '客观错误疑似:0－无疑似错误;1－有疑似错误',
   `zgOptionalDoubt` TINYINT(1) DEFAULT '0' COMMENT '选择题错误疑似:0－无疑似错误；1－有疑似错误',
-  `examNumberDoubtDone` TINYINT(1) DEFAULT '0' COMMENT '考号疑似错误是扫描时已经处理过,0－未处理；1－已处理',
+  `examNumberDoubtDone` TINYINT(1) DEFAULT '0' COMMENT '考号疑似错误是扫描时已经处理过,0－未处理；1－已处理',    
   `sheetKey` VARCHAR(36) COMMENT '扫描时生成的唯一标识，相同的sheetKey表示一个考生的答题卡',   
   PRIMARY KEY (`id`), 
   KEY `x_ps_SheetScan_sheetScanId` (`sheetScanId`),
@@ -647,12 +647,12 @@ CREATE TABLE `t_ps_ExamineeItemScore` (
 DROP TABLE IF EXISTS `t_ps_MarkTeam`;
 CREATE TABLE `t_ps_MarkTeam` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `teamId` VARCHAR(36) NOT NULL COMMENT '考试唯一标识',
-  `parentTeamId` VARCHAR(36) COMMENT '考试唯一标识',  
+  `teamId` VARCHAR(36) NOT NULL COMMENT '评卷组唯一标识',
+  `parentTeamId` VARCHAR(36) COMMENT '上级评卷组唯一标识',  
   `examId` VARCHAR(36) NOT NULL COMMENT '考试唯一标识',
   `subjectId` VARCHAR(36) NOT NULL COMMENT '科目唯一标识', 
   `orgId` VARCHAR(36) COMMENT '校考，统考，联考使用评卷老师的学校唯一标识',   
-  `itemId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识',   
+  `markItemId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识',   
   `name` VARCHAR(128) NOT NULL COMMENT '组名' ,
   `planned` INT(8) DEFAULT '-1' COMMENT '组计划评卷量,-1表示无计划量' ,
   `finished` INT(8) NOT NULL COMMENT '组实际完成评卷量' ,  
@@ -661,7 +661,7 @@ CREATE TABLE `t_ps_MarkTeam` (
   KEY `x_ps_MarkTeam_subjectId` (`subjectId`) ,
   KEY `x_ps_MarkTeam_teamId` (`teamId`) ,
   KEY `x_ps_MarkTeam_parentTeamId` (`parentTeamId`) ,
-  KEY `x_ps_MarkTeam_itemId` (`itemId`)      
+  KEY `x_ps_MarkTeam_markItemId` (`markItemId`)      
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='阅卷－评卷组';
 
 DROP TABLE IF EXISTS `t_ps_MarkTeamMember`;
@@ -766,6 +766,7 @@ CREATE TABLE `t_ps_ExamNumberMarkHandler` (
   `fetchTime` TIMESTAMP COMMENT '提取时间',
   `submitTime` TIMESTAMP COMMENT '提交时间',
   `submitTimes` TINYINT(2)  COMMENT '提交时的评次', 
+  `spend` INT(8)  COMMENT '耗时,毫秒,=submitTime-fetchTime',   
   `examNumber` VARCHAR(36) COMMENT '考号',
   `existsRegister` TINYINT(1) COMMENT '是否报考:1-是，0-否则', 
   `seq` INT(8) COMMENT '评卷人的评卷顺序号',  
@@ -825,7 +826,8 @@ CREATE TABLE `t_ps_KgMarkHandler` (
   `fetchTimes` TINYINT(2)  COMMENT '取出时的评次',  
   `fetchTime` TIMESTAMP COMMENT '提取时间',
   `submitTime` TIMESTAMP COMMENT '提交时间',
-  `submitTimes` TINYINT(2)  COMMENT '提交时的评次',   
+  `submitTimes` TINYINT(2)  COMMENT '提交时的评次',
+  `spend` INT(8)  COMMENT '耗时,毫秒,=submitTime-fetchTime',   
   `optional` TEXT COMMENT '客观题，默认JSON格式{"1":"A","2":"#","3":"ABC"},无选项以＃代替',
   `seq` INT(8) COMMENT '评卷人的评卷顺序号',   
   PRIMARY KEY (`id`), 
@@ -870,7 +872,8 @@ CREATE TABLE `t_ps_ZgOptionalMarkHandler` (
   `fetchTimes` TINYINT(2)  COMMENT '取出时的评次',  
   `fetchTime` TIMESTAMP COMMENT '提取时间',
   `submitTime` TIMESTAMP COMMENT '提交时间',
-  `submitTimes` TINYINT(2)  COMMENT '提交时的评次',   
+  `submitTimes` TINYINT(2)  COMMENT '提交时的评次', 
+  `spend` INT(8)  COMMENT '耗时,毫秒,=submitTime-fetchTime',    
   `optional` VARCHAR(32) COMMENT '选做题选项，多组时以;分隔，无选项以＃代替',
   `seq` INT(8) COMMENT '评卷人的评卷顺序号',   
   PRIMARY KEY (`id`), 
@@ -925,6 +928,7 @@ CREATE TABLE `t_ps_ScoringMarkHandler` (
   `valid` TINYINT(1)  COMMENT '评分是否有效',  
   `submitTime` TIMESTAMP COMMENT '提交时间',
   `submitTimes` TINYINT(2)  COMMENT '正评提交时的评次',
+  `spend` INT(8)  COMMENT '耗时,毫秒,=submitTime-fetchTime',    
   `score` FLOAT(3,1) DEFAULT '-1.0'  COMMENT '得分',    
   `scores` VARCHAR(128) COMMENT '得分；多个给分点以;分隔',
   `unabled` TINYINT(1) DEFAULT '1' COMMENT '问题卷标记：0－有问题；1－正常;标记为问题卷时scores为Null', 

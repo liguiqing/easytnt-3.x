@@ -519,5 +519,6 @@
 		<module>easytnt-report-3.x</module>
 		<module>easytnt-tss-3.x</module>
 		<module>easytnt-cache-3.x</module>
+		<module>easytnt-mock-3.x</module>
 	</modules>
 </project>

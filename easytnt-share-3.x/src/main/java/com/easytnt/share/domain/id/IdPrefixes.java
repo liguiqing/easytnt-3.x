@@ -38,4 +38,6 @@ public class IdPrefixes {
     public static final String MarkerIdPrefix = "Mar";
 
     public static final String MarkerTeamIdPrefix = "MTE";
+
+    public static final String ExamineeIdPrefix = "EXM";
 }

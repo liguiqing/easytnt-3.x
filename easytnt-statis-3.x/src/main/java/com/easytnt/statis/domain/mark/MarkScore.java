@@ -4,6 +4,8 @@
 
 package com.easytnt.statis.domain.mark;
 
+import com.easytnt.commons.domain.Identity;
+import com.google.common.base.Objects;
 import com.google.common.primitives.Doubles;
 
 import java.util.Date;
@@ -16,6 +18,10 @@ import java.util.Date;
  */
 
 public class MarkScore {
+    private String teamId;
+
+    private String markerId;
+
     private int timesRequired = 1; //评题评次
 
     private double error = 0d; //评题误差
@@ -36,6 +42,10 @@ public class MarkScore {
 
     private MarkScore(){
 
+    }
+
+    public boolean isSameOf(Identity id){
+        return Objects.equal(id.id(), this.teamId) || Objects.equal(id.id(), this.markerId);
     }
 
     public boolean isScoreOf(double score){
@@ -231,6 +241,15 @@ public class MarkScore {
 
         public Builder submitTime(Date submitTime){
             this.markScore.submitTime = submitTime;
+            return this;
+        }
+
+        public Builder teamId(String teamId){
+            this.markScore.teamId = teamId;
+            return this;
+        }
+        public Builder markerId(String markerId){
+            this.markScore.markerId = markerId;
             return this;
         }
 
