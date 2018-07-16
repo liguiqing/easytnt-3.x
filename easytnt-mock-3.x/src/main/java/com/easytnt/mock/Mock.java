@@ -1,9 +1,6 @@
 package com.easytnt.mock;
 
-import com.easytnt.commons.domain.Identity;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.util.List;
 
 /**
  * @author Liguiqing
@@ -11,11 +8,11 @@ import java.util.List;
  */
 
 public interface Mock {
-    Identity[] ids();
+    String[] ids();
 
     void createData(JdbcTemplate jdbc);
 
-    void userMocks(List<Mock> mocks);
+    int size();
 
     int order();
 }

@@ -3,43 +3,31 @@ package com.easytnt.mock.exam;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.mock.AbstractMock;
 import com.easytnt.mock.IdMocker;
-import com.easytnt.mock.Mock;
 import com.easytnt.share.domain.id.IdPrefixes;
-import com.easytnt.share.domain.id.subject.SubjectId;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@Component
 public class SubjectMock extends AbstractMock {
-    private SubjectId[] ids = new SubjectId[]{new SubjectId(IdMocker.genId(IdPrefixes.SubjectIdPrefix,"1")),
-            new SubjectId(IdMocker.genId(IdPrefixes.SubjectIdPrefix,"2")),
-            new SubjectId(IdMocker.genId(IdPrefixes.SubjectIdPrefix,"3"))};
+    private String[] ids = new String[]{
+            IdMocker.genId(IdPrefixes.SubjectIdPrefix,"1"),
+            IdMocker.genId(IdPrefixes.SubjectIdPrefix,"2"),
+            IdMocker.genId(IdPrefixes.SubjectIdPrefix,"3")};
 
     private String creatorId = IdMocker.genId(IdPrefixes.PersonIdPrefix);
 
-    private ExamMock exam;
-
     @Override
     public int order(){
-        return 3;
+        return 11;
     }
 
-    public SubjectId[] ids(){
+    public String[] ids(){
         return ids;
-    }
-
-    public void userMocks(List<Mock> mocks){
-        for(Mock mock:mocks){
-            if(mock instanceof  ExamMock){
-                this.exam = (ExamMock) mock;
-                break;
-            }
-        }
     }
 
     @Override
@@ -54,9 +42,9 @@ public class SubjectMock extends AbstractMock {
 
     protected Object[] getValue(String key){
         switch (key){
-            case "subject_id": return new String[]{ids[0].id(),ids[1].id(),ids[2].id()};
-            case "exam_id": return new String[]{exam.getId(0),exam.getId(0),exam.getId(0)};
-            case "target_subject_id": return new String[]{ids[0].id(),ids[1].id(),ids[2].id()};
+            case "subject_id": return this.ids;
+            case "exam_id": return new String[]{this.getExam().getId(0),this.getExam().getId(0),this.getExam().getId(0)};
+            case "target_subject_id": return this.ids;
             case "target_subject_name": return new String[]{"语文","数学","英语"};
             case "creator_id": return new String[]{creatorId,creatorId,creatorId};
             case "name": return  new String[]{"语文","数学","英语"};
@@ -72,12 +60,6 @@ public class SubjectMock extends AbstractMock {
             case "is_del": return new Integer[]{0,0,0};
             default: return new Object[]{null,null,null};
         }
-    }
-
-    @Override
-    protected String getFields() {
-        return "subject_id,exam_id,target_subject_id,target_subject_name,creator_id,name,sheets,score," +
-                "kg_score,zg_score,status,mark_way,last_update_time,last_operator_id,last_operator_name,is_del";
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext-mock-test-ds.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContext-mock-test-ds.xml","classpath:META-INF/spring/applicationContext-mock-app.xml"})
 public class MockExecuterTest {
 
     @Autowired
@@ -31,7 +32,7 @@ public class MockExecuterTest {
 
     @Test
     public void test(){
-        String s = "examinee_id, exam_id, person_id, school_id, school_name, clazz_id, clazz_name, class_id, class_name, name, student_no, exam_number, point, room, seat, last_update_time, last_operator_id, last_operator_name, is_del";
+        String s = "answer_sheet_id, paper_type, sheet, page, w, h, img_url, roate, features, exam_number_features, kg_features, zg_features, zg_optional_features, last_update_time, last_operator_id, last_operator_name, is_del";
         Arrays.stream(s.split(",")).map(String::trim).map(a-> {
             return "case \"" + a + "\": return new Object[]{};";
         }).forEach(System.out::println);
@@ -42,6 +43,13 @@ public class MockExecuterTest {
         Arrays.stream(repeatOfGroup(11,new String[]{"a","b","c"})).forEach(System.out::println);
         System.out.println("---------------------------------------");
         Arrays.stream(repeatOfGroup(12,new String[]{"a","b","c"})).forEach(System.out::println);
+        String[] ss = Stream.of(s.split(",")).map(s1 -> "?").toArray(String[]::new);
+        System.out.println(Arrays.toString(ss));
+
+    }
+
+    private String replaceTo(String s){
+        return "?";
     }
 
     protected String[] repeatOfGroup(int size,String[] src){

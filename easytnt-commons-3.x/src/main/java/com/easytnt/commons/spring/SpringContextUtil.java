@@ -3,7 +3,10 @@
  */
 package com.easytnt.commons.spring;
 
+import java.lang.reflect.Array;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -47,8 +50,15 @@ public class SpringContextUtil implements ApplicationContextAware {
 				bdef.getPropertyValues().add(p, pvs.get(p));
 			}
 		}
-
 		DefaultListableBeanFactory fty = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
 		fty.registerBeanDefinition(beanId, bdef);
+	}
+
+	public static <T> T[] getBeans(Class<T> type){
+		Map<String,T> subBeans =  applicationContext.getBeansOfType(type);
+		T[] ts = (T[]) Array.newInstance(type, subBeans.size());
+		if(ts.length == 0)
+			return ts;
+		return subBeans.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()).toArray(ts);
 	}
 }

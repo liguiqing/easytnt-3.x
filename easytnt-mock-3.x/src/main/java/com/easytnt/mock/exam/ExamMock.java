@@ -1,49 +1,36 @@
 package com.easytnt.mock.exam;
 
-import com.easytnt.commons.domain.Identity;
+import com.easytnt.commons.spring.SpringContextUtil;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.mock.AbstractMock;
 import com.easytnt.mock.IdMocker;
-import com.easytnt.mock.Mock;
 import com.easytnt.share.domain.id.IdPrefixes;
-import com.easytnt.share.domain.id.exam.ExamId;
-import com.easytnt.share.domain.id.exam.ProjectId;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.zip.DataFormatException;
+import java.util.Date;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@Component
 public class ExamMock extends AbstractMock {
-    private ExamId[] ids =new ExamId[]{ new ExamId(IdMocker.genId(IdPrefixes.ExamIdPrefix))};
+    private String[] ids =new String[]{ IdMocker.genId(IdPrefixes.ExamIdPrefix)};
+
     private String creatorId = IdMocker.genId(IdPrefixes.PersonIdPrefix);
+
     private String orgId = IdMocker.genId(IdPrefixes.TargetOrgIdPrefix);
-    private ProjectMock project;
 
     @Override
     public int order(){
-        return 2;
+        return 10;
     }
 
     @Override
-    public Identity[] ids() {
+    public String[] ids() {
         return ids;
     }
 
-    public void userMocks(List<Mock> mocks){
-        for(Mock mock:mocks){
-            if(mock instanceof  ProjectMock){
-                this.project = (ProjectMock) mock;
-                break;
-            }
-        }
-    }
 
     @Override
     protected String table() {
@@ -52,13 +39,13 @@ public class ExamMock extends AbstractMock {
 
     @Override
     protected String getIdField() {
-        return "project_id";
+        return "exam_id";
     }
 
     protected Object[] getValue(String key){
         switch (key){
-            case "exam_id": return new String[]{ids[0].id()};
-            case "project_id": return new String[]{project.ids()[0].id()};
+            case "exam_id": return this.ids;
+            case "project_id": return new String[]{getProject().ids()[0]};
             case "target_org_id": return new String[]{orgId};
             case "creator_org_id": return new String[]{orgId};
             case "target_org_type": return new Integer[]{1};
@@ -81,11 +68,8 @@ public class ExamMock extends AbstractMock {
         }
     }
 
-    @Override
-    protected String getFields() {
-        return "exam_id,project_id,target_org_id,creator_org_id,target_org_type,creator_id,name," +
-                    "grade_name,study_starts_year,study_ends_year,starts,ends,status,catagory,scope,create_time," +
-                    "last_update_time,last_operator_id,last_operator_name,is_del";
+    private ProjectMock getProject(){
+        return SpringContextUtil.getBean(ProjectMock.class);
     }
 
 }

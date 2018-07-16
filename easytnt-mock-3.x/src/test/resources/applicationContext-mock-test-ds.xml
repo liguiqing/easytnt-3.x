@@ -16,7 +16,9 @@
 		  http://www.springframework.org/schema/tx         
 		  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
        	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd  ">
+    <context:annotation-config />
 
+    <bean class="com.easytnt.commons.spring.SpringContextUtil"></bean>
 
 	<bean class="com.ez.test.repository.JNDIDataSource" init-method="newJndiDataSource"></bean>
 

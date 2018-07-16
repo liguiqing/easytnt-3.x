@@ -63,6 +63,9 @@ public class NumberUtilWrapper {
      * @return
      */
     public static long randomBetween(long x,long y){
+        if(x == y)
+            return x;
+
         long rtn = x + (long) (Math.random() * (y - x));
         if (rtn == x || rtn == y) {
             return randomBetween(x, y);
@@ -78,6 +81,9 @@ public class NumberUtilWrapper {
      * @return
      */
     public static int randomBetween(int x,int y){
+        if(x == y)
+            return x;
+
         int rtn = x + (int) (Math.random() * (y - x));
         if (rtn == x || rtn == y) {
             return randomBetween(x, y);
@@ -93,6 +99,9 @@ public class NumberUtilWrapper {
      * @return
      */
     public static float randomBetween(float x,float y){
+        if(x == y)
+            return x;
+
         float rtn = x + (float) (Math.random() * (y - x));
         if (rtn == x || rtn == y) {
             return randomBetween(x, y);
@@ -107,6 +116,9 @@ public class NumberUtilWrapper {
      * @return
      */
     public static double randomBetween(double x,double y){
+        if(x == y)
+            return x;
+
         double rtn = x + (double) (Math.random() * (y - x));
         if (rtn == x || rtn == y) {
             return randomBetween(x, y);
