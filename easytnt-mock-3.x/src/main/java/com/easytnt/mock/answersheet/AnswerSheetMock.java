@@ -25,34 +25,38 @@ public class AnswerSheetMock extends AbstractMock {
     }
 
     @Override
-    protected String table() {
+    public String table() {
         return "ps_answer_sheet";
     }
 
     @Override
-    protected String getIdField() {
+    public String getIdField() {
         return "answer_sheet_id";
     }
 
     @Override
-    protected Object[] getValue(String key) {
+    public Object[] getMockValue(String key) {
         switch (key){
             case "answer_sheet_id": return this.ids;
-            case "exam_id": return repeatOf(this.size(),this.getExam().ids()[0]);
-            case "subject_id": return repeatOfGroup(this.size(),this.getSubject().ids());
-            case "designer_id": return repeatOf(this.size(),null);
-            case "paper_id": return repeatOf(this.size(),null);
+            case "exam_id": return this.repeator.repeatOf(this.size(),this.getExam().ids()[0]);
+            case "subject_id": return this.repeator.repeatOfGroup(this.size(),this.getSubject().ids());
+            case "designer_id": return this.repeator.repeatOf(this.size(),null);
+            case "paper_id": return this.repeator.repeatOf(this.size(),null);
             case "name": return  new String[]{"语文答题卡","数学答题卡","英语答题卡"};
-            case "catagory": return repeatOf(this.size(),"");
-            case "sheets": return repeatOf(this.size(),1);
-            case "pages": return repeatOf(this.size(),2);
-            case "ossPath": return repeatOf(this.size(),"");
-            case "last_update_time": return repeatOf(this.size(),DateUtilWrapper.now());
-            case "last_operator_id": return repeatOf(this.size(),IdMocker.genId(IdPrefixes.PersonIdPrefix));
-            case "last_operator_name": return repeatOf(this.size(),"唐伯虎");
-            case "is_del": return repeatOf(this.size(),0);
-            default: return repeatOf(this.size(),null);
+            case "catagory": return this.repeator.repeatOf(this.size(),"");
+            case "sheets": return this.repeator.repeatOf(this.size(),1);
+            case "pages": return this.repeator.repeatOf(this.size(),2);
+            case "ossPath": return this.repeator.repeatOf(this.size(),"");
+            case "last_update_time": return this.repeator.repeatOf(this.size(),DateUtilWrapper.now());
+            case "last_operator_id": return this.repeator.repeatOf(this.size(),IdMocker.genId(IdPrefixes.PersonIdPrefix));
+            case "last_operator_name": return this.repeator.repeatOf(this.size(),"唐伯虎");
+            case "is_del": return this.repeator.repeatOf(this.size(),0);
+            default: return this.repeator.repeatOf(this.size(),null);
         }
+    }
+
+    public int getSheets(){
+        return this.ids.length;
     }
 
     @Override

@@ -10,6 +10,79 @@ import static org.junit.Assert.*;
 public class RepeatorTest {
 
     @Test
+    public  void repeatOfGroupOfEachLoop(){
+        Repeator repeator = new Repeator();
+        String[] as = repeator.repeatOfGroupOfEachLoop(2, 1,"a","b");
+        assertEquals(4,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+        assertEquals("a",as[2]);
+        assertEquals("b",as[3]);
+
+        as = repeator.repeatOfGroupOfEachLoop(1, 1,"a","b");
+        assertEquals(2,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+
+
+        as = repeator.repeatOfGroupOfEachLoop(2, 2,"a","b");
+        assertEquals(8,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+        assertEquals("a",as[2]);
+        assertEquals("b",as[3]);
+        assertEquals("a",as[4]);
+        assertEquals("b",as[5]);
+        assertEquals("a",as[6]);
+        assertEquals("b",as[7]);
+
+        as = repeator.repeatOfGroupOfEachLoop(2, 2,"a","b","c");
+        assertEquals(12,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+        assertEquals("c",as[2]);
+        assertEquals("a",as[3]);
+        assertEquals("b",as[4]);
+        assertEquals("c",as[5]);
+        assertEquals("a",as[6]);
+        assertEquals("b",as[7]);
+        assertEquals("c",as[8]);
+        assertEquals("a",as[9]);
+        assertEquals("b",as[10]);
+        assertEquals("c",as[11]);
+    }
+
+    @Test
+    public void repeatOfGroupOfEachLoopMaxLt(){
+        Repeator repeator = new Repeator();
+        String[] as = repeator.repeatOfGroupOfEachLoopMaxLt(2, 1,3,"a","b");
+        assertEquals(3,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+        assertEquals("a",as[2]);
+
+        as = repeator.repeatOfGroupOfEachLoopMaxLt(1, 1,2,"a","b");
+        assertEquals(2,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+
+
+        as = repeator.repeatOfGroupOfEachLoopMaxLt(2, 2,3,"a","b");
+        assertEquals(3,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+        assertEquals("a",as[2]);
+
+        as = repeator.repeatOfGroupOfEachLoopMaxLt(2, 2,5,"a","b");
+        assertEquals(5,as.length);
+        assertEquals("a",as[0]);
+        assertEquals("b",as[1]);
+        assertEquals("a",as[2]);
+        assertEquals("b",as[3]);
+        assertEquals("a",as[4]);
+    }
+
+    @Test
     public void repeatOfGroupOfEachMaxLt(){
         Repeator repeator = new Repeator();
         String[] as = repeator.repeatOfGroupOfEachMaxLt(2, 1,3,"a","b");

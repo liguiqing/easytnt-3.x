@@ -32,19 +32,17 @@ public class MockExecuterTest {
 
     @Test
     public void test(){
-        String s = "answer_sheet_id, paper_type, sheet, page, w, h, img_url, roate, features, exam_number_features, kg_features, zg_features, zg_optional_features, last_update_time, last_operator_id, last_operator_name, is_del";
-        Arrays.stream(s.split(",")).map(String::trim).map(a-> {
-            return "case \"" + a + "\": return new Object[]{};";
-        }).forEach(System.out::println);
-        Arrays.stream(repeatOfGroup(10,new String[]{"a","b","c"})).forEach(System.out::println);
-        System.out.println("---------------------------------------");
-        Arrays.stream(repeatOfGroup(9,new String[]{"a","b","c"})).forEach(System.out::println);
-        System.out.println("---------------------------------------");
-        Arrays.stream(repeatOfGroup(11,new String[]{"a","b","c"})).forEach(System.out::println);
-        System.out.println("---------------------------------------");
-        Arrays.stream(repeatOfGroup(12,new String[]{"a","b","c"})).forEach(System.out::println);
-        String[] ss = Stream.of(s.split(",")).map(s1 -> "?").toArray(String[]::new);
-        System.out.println(Arrays.toString(ss));
+        String s = "answer_sheet_item_id, parent_item_id, exam_id, subject_id, answer_sheet_id, target_subject_id, target_subject_name, origin_item_id, name, catagory1, catagory2, score, required, num, content, st_type, readonly, rule, last_update_time, last_operator_id, last_operator_name, is_del";
+        Arrays.stream(s.split(",")).map(String::trim).map(a->"case \"" + a + "\": return new Object[]{};").forEach(System.out::println);
+//        Arrays.stream(repeatOfGroup(10,new String[]{"a","b","c"})).forEach(System.out::println);
+//        System.out.println("---------------------------------------");
+//        Arrays.stream(repeatOfGroup(9,new String[]{"a","b","c"})).forEach(System.out::println);
+//        System.out.println("---------------------------------------");
+//        Arrays.stream(repeatOfGroup(11,new String[]{"a","b","c"})).forEach(System.out::println);
+//        System.out.println("---------------------------------------");
+//        Arrays.stream(repeatOfGroup(12,new String[]{"a","b","c"})).forEach(System.out::println);
+//        String[] ss = Stream.of(s.split(",")).map(s1 -> "?").toArray(String[]::new);
+//        System.out.println(Arrays.toString(ss));
 
     }
 

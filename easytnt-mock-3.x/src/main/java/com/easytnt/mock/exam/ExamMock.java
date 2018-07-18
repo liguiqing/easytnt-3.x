@@ -33,16 +33,16 @@ public class ExamMock extends AbstractMock {
 
 
     @Override
-    protected String table() {
+    public String table() {
         return "ps_exam";
     }
 
     @Override
-    protected String getIdField() {
+    public String getIdField() {
         return "exam_id";
     }
 
-    protected Object[] getValue(String key){
+    public Object[] getMockValue(String key){
         switch (key){
             case "exam_id": return this.ids;
             case "project_id": return new String[]{getProject().ids()[0]};

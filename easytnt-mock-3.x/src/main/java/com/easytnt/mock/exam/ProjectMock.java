@@ -21,22 +21,17 @@ public class ProjectMock extends AbstractMock {
     }
 
     @Override
-    protected String table() {
+    public String table() {
         return "ps_marking_project";
     }
 
     @Override
-    protected String getIdField() {
+    public String getIdField() {
         return "project_id";
     }
 
-    //@Override
-    //protected String getFields() {
-    //    return "project_id,creator_id,manager_ids,name,status,is_del";
-    //}
-
     @Override
-    protected Object[] getValue(String key) {
+    public Object[] getMockValue(String key) {
         switch (key){
             case "project_id": return this.ids;
             case "creator_id": return new String[]{creatorId};

@@ -269,12 +269,13 @@ CREATE TABLE `t_ps_SubjectRegister` (
 DROP TABLE IF EXISTS `t_ps_AnswerSheet`;
 CREATE TABLE `t_ps_AnswerSheet` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `answerSheetId` VARCHAR(36) NOT NULL COMMENT '答题卡唯一标示',
+  `answerSheetId` VARCHAR(36) NOT NULL COMMENT '答题卡唯一标识',
   `examId` VARCHAR(36) NOT NULL COMMENT '考试唯一标识',
   `subjectId` VARCHAR(36) NOT NULL COMMENT '科目唯一标识',  
-  `designerId` VARCHAR(36) NOT NULL COMMENT '设计唯一标识',   
+  `designerId` VARCHAR(36)  COMMENT '设计者唯一标识，源答题卡设计系统',
+  `designId` VARCHAR(36)  COMMENT '设计卡唯一标识',
   `name` VARCHAR(32) NOT NULL COMMENT '名称',
-  `catagory` VARCHAR(4) DEFAULT '' COMMENT 'AB卡时值为AB',
+  `catagory` VARCHAR(4) DEFAULT '' COMMENT 'AB卡时值为A｜B',
   `sheets` TINYINT(2) DEFAULT '1' COMMENT '卡数',  
   `pages` TINYINT(2) DEFAULT '2' COMMENT '页数',
   `lastUpdateTime` TIMESTAMP DEFAULT NOW() COMMENT '最后更新时间',
@@ -369,6 +370,23 @@ CREATE TABLE `t_ps_AnswerSheetItemEditorSt` (
 
 
 /***考生答题卡扫描***/
+DROP TABLE IF EXISTS `t_ps_AnswerSheetScanTemplate`;
+CREATE TABLE `t_ps_AnswerSheetScanTemplate` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `answerSheetId` varchar(36) NOT NULL COMMENT '答题卡唯一标识',
+  `designerId` varchar(36)  COMMENT '设计者唯一标识',
+  `designerName` varchar(36)  COMMENT '设计者姓名',
+  `name` varchar(64) NOT NULL COMMENT '名称',
+  `templateFeatures` midiumtext DEFAULT NULL COMMENT '模板特征数据',	
+  `url` varchar(100) DEFAULT NULL COMMENT '模板存储地址',
+  `lastUpdateTime` TIMESTAMP DEFAULT NOW() COMMENT '最后更新时间',
+  `lastOperatorId` VARCHAR(36)  COMMENT '最后更新者唯一标识',
+  `lastOperatorName` VARCHAR(64)  COMMENT '最后更新者姓名', 
+  PRIMARY KEY (`id`),
+  KEY `x_ps_AnswerSheetScanTemplate_answerSheetId` (`answerSheetId`) USING BTREE,
+  KEY `x_ps_AnswerSheetScanTemplate_designerId` (designerId) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8 COMMENT='阅卷-科目答题卡扫描模板';
+
 DROP TABLE IF EXISTS `t_ps_BatchScan`;
 CREATE TABLE `t_ps_BatchScan` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,

@@ -66,7 +66,7 @@ public class NumberUtilWrapper {
         if(x == y)
             return x;
 
-        long rtn = x + (long) (Math.random() * (y - x));
+        long rtn = x + (long) (Math.ceil((Math.random() * (y - x))));
         return rtn;
     }
 
@@ -81,7 +81,7 @@ public class NumberUtilWrapper {
         if(x == y)
             return x;
 
-        int rtn = x + (int) (Math.random() * (y - x));
+        int rtn = x + (int)(Math.ceil((Math.random() * (y - x))));
         return rtn;
     }
 
@@ -96,7 +96,7 @@ public class NumberUtilWrapper {
         if(x == y)
             return x;
 
-        float rtn = x + (float) (Math.random() * (y - x));
+        float rtn = x + (float) (Math.random() * (y - x + 1));
         return rtn;
     }
     /**
@@ -109,7 +109,7 @@ public class NumberUtilWrapper {
     public static double randomBetween(double x,double y){
         if(x == y)
             return x;
-        double rtn = x + (double) (Math.random() * (y - x));
+        double rtn = x + (double) (Math.random() * (y - x + 1));
         return rtn;
     }
 
@@ -127,7 +127,7 @@ public class NumberUtilWrapper {
         if(x.equals(y))
             return x;
 
-        double rtn = x.doubleValue() + (double) (Math.random() * (x.doubleValue() - y.doubleValue()));
+        double rtn = x.doubleValue() + (double) (Math.random() * (x.doubleValue() - y.doubleValue() +1 ));
         if (leftOpened) {
             if(rtn == x.doubleValue())
                 return rtn;

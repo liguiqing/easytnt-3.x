@@ -15,45 +15,58 @@ import org.springframework.stereotype.Component;
 public class SubjectRegisterMock extends AbstractMock {
 
     @Override
-    protected String table() {
+    public String table() {
         return "ps_subject_rigister";
     }
 
     @Override
-    protected String getIdField() {
+    public String getIdField() {
         return "examinee_id";
     }
 
     @Override
-    protected Object[] getValue(String key) {
+    public Object[] getMockValue(String key) {
         switch (key){
-            case "exam_id": return repeatOf(this.realSize(),this.getExam().ids()[0]);
+            case "exam_id": return this.repeator.repeatOf(this.realSize(),this.getExam().ids()[0]);
             case "examinee_id": return this.examineeIds();
-            case "subject_id": return repeatOfGroup(this.realSize(),this.getSubject().ids());
-            case "clazz_id": return repeatOfOtheridsGrop(this.realSize(),"CLA","1","2","3");
-            case "clazz_name": return repeatOfGroup(this.realSize(),"1班","2班","3班");
-            case "attended": return repeatOfMixedRandom(this.realSize(),2,0.05,1);
-            case "last_update_time": return repeatOf(this.realSize(),DateUtilWrapper.now());
-            case "last_operator_id": return repeatOf(this.realSize(),IdMocker.genId(IdPrefixes.PersonIdPrefix));
-            case "last_operator_name": return repeatOf(this.realSize(),"唐伯虎");
-            case "is_del": return repeatOf(this.realSize(),0);
-            default: return repeatOf(this.realSize(),null);
+            case "subject_id": return this.getExamineesRegisterSubjects();
+            case "clazz_id": return this.getExaminee().examClazzIdsRepeatOf(this.getRegisterSubjects());
+            case "clazz_name": return this.getExaminee().examClazzNamesRepeatOf(this.getRegisterSubjects());
+            case "attended": return this.repeator.repeatOfMixedRandom(this.realSize(),2,0.05,1);
+            case "last_update_time": return this.repeator.repeatOf(this.realSize(),DateUtilWrapper.now());
+            case "last_operator_id": return this.repeator.repeatOf(this.realSize(),IdMocker.genId(IdPrefixes.PersonIdPrefix));
+            case "last_operator_name": return this.repeator.repeatOf(this.realSize(),"唐伯虎");
+            case "is_del": return this.repeator.repeatOf(this.realSize(),0);
+            default: return this.repeator.repeatOf(this.realSize(),null);
         }
+    }
+
+    public int getRegisterSubjects(){
+        return this.getSubject().ids().length;
+    }
+
+    public int getRegisterExaminees(){
+        return this.examineeIds().length;
+    }
+
+    public String[] getExamineesRegisterSubjects(){
+        String[] ss = this.repeator.repeatOfGroupOfEach(1,size(),this.getSubject().ids());
+        return ss;
     }
 
     @Override
     protected void correct(JdbcTemplate jdbc){
-        jdbc.update("update ps_subject_rigister a inner join ps_examinee b on b.examinee_id=a.examinee_id " +
-                "set a.clazz_id=b.clazz_id,a.clazz_name = b.clazz_name");
+        //.update("update ps_subject_rigister a inner join ps_examinee b on b.examinee_id=a.examinee_id " +
+        //        "set a.clazz_id=b.clazz_id,a.clazz_name = b.clazz_name");
     }
 
 
     private String[] examineeIds(){
-        return this.getExaminee().examineeIdsRepeatOf(this.getSubject().ids().length);
+        return this.getExaminee().examineeIdsRepeatOf(this.getRegisterSubjects());
     }
 
     public int realSize(){
-        return this.size() * this.getSubject().ids().length;
+        return this.size() * this.getRegisterSubjects();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.easytnt.mock;
 
 import com.easytnt.commons.spring.SpringContextUtil;
-import com.easytnt.commons.util.NumberUtilWrapper;
+import com.easytnt.mock.answersheet.AnswerSheetMock;
 import com.easytnt.mock.exam.ExamMock;
 import com.easytnt.mock.exam.SubjectMock;
 import com.easytnt.mock.examinee.ExamineeMock;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
-import sun.java2d.xr.MutableInteger;
+import org.apache.commons.lang3.mutable.MutableInt;
 
-import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 
 public abstract class AbstractMock implements Mock {
 
+    @Autowired(required = false)
+    private DataSet dataSet;
+
     @Autowired
     protected Repeator repeator;
 
@@ -32,10 +35,17 @@ public abstract class AbstractMock implements Mock {
 
     public void createData(JdbcTemplate jdbc) {
         this.genFields(jdbc);
-        this.fvs = Arrays.stream(this.fields).collect(Collectors.toMap(k -> k, this::getValue, (k1, k2) -> k2, LinkedHashMap::new));
+        this.fvs = Arrays.stream(this.fields).collect(Collectors.toMap(k -> k, this::getValues, (k1, k2) -> k2, LinkedHashMap::new));
         this.delete(jdbc);
         this.insert(jdbc);
         this.correct(jdbc);
+    }
+
+    public Object[] getValues(String key){
+        if(this.dataSet != null){
+            return dataSet.getValuesOf(key,this);
+        }
+        return this.getMockValue(key);
     }
 
     @Override
@@ -71,8 +81,8 @@ public abstract class AbstractMock implements Mock {
     private void genFields(JdbcTemplate jdbc){
         SqlRowSet rowSet = jdbc.queryForRowSet("select * from " + this.table() + " limit 0");
         SqlRowSetMetaData metaData = rowSet.getMetaData();
-        String[] coloumnName = metaData.getColumnNames();
-        this.fields = Stream.of(coloumnName).filter(s -> !"id".equals(s)).toArray(String[]::new);
+        String[] columnNames = metaData.getColumnNames();
+        this.fields = Stream.of(columnNames).filter(s -> !"id".equals(s)).toArray(String[]::new);
     }
 
     private String[] sqlDelete() {
@@ -93,33 +103,14 @@ public abstract class AbstractMock implements Mock {
 
         for(int i=0;i<os.length;i++){
             Object[] arg = args.get(i);
-
-            final MutableInteger count = new MutableInteger(0);
+            final MutableInt count = new MutableInt(0);
             final int m = i;
             this.fvs.forEach((k,v)->{
                 int j = count.getValue();
                 arg[j] = v[m];
                 count.setValue(j+1);
             });
-            //args.add(arg);
         }
-//
-//
-//        for(int i=0;i<os.length;i++){
-//            args.add(new Object[size]);
-//        }
-//
-//
-//        final MutableInteger count = new MutableInteger(0);
-//        this.fvs.forEach((k,v)->{
-//            final MutableInteger count2 = new MutableInteger(0);
-//            int i = count2.getValue();
-//            int j = count.getValue();
-//            Stream.of(v).forEach(o->{args.get(count2.getValue())[count.getValue()]=o;});
-//            count.setValue(j++);
-//            count2.setValue(i++);
-//        });
-
         return args;
     }
 
@@ -141,82 +132,67 @@ public abstract class AbstractMock implements Mock {
         return fromTo(from,to,"");
     }
 
-    protected String[] fromTo(int from,int to,String prefix){
-        int length = to - from;
+    protected String[] fromTo(String prefix,int from,int to){
+        int length = to - from + 1;
         String[] ss = new String[length];
         for(int i=0;i<length;i++){
-            ss[i] = prefix+(to++);
+            ss[i] = prefix+(from++);
         }
         return ss;
     }
 
+    protected String[] fromTo(int from,int to,String suffix){
+        int length = to - from + 1;
+        String[] ss = new String[length];
+        for(int i=0;i<length;i++){
+            ss[i] = (from++)+suffix;
+        }
+        return ss;
+    }
 
-    protected String[] otherids(int size,String prefix,String midfix){
-        String[] ids = new String[size];
-        for(int i=0;i<size;i++){
-            ids[i] = IdMocker.genId(prefix,midfix+"-"+i);
+    protected String[] genIds(String prefix,String midfix,String... suffix){
+        String[] ids = new String[suffix.length];
+        for(int i=0;i<ids.length;i++){
+            if((midfix==null||midfix.length()==0))
+                ids[i] = IdMocker.genId(prefix,suffix[i]);
+            else
+                ids[i] = IdMocker.genId(prefix,midfix+"-"+suffix[i]);
         }
         return ids;
     }
 
-    protected String[] repeatOfOtherids(int size,String prefix,String suffix){
-        String id = IdMocker.genId(prefix,suffix);
-        return this.repeator.repeatOf(size, id);
-    }
-
-
-    protected String[] repeatOfOtheridsGrop(int size,String prefix,String... suffix){
-        String[] ids = new String[suffix.length];
-        for(int i=0;i<ids.length;i++){
-            ids[i] = IdMocker.genId(prefix,suffix[i]);
+    protected  <T> void  setArray(T t, T[] ts, int start, int end){
+        for(int i=start;i<=end;i++){
+            ts[i] = t;
         }
-        return this.repeator.repeatOfGroup(size, ids);
     }
 
-    protected String[] repeatOfOtheridsGropOfEach(int size,int repeatsOfEach,String prefix,String... suffix){
-        return this.repeatOfOtheridsGropOfEachMaxLt(size,repeatsOfEach,1,prefix,suffix);
-    }
-
-    protected String[] repeatOfOtheridsGropOfEachMaxLt(int size,int repeatsOfEach,int max,String prefix,String... suffix){
-        String[] ids = new String[suffix.length];
-        for(int i=0;i<ids.length;i++){
-            ids[i] = IdMocker.genId(prefix,suffix[i]);
+    protected  <T,V> void  setArray( T[] ts, int start, int end,V v,Function<V,T> func){
+        for(int i=start;i<=end;i++){
+            ts[i] = func.apply(v);
         }
-        return this.repeator.repeatOfGroupOfEachMaxLt(size,repeatsOfEach,max,ids);
     }
 
-    protected <T> T[] repeatOfGroup(int size,T... src){
-        return this.repeator.repeatOfGroup(size, src);
-    }
-
-    protected <T> T[] repeatOf(int size,T value){
-        return this.repeator.repeatOf(size, value);
-    }
-
-    protected <T,R extends T> T[] repeatOfMixedRandom(int size,R mixed,double rate,T value){
-        return this.repeator.repeatOfMixedRandom(size, mixed, rate, value);
-    }
-
-    protected <T,R extends T> T[] repeatOfGroupMixedRandom(int size,R[] rs,double rate,T... src){
-        return this.repeator.repeatOfGroupMixedRandom(size, rs, rate, src);
-    }
-
-    protected ExamMock getExam(){
+    public ExamMock getExam(){
         return SpringContextUtil.getBean(ExamMock.class);
     }
 
-    protected SubjectMock getSubject(){
+    public SubjectMock getSubject(){
         return SpringContextUtil.getBean(SubjectMock.class);
     }
 
-    protected ExamineeMock getExaminee(){
+    public ExamineeMock getExaminee(){
         return SpringContextUtil.getBean(ExamineeMock.class);
     }
 
-    protected abstract String table();
+    public AnswerSheetMock getAnswerSheet(){
+        return SpringContextUtil.getBean(AnswerSheetMock.class);
+    }
 
-    protected abstract String getIdField();
+    public abstract String table();
 
-    protected abstract Object[] getValue(String key);
+    public abstract String getIdField();
+
+    public abstract Object[] getMockValue(String key);
 
 }
