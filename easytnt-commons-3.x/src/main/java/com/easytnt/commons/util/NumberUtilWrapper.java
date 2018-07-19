@@ -144,4 +144,30 @@ public class NumberUtilWrapper {
         return rtn;
     }
 
+    /**
+     * 将数字转换按指定步长增加的线性字符串
+     * 如:2.5 步长0.5-->[0,0.5,1,1.5,2,2.5]
+     * 又如:2.6 步长0.5-->[0,0.5,1,1.5,2,2.5,2.6]
+     *
+     * @param x 待转换的数字
+     * @param step 线性增长的步长
+     * @return
+     */
+    public static String toLinearString(double x,double step,int scale){
+        if(scale<0)
+            scale = 0;
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(scale);
+
+        int length = (int)Math.ceil(x/step) + 1;
+        String[] array = new String[length];
+        int j = 0;
+        for(double i=0;i<=x;i=i+step){
+            array[j++] = nf.format(i);
+        }
+        if(array[length-1] == null)
+            array[length-1] = nf.format(x);
+        String linear = String.join(",",array);
+        return linear;
+    }
 }
