@@ -48,6 +48,10 @@ public abstract class AbstractMock implements Mock {
         return this.getMockValue(key);
     }
 
+    public Object[] getFieldValus(String field){
+        return this.fvs.get(field);
+    }
+
     @Override
     public int size(){
         return 1;
