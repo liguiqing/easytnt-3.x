@@ -1,23 +1,20 @@
 package com.easytnt.mock.answersheet;
 
 import com.easytnt.commons.spring.SpringContextUtil;
+import com.easytnt.mock.AbstracMockTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext-mock-test-ds.xml","classpath:META-INF/spring/applicationContext-mock-app.xml"})
-public class AnswerSheetItemTest {
+public class AnswerSheetItemTest  extends AbstracMockTest {
 
     @Test
     public void getValue() {

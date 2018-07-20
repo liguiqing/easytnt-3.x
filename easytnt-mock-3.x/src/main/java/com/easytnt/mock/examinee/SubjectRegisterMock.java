@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubjectRegisterMock extends AbstractMock {
 
+    private Integer[] attendeds;
+
     @Override
     public String table() {
         return "ps_subject_rigister";
@@ -32,13 +34,19 @@ public class SubjectRegisterMock extends AbstractMock {
             case "subject_id": return this.getExamineesRegisterSubjects();
             case "clazz_id": return this.getExaminee().examClazzIdsRepeatOf(this.getRegisterSubjects());
             case "clazz_name": return this.getExaminee().examClazzNamesRepeatOf(this.getRegisterSubjects());
-            case "attended": return this.repeator.repeatOfMixedRandom(this.realSize(),2,0.05,1);
+            case "attended": return attendeds();
             case "last_update_time": return this.repeator.repeatOf(this.realSize(),DateUtilWrapper.now());
             case "last_operator_id": return this.repeator.repeatOf(this.realSize(),IdMocker.genId(IdPrefixes.PersonIdPrefix));
             case "last_operator_name": return this.repeator.repeatOf(this.realSize(),"唐伯虎");
             case "is_del": return this.repeator.repeatOf(this.realSize(),0);
             default: return this.repeator.repeatOf(this.realSize(),null);
         }
+    }
+
+    private Integer[] attendeds(){
+        if(this.attendeds == null)
+            this.attendeds = this.repeator.repeatOfMixedRandom(this.realSize(),2,0.05,1);
+        return this.attendeds;
     }
 
     public int getRegisterSubjects(){

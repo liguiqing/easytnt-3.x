@@ -17,6 +17,8 @@ public class ExamineeSheetMock extends AbstractMock {
 
     private String[] cryptCode;
 
+    private Integer[]markable;
+
     @Autowired
     private SubjectRegisterMock register;
 
@@ -44,13 +46,29 @@ public class ExamineeSheetMock extends AbstractMock {
             case "seq": return this.repeator.repeatOf(this.realSize(),1);
             case "crypt_code": return getCryptCode();
             case "scoredable": return this.repeator.repeatOf(this.realSize(),1);
-            case "markable": return this.repeator.repeatOfMixedRandom(this.realSize(),0,0.03,1);
+            case "markable": return getMarkable();
             case "score": return this.repeator.repeatOf(this.realSize(),null);
             case "kg_score": return this.repeator.repeatOf(this.realSize(),null);
             case "zg_score": return this.repeator.repeatOf(this.realSize(),null);
             case "is_del": return this.repeator.repeatOf(this.realSize(),0);
             default: return this.repeator.repeatOf(this.realSize(),null);
         }
+    }
+
+    public int countMarkables(){
+        return Stream.of(this.getValues("markable")).filter(m->(int)m==1).toArray().length;
+    }
+
+    public int countMarkablesOf(String subjectId){
+        int length = this.realSize();
+        Object[] subjectIds = this.getValues("subject_id");
+        Object[] markables = this.getValues("markable");
+        int count = 0;
+        for(int i=0;i<length;i++){
+            if(subjectIds[i].equals(subjectId) && (int)markables[i] == 1)
+                count++;
+        }
+        return count;
     }
 
     @Override
@@ -61,6 +79,12 @@ public class ExamineeSheetMock extends AbstractMock {
 
     private Integer[] getExamineenos(){
         return this.repeator.repeatOfGroup(register.getRegisterSubjects(), this.getExaminee().examineenos());
+    }
+
+    private Integer[] getMarkable(){
+        if(this.markable == null)
+            this.markable = this.repeator.repeatOfMixedRandom(this.realSize(),0,0.03,1);
+        return this.markable;
     }
 
     private String[] getCryptCode(){

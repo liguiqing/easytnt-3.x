@@ -63,6 +63,10 @@ public class AnswerSheetItem extends AbstractMock {
         return this.ids().length;
     }
 
+    public int getZgItemsCount(){
+        return Stream.of(this.getValues("catagory2")).filter( c->(int)c >=4).collect(Collectors.toList()).toArray().length;
+    }
+
     public String[] getItemNames(){
         String[] subjectNames = getItemsSubjectNames();
         MutableInt i = new MutableInt();
@@ -139,20 +143,20 @@ public class AnswerSheetItem extends AbstractMock {
     public Integer[] getCatagory2(){
         String[] ids = ids();
 
-        Integer[] catagory1 = new Integer[ids.length];
-        setArray(1, catagory1, 1, 8);
-        setArray(4, catagory1, 10, 13);
-        setArray(5, catagory1, 14, 18);
-        setArray(7, catagory1, 19, 19);
+        Integer[] catagory = new Integer[ids.length];
+        setArray(1, catagory, 1, 8);
+        setArray(4, catagory, 10, 13);
+        setArray(5, catagory, 14, 18);
+        setArray(7, catagory, 19, 19);
 
-        setArray(1, catagory1, 21, 28);
-        setArray(4, catagory1, 30, 33);
-        setArray(5, catagory1, 34, 40);
+        setArray(1, catagory, 21, 28);
+        setArray(4, catagory, 30, 33);
+        setArray(5, catagory, 34, 40);
 
-        setArray(1, catagory1, 42, 101);
-        setArray(4, catagory1, 103, ids.length-2);
-        catagory1[ids.length-1] = 6;
-        return catagory1;
+        setArray(1, catagory, 42, 101);
+        setArray(4, catagory, 103, ids.length-2);
+        catagory[ids.length-1] = 6;
+        return catagory;
     }
 
     public String[] getSheetItemParentIds(){

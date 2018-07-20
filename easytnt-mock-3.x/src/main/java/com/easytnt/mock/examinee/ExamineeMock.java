@@ -3,7 +3,6 @@ package com.easytnt.mock.examinee;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.mock.AbstractMock;
 import com.easytnt.mock.IdMocker;
-import com.easytnt.mock.exam.ExamMock;
 import com.easytnt.share.domain.id.IdPrefixes;
 import org.springframework.stereotype.Component;
 

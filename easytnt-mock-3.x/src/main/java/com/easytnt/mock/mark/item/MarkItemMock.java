@@ -90,6 +90,16 @@ public class MarkItemMock extends AbstractMock {
         return 15;
     }
 
+    public int sizeOf(String subjectId){
+        int size = 0;
+        String[] subjectIds = subjectIds();
+        for(String s:subjectIds){
+            if(subjectId.equals(s))
+                size++;
+        }
+        return size;
+    }
+
     @Override
     public String[] ids() {
         String[] suffixes = this.fromTo(1, this.size());

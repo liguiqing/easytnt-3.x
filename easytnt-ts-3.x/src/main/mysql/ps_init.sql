@@ -587,9 +587,9 @@ CREATE TABLE `t_ps_MarkItemSlices` (
 DROP TABLE IF EXISTS `t_ps_MarkItemScore`;
 CREATE TABLE `t_ps_MarkItemScore` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `markItemScoreId` VARCHAR(36) NOT NULL COMMENT '评题给分规则唯一标识',
+  `parentScoreId` VARCHAR(36) COMMENT '上级评题给分规则唯一标识',
   `markItemId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识',
-  `markItemScoreId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识', 
-  `parentScoreId` VARCHAR(36) COMMENT '上级评题唯一标识',    
   `name` VARCHAR(36) NOT NULL COMMENT '名称', 
   `levels` TINYINT(1) DEFAULT '1' COMMENT '层次,实际中最多两层，1层是评题的分数，2层是给分点',     
   `seq` TINYINT(2) NOT NULL COMMENT '顺序号', 
@@ -620,9 +620,9 @@ CREATE TABLE `t_ps_MarkItemToSheetItem` (
 DROP TABLE IF EXISTS `t_ps_ExamineeItem`;
 CREATE TABLE `t_ps_ExamineeItem` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `markItemId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识',
-  `subjectId` VARCHAR(36) NOT NULL COMMENT '科目唯一标识',  
   `examineeItemId` VARCHAR(36) NOT NULL COMMENT '考生评题唯一标识',
+  `markItemId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识',
+  `subjectId` VARCHAR(36) NOT NULL COMMENT '科目唯一标识',
   `cryptCode` VARCHAR(32) NOT NULL COMMENT '密号',
   `purpose` TINYINT(1) DEFAULT '1' COMMENT '评题用途：1－主观题；2－考号；3－客观题；4－选做题分题',                                    
   PRIMARY KEY (`id`), 
@@ -633,7 +633,7 @@ CREATE TABLE `t_ps_ExamineeItem` (
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='阅卷－科目考生评题';
 
 DROP TABLE IF EXISTS `t_ps_ExamineeItemSlices`;
-CREATE TABLE `t_ps_ExamineeItemSlices` (.
+CREATE TABLE `t_ps_ExamineeItemSlices` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `markItemId` VARCHAR(36) NOT NULL COMMENT '评题唯一标识',
   `sheetSlicesId` VARCHAR(36) NOT NULL COMMENT '答题卡切片唯一标识', 

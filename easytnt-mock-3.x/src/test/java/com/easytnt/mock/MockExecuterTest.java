@@ -32,7 +32,7 @@ public class MockExecuterTest {
 
     @Test
     public void test(){
-        String s = "mark_item_score_id, mark_item_id, parent_score_id, name, seq, score, score_limite, score_linear, error, scope, person_id, is_del";
+        String s = "examinee_item_id, exam_id, subject_id, mark_item_id, batch_id, crypt_code, sheet_key, purpose, is_del";
         System.out.println("switch(key){");
         Arrays.stream(s.split(",")).map(String::trim).map(a->"case \"" + a + "\": return new Object[]{};").forEach(System.out::println);
         System.out.println("default: return this.repeator.repeatOf(this.size(),null);");
