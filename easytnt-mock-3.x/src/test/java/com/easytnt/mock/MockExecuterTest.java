@@ -8,9 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
@@ -32,7 +31,7 @@ public class MockExecuterTest {
 
     @Test
     public void test(){
-        String s = "examinee_item_id, exam_id, subject_id, mark_item_id, batch_id, crypt_code, sheet_key, purpose, is_del";
+        String s = "mark_id, exam_id, subject_id, batch_id, mark_item_id, examinee_item_id, school_id, clazz_id, purpose, point, room, crypt_code, group_no, fetch_seq, required, times, arbiter, fetchsign, unabled, formal_marker_ids, score, is_del";
         System.out.println("switch(key){");
         Arrays.stream(s.split(",")).map(String::trim).map(a->"case \"" + a + "\": return new Object[]{};").forEach(System.out::println);
         System.out.println("default: return this.repeator.repeatOf(this.size(),null);");

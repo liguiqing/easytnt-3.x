@@ -1,6 +1,6 @@
 package com.easytnt.mock.mark.item;
 
-import com.easytnt.mock.AbstracMockTest;
+import com.easytnt.mock.AbstractMockTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
-public class MarkItemScoreMockTest extends AbstracMockTest {
+public class MarkItemScoreMockTest extends AbstractMockTest {
 
     @Autowired
     private MarkItemScoreMock markItemScore;

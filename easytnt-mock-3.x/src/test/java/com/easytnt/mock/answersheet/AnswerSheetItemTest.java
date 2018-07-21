@@ -1,7 +1,7 @@
 package com.easytnt.mock.answersheet;
 
 import com.easytnt.commons.spring.SpringContextUtil;
-import com.easytnt.mock.AbstracMockTest;
+import com.easytnt.mock.AbstractMockTest;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
-public class AnswerSheetItemTest  extends AbstracMockTest {
+public class AnswerSheetItemTest  extends AbstractMockTest {
 
     @Test
     public void getValue() {

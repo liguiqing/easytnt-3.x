@@ -1,6 +1,6 @@
 package com.easytnt.mock.examinee;
 
-import com.easytnt.mock.AbstracMockTest;
+import com.easytnt.mock.AbstractMockTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
-public class ExamineeSheetMockTest extends AbstracMockTest {
+public class ExamineeSheetMockTest extends AbstractMockTest {
 
     @Autowired
     private ExamineeSheetMock examineeSheet;

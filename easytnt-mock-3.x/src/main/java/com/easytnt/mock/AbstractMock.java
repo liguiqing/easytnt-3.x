@@ -52,6 +52,46 @@ public abstract class AbstractMock implements Mock {
         return this.fvs.get(field);
     }
 
+    protected Object valuesOf(String key,Object value){
+        Object[] values = this.getValues(key);
+        for(int i=0;i<size();i++){
+            if(values[i].equals(value))
+                return values[i];
+        }
+        return null;
+    }
+
+    protected Object valuesOfWithId(String key,String id){
+        Object[] ids = this.ids();
+        Object[] values = this.getValues(key);
+        for(int i=0;i<size();i++){
+            if(ids[i].equals(id))
+                return values[i];
+        }
+        return null;
+    }
+
+
+    protected Object[] valuesFromOtherMock(String key,String otherKey,boolean withId,AbstractMock other){
+        Object[] keyValues = this.getValues(key);
+        int length = keyValues.length;
+        Object[] os = new Object[length];
+
+        for(int i=0;i<length;i++){
+            if(withId){
+                os[i] = other.valuesOfWithId(otherKey,(String)keyValues[i]);
+            }else{
+                os[i] = other.valuesOf(otherKey,keyValues[i]);
+            }
+        }
+        return os;
+    }
+
+    protected <M extends AbstractMock> M getOtherMock(Class<M> otherType){
+        return SpringContextUtil.getBean(otherType);
+    }
+
+
     @Override
     public int size(){
         return 1;

@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext-mock-test-ds.xml",
         "classpath:META-INF/spring/applicationContext-mock-app.xml"})
-public abstract class AbstracMockTest {
+public abstract class AbstractMockTest {
 
 
 }

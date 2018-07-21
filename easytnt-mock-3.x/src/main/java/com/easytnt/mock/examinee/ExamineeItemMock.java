@@ -3,10 +3,9 @@ package com.easytnt.mock.examinee;
 import com.easytnt.commons.spring.SpringContextUtil;
 import com.easytnt.mock.AbstractMock;
 import com.easytnt.mock.mark.item.MarkItemMock;
-import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.stream.Stream;
 
 /**
  * @author Liguiqing
@@ -74,6 +73,26 @@ public class ExamineeItemMock extends AbstractMock {
         }
         return values;
     }
+
+    public Object[] valuesOf(String key,int purpose){
+        Object[] purposes = getValues("purpose");
+        Object[] os = new Object[sizeOf(purpose)];
+        Object[] values = getValues(key);
+        int length = purposes.length;
+        int k = 0;
+        for(int i=0;i<length;i++){
+            if((int)purposes[i] == purpose){
+                os[k++] = values[i];
+            }
+        }
+        return os;//Arrays.stream(os).filter(v->v!=null).toArray();
+    }
+
+    public int sizeOf(int purpose){
+        Object[] purposes = getValues("purpose");
+        return Stream.of(purposes).filter(p->{return (int)p==purpose;}).toArray().length;
+    }
+
 
     @Override
     public int size(){
