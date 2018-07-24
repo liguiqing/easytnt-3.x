@@ -52,21 +52,19 @@ public abstract class AbstractMock implements Mock {
         return this.fvs.get(field);
     }
 
-    protected Object valuesOf(String key,Object value){
-        Object[] values = this.getValues(key);
-        for(int i=0;i<size();i++){
-            if(values[i].equals(value))
-                return values[i];
-        }
-        return null;
+    protected Object valuesOf(String key1,String key2,Object value){
+        return getValueFromArray(this.getValues(key1),this.getValues(key2),value);
     }
 
     protected Object valuesOfWithId(String key,String id){
-        Object[] ids = this.ids();
-        Object[] values = this.getValues(key);
-        for(int i=0;i<size();i++){
-            if(ids[i].equals(id))
-                return values[i];
+        return getValueFromArray(this.ids(),this.getValues(key),id);
+    }
+
+    private Object getValueFromArray(Object[] srcValues,Object[] destValues,Object targetValue){
+        int length = srcValues.length;
+        for(int i=0;i<length;i++){
+            if(srcValues[i].equals(targetValue))
+                return destValues[i];
         }
         return null;
     }
@@ -81,7 +79,7 @@ public abstract class AbstractMock implements Mock {
             if(withId){
                 os[i] = other.valuesOfWithId(otherKey,(String)keyValues[i]);
             }else{
-                os[i] = other.valuesOf(otherKey,keyValues[i]);
+                os[i] = other.valuesOf(key,otherKey,keyValues[i]);
             }
         }
         return os;

@@ -1,6 +1,5 @@
 package com.easytnt.mock.mark.item;
 
-import com.easytnt.commons.spring.SpringContextUtil;
 import com.easytnt.commons.util.NumberUtilWrapper;
 import com.easytnt.mock.AbstractMock;
 import org.springframework.stereotype.Component;
@@ -45,6 +44,11 @@ public class MarkItemScoreMock extends AbstractMock {
         }
     }
 
+    public Double[] getMarkItemScoreLimit(String markItemId){
+        String scoreLimit = (String)this.valuesOf("mark_item_id", "score_limite", markItemId);
+        return Stream.of(scoreLimit.split(";")).map(s->Double.valueOf(s)).collect(Collectors.toList()).toArray(new Double[]{});
+    }
+
     private Object[] getMarkItemIds(){
         return markItemValues("mark_item_id");
     }
@@ -65,7 +69,7 @@ public class MarkItemScoreMock extends AbstractMock {
     }
 
     private Object[] markItemValues(String key){
-        MarkItemMock markItem = SpringContextUtil.getBean(MarkItemMock.class);
+        MarkItemMock markItem = getOtherMock(MarkItemMock.class);
         Object[] os = markItem.getMockValue(key);
         os[0] = null;
         os[1] = null;
@@ -75,7 +79,6 @@ public class MarkItemScoreMock extends AbstractMock {
         os[11] = null;
         return Stream.of(os).filter(id->id!=null).collect(Collectors.toList()).toArray();
     }
-
 
     @Override
     public int size(){

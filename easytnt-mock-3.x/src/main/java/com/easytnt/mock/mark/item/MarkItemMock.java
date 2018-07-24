@@ -1,9 +1,12 @@
 package com.easytnt.mock.mark.item;
 
 import com.easytnt.mock.AbstractMock;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,6 +46,10 @@ public class MarkItemMock extends AbstractMock {
             case "is_del": return this.repeator.repeatOf(this.size(),0);
             default: return this.repeator.repeatOf(this.size(),null);
         }
+    }
+
+    public String getAnswerSheetId(String markItemId){
+        return (String)valuesOf("mark_item_id","answer_sheet_id",markItemId);
     }
 
     private String[] getItemNames(){
@@ -99,6 +106,21 @@ public class MarkItemMock extends AbstractMock {
         }
         return size;
     }
+
+    public Object[] purposeValuesOf(int purpose,String key){
+        int[] purposes = Arrays.stream(this.getValues("purpose")).mapToInt(s->(int)s).toArray();
+        int length = purposes.length;
+        ArrayList<Object> purposeIds = Lists.newArrayList();
+        Object[] values = this.getValues(key);
+        for(int i = 0;i<length;i++){
+            if(purposes[i] == purpose){
+                purposeIds.add(values[i]);
+            }
+        }
+        return purposeIds.toArray();
+    }
+
+
 
     @Override
     public String[] ids() {

@@ -6,9 +6,12 @@ import com.easytnt.commons.util.StringUtilWrapper.Word;
 import com.easytnt.mock.AbstractMock;
 import com.easytnt.mock.IdMocker;
 import com.easytnt.share.domain.id.IdPrefixes;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,7 +21,7 @@ import java.util.stream.Stream;
  */
 @Component
 public class AnswerSheetItem extends AbstractMock {
-
+    private String[] content;
 
     @Override
     public String table() {
@@ -85,16 +88,19 @@ public class AnswerSheetItem extends AbstractMock {
     }
 
     public String[] getContent(){
-        String[] ids = ids();
-        String[] contents = new String[ids.length];
-        setArray(contents,1,8,5d,this::content);
-        setArray(contents,21,28,5d,this::content);
-        setArray(contents,42,101,1.5d,this::content);
-        return contents;
+        if(this.content == null) {
+            String[] ids = ids();
+            String[] contents = new String[ids.length];
+            setArray(contents, 1, 8, 5d, this::content);
+            setArray(contents, 21, 28, 5d, this::content);
+            setArray(contents, 42, 101, 1.5d, this::content);
+            this.content = contents;
+        }
+        return this.content;
     }
 
     private String content(double score){
-        String s = StringUtilWrapper.ramdonOf(Word.A, Word.B, Word.C, Word.D);
+        String s = StringUtilWrapper.randomOf(Word.A, Word.B, Word.C, Word.D);
         return "{\""+s+"\":"+score+"}";
     }
 
@@ -210,6 +216,19 @@ public class AnswerSheetItem extends AbstractMock {
         System.arraycopy(sx,0,ss,yw.length,sx.length);
         System.arraycopy(yy,0,ss,yw.length+sx.length,yy.length);
         return ss;
+    }
+
+    public List<String> getKgOptionsOfAswerSheet(String aswerSheetId){
+        Object[] aswerSheetIds = this.getValues("answer_sheet_id");
+        Object[] category2 = getCatagory2();
+        ArrayList<String> aswerSheetKgOptions = Lists.newArrayList();
+        int length = aswerSheetIds.length;
+        for(int i = 0;i < length;i++){
+            if(aswerSheetIds[i].equals(aswerSheetId) && category2[i] != null && (category2[i].equals(1)||category2[i].equals(2)||category2[i].equals(3))){
+                aswerSheetKgOptions.add(this.getContent()[i]);
+            }
+        }
+        return aswerSheetKgOptions;
     }
 
 

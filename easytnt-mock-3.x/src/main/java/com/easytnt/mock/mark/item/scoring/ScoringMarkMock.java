@@ -53,6 +53,16 @@ public class ScoringMarkMock extends AbstractMock {
         }
     }
 
+    public Object getValueForMarkId(String markId,String key){
+        String[] ids = ids();
+        int i = 0;
+        for(String id:ids){
+            if(id.equals(markId)){
+                return this.getValues(key)[i];
+            }
+        }
+        return null;
+    }
 
     private Object[] valuesFromExamineeItem(String key){
         ExamineeItemMock examineeItem = getOtherMock(ExamineeItemMock.class);
