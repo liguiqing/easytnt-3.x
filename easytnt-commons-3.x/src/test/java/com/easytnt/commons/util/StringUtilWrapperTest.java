@@ -2,7 +2,6 @@ package com.easytnt.commons.util;
 
 import static com.easytnt.commons.util.StringUtilWrapper.Word;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -15,17 +14,17 @@ public class StringUtilWrapperTest {
     @Test
     public void ramdonOf() {
         Word[] words = new Word[]{Word.A};
-        String sw = StringUtilWrapper.ramdonOf(words);
+        String sw = StringUtilWrapper.randomOf(words);
         assertEquals("a",sw);
     }
 
     @Test
     public void ramdonOf1() {
         for(int i=0;i<100;i++){
-            String sw = StringUtilWrapper.ramdonOf('a','b');
+            String sw = StringUtilWrapper.randomOf('a','b');
             assertTrue("a".equals(sw)||"b".equals(sw));
 
-            sw = StringUtilWrapper.ramdonOf('a','b','c');
+            sw = StringUtilWrapper.randomOf('a','b','c');
             assertTrue("a".equals(sw)||"b".equals(sw)||"c".equals(sw));
         }
 

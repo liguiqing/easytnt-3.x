@@ -4,7 +4,10 @@
 
 package com.easytnt.commons.util;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.text.NumberFormat;
+import java.util.Comparator;
 
 /**
  * 数字处理工具
@@ -169,5 +172,14 @@ public class NumberUtilWrapper {
             array[length-1] = nf.format(x);
         String linear = String.join(",",array);
         return linear;
+    }
+
+    public static int compare(Number x,Number y){
+        int v = 0 ;
+        //todo more comparing
+        if(x instanceof Integer) {
+            v = NumberUtils.compare(((Integer) x).intValue(), ((Integer) y).intValue());
+        }
+        return v;
     }
 }

@@ -69,12 +69,12 @@ public class StringUtilWrapper {
         }
     }
 
-    public static String ramdonOf(Word... src){
+    public static String randomOf(Word... src){
         int i = NumberUtilWrapper.randomBetween(0,src.length);
         return Word.get(i).lower;
     }
 
-    public static String ramdonOf(char... src){
+    public static String randomOf(char... src){
         int i = NumberUtilWrapper.randomBetween(0,src.length);
         return Word.get(i).lower;
     }
