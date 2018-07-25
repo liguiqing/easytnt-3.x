@@ -49,6 +49,11 @@ public class MarkItemScoreMock extends AbstractMock {
         return Stream.of(scoreLimit.split(";")).map(s->Double.valueOf(s)).collect(Collectors.toList()).toArray(new Double[]{});
     }
 
+    public Double getError(String markItemId){
+        return (Double)this.valuesOf("mark_item_id", "error", markItemId);
+
+    }
+
     private Object[] getMarkItemIds(){
         return markItemValues("mark_item_id");
     }
@@ -64,7 +69,7 @@ public class MarkItemScoreMock extends AbstractMock {
     private Object[] getScoreLinear(){
         Object[] scores = getMarkItemScores();
         return Stream.of(scores).map(s->{
-            return NumberUtilWrapper.toLinearString((Double)s,0.5,2);
+            return NumberUtilWrapper.toLinearString((Double)s,0.5,2,";");
         }).collect(Collectors.toList()).toArray();
     }
 

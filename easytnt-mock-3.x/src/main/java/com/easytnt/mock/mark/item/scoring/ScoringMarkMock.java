@@ -41,13 +41,13 @@ public class ScoringMarkMock extends AbstractMock {
             case "crypt_code": return valuesFromExamineeItem("crypt_code");
             case "group_no": return this.repeator.repeatOf(this.size(),null);
             case "fetch_seq": return fromTo(1,this.size());
-            case "required": return valuesFromMarkItem("required_times");
+            case "required": return valuesFromMarkItem("mark_item_id","required_times");
             case "times": return this.repeator.repeatOf(this.size(),0);
             case "arbiter": return this.repeator.repeatOf(this.size(),0);
             case "fetchsign": return this.repeator.repeatOf(this.size(),0);
             case "unabled": return this.repeator.repeatOf(this.size(),0);
             case "formal_marker_ids": return this.repeator.repeatOf(this.size(),null);
-            case "score": return this.repeator.repeatOf(this.size(),0d);
+            case "score": return this.repeator.repeatOf(this.size(),-1d);
             case "is_del": return this.repeator.repeatOf(this.size(),0);
             default: return this.repeator.repeatOf(this.size(),null);
         }
@@ -60,6 +60,7 @@ public class ScoringMarkMock extends AbstractMock {
             if(id.equals(markId)){
                 return this.getValues(key)[i];
             }
+            i++;
         }
         return null;
     }
@@ -70,9 +71,9 @@ public class ScoringMarkMock extends AbstractMock {
         return values;
     }
 
-    private Object[] valuesFromMarkItem(String key){
+    private Object[] valuesFromMarkItem(String key,String otherKey){
         MarkItemMock markItem = getOtherMock(MarkItemMock.class);
-        return valuesFromOtherMock(key, "mark_item_id",true, markItem);
+        return valuesFromOtherMock(key,"mark_item_id", otherKey,true, markItem);
     }
 
     @Override

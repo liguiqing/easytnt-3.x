@@ -46,7 +46,7 @@ public class KgMarkMock extends AbstractMock {
             case "examinee_item_id": return valuesFromExamineeItem("examinee_item_id");
             case "crypt_code": return valuesFromExamineeItem("crypt_code");
             case "fetch_seq": return fromTo(1,this.size());
-            case "required": return valuesFromMarkItem("required_times");
+            case "required": return valuesFromMarkItem("mark_item_id","required_times");
             case "times": return this.repeator.repeatOf(this.size(),0);
             case "arbiter": return this.repeator.repeatOf(this.size(),0);
             case "fetchsign": return this.repeator.repeatOf(this.size(),0);
@@ -158,9 +158,9 @@ public class KgMarkMock extends AbstractMock {
         return values;
     }
 
-    private Object[] valuesFromMarkItem(String key){
+    private Object[] valuesFromMarkItem(String key,String otherKey){
         MarkItemMock markItem = getOtherMock(MarkItemMock.class);
-        return valuesFromOtherMock(key, "mark_item_id",true, markItem);
+        return valuesFromOtherMock(key,"mark_item_id", otherKey,true, markItem);
     }
 
     @Override

@@ -70,16 +70,16 @@ public abstract class AbstractMock implements Mock {
     }
 
 
-    protected Object[] valuesFromOtherMock(String key,String otherKey,boolean withId,AbstractMock other){
+    protected Object[] valuesFromOtherMock(String key,String otherKey1,String otherKey2,boolean withId,AbstractMock other){
         Object[] keyValues = this.getValues(key);
         int length = keyValues.length;
         Object[] os = new Object[length];
 
         for(int i=0;i<length;i++){
             if(withId){
-                os[i] = other.valuesOfWithId(otherKey,(String)keyValues[i]);
+                os[i] = other.valuesOfWithId(otherKey2,(String)keyValues[i]);
             }else{
-                os[i] = other.valuesOf(key,otherKey,keyValues[i]);
+                os[i] = other.valuesOf(otherKey1,otherKey2,keyValues[i]);
             }
         }
         return os;
@@ -128,11 +128,19 @@ public abstract class AbstractMock implements Mock {
     }
 
     private String[] sqlDelete() {
-        return Stream.of(ids()).map(this::genDeleteSql).collect(Collectors.toList()).toArray(new String[]{});
+        return Stream.of(deleteIds()).map(id->genDeleteSql(id+"")).collect(Collectors.toList()).toArray(new String[]{});
+    }
+
+    protected Object[] deleteIds(){
+        return ids();
+    }
+
+    protected String deleteIdField(){
+        return getIdField();
     }
 
     private String genDeleteSql(String id){
-        return "DELETE from " + table() + " where " + getIdField() + "='" + id + "'";
+        return "DELETE from " + table() + " where " + deleteIdField() + "='" + id + "'";
     }
 
     private List<Object[]> args() {

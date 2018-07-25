@@ -59,7 +59,7 @@ public class MarkTeamMemberMock extends AbstractMock {
     @Override
     public String[] ids() {
         MarkTeamMock markTeam = getOtherMock(MarkTeamMock.class);
-        return Arrays.stream(valuesFromOtherMock("mark_item_id","team_id",false,markTeam))
+        return Arrays.stream(valuesFromOtherMock("mark_item_id","mark_item_id","team_id",false,markTeam))
                 .map(id->(String)id).collect(Collectors.toList()).toArray(new String[]{});
     }
 }
