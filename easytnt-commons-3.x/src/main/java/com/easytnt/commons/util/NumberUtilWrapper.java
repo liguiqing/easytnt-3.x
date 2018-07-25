@@ -156,7 +156,7 @@ public class NumberUtilWrapper {
      * @param step 线性增长的步长
      * @return
      */
-    public static String toLinearString(double x,double step,int scale){
+    public static String toLinearString(double x,double step,int scale,String delimiter){
         if(scale<0)
             scale = 0;
         NumberFormat nf = NumberFormat.getInstance();
@@ -170,7 +170,7 @@ public class NumberUtilWrapper {
         }
         if(array[length-1] == null)
             array[length-1] = nf.format(x);
-        String linear = String.join(",",array);
+        String linear = String.join(delimiter,array);
         return linear;
     }
 
