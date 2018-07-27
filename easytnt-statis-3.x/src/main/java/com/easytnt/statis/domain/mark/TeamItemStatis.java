@@ -17,6 +17,8 @@ import com.easytnt.share.domain.id.mark.MarkerTeamId;
 
 public class TeamItemStatis extends ItemStatis {
 
+    private int planned = -1;
+
     public TeamItemStatis(MarkerTeamId teamId, String name, MarkItemId markItemId, String itemName,
                           int timesRequired, double fullScore, double error) {
         super(markItemId, itemName, timesRequired, fullScore, error);
@@ -29,5 +31,16 @@ public class TeamItemStatis extends ItemStatis {
         super(markItemId, itemName, timesRequired, fullScore, error, totalRequired);
         this.targetId(teamId);
         this.targetName(name);
+    }
+    public TeamItemStatis(MarkerTeamId teamId, String name, MarkItemId markItemId, String itemName,
+                          int timesRequired, double fullScore, double error, int totalRequired,int planned) {
+        super(markItemId, itemName, timesRequired, fullScore, error, totalRequired);
+        this.targetId(teamId);
+        this.targetName(name);
+        this.planned = planned;
+    }
+
+    public int getPlanned() {
+        return planned;
     }
 }

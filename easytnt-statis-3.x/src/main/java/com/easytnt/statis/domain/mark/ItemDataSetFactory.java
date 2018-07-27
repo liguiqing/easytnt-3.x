@@ -15,7 +15,7 @@ import java.util.Date;
 
 public interface ItemDataSetFactory {
 
-    default ItemDataSet newDataSetOf (MarkItemId markItemId, Date startTime, Date endTime){
+    default MarkItemDataSet newDataSetOf (MarkItemId markItemId, Date startTime, Date endTime){
         JdbcTemplate jdbc = SpringContextUtil.getBean(JdbcTemplate.class);
         AssertionConcerns.assertArgumentNotNull(jdbc,"无效的数据源");
         return new JdbcItemDataSet(jdbc,markItemId.id(),startTime,endTime);

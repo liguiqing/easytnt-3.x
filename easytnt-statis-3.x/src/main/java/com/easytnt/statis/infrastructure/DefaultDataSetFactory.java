@@ -11,7 +11,5 @@ import org.springframework.context.ApplicationContext;
 
 public class DefaultDataSetFactory implements ItemDataSetFactory {
 
-    @Autowired
-    private ApplicationContext context;
 
 }

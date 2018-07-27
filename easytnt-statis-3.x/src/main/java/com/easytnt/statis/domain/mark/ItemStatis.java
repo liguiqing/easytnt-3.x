@@ -6,6 +6,7 @@ package com.easytnt.statis.domain.mark;
 
 import com.easytnt.commons.domain.Identity;
 import com.easytnt.share.domain.id.mark.MarkItemId;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -219,5 +220,15 @@ public abstract class ItemStatis {
     @Override
     public int hashCode() {
         return Objects.hashCode(markItemId, targetId);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("markItemId", markItemId)
+                .add("itemName", itemName)
+                .add("targetName", targetName)
+                .add("targetId", targetId)
+                .toString();
     }
 }

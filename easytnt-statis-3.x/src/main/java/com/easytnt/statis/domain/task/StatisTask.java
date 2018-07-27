@@ -3,7 +3,7 @@ package com.easytnt.statis.domain.task;
 import com.easytnt.commons.AssertionConcerns;
 import com.easytnt.commons.util.CollectionsUtilWrapper;
 import com.easytnt.share.domain.id.mark.MarkItemId;
-import com.easytnt.statis.domain.mark.ItemDataSet;
+import com.easytnt.statis.domain.mark.MarkItemDataSet;
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.MarkScore;
 import com.easytnt.statis.domain.mark.StatisIndex;
@@ -28,7 +28,7 @@ public class StatisTask {
 
     private AtomicBoolean running = new AtomicBoolean(false);
 
-    private ItemDataSet dataSet;
+    private MarkItemDataSet dataSet;
 
     private List<ItemStatis> statises;
 
@@ -162,7 +162,7 @@ public class StatisTask {
             this.task.statises = Lists.newArrayList();
         }
 
-        public Builder useDataSet(ItemDataSet dataSet){
+        public Builder useDataSet(MarkItemDataSet dataSet){
             this.task.dataSet = dataSet;
             return this;
         }

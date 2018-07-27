@@ -18,9 +18,7 @@ import java.util.Date;
  */
 
 public class MarkScore {
-    private String teamId;
-
-    private String markerId;
+    private String tartgetId;
 
     private int timesRequired = 1; //评题评次
 
@@ -45,7 +43,7 @@ public class MarkScore {
     }
 
     public boolean isSameOf(Identity id){
-        return Objects.equal(id.id(), this.teamId) || Objects.equal(id.id(), this.markerId);
+        return Objects.equal(id.id(), this.tartgetId);
     }
 
     public boolean isScoreOf(double score){
@@ -244,12 +242,8 @@ public class MarkScore {
             return this;
         }
 
-        public Builder teamId(String teamId){
-            this.markScore.teamId = teamId;
-            return this;
-        }
-        public Builder markerId(String markerId){
-            this.markScore.markerId = markerId;
+        public Builder tartgetId(String tartgetId){
+            this.markScore.tartgetId = tartgetId;
             return this;
         }
 

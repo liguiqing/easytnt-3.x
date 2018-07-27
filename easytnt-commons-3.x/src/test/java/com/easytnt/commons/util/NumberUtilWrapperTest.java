@@ -68,13 +68,13 @@ public class NumberUtilWrapperTest {
 
     @Test
     public void toLinearString(){
-        String l = NumberUtilWrapper.toLinearString(2, 0.5,2);
+        String l = NumberUtilWrapper.toLinearString(2, 0.5,2,",");
         assertEquals(5,l.split(",").length);
 
-        l = NumberUtilWrapper.toLinearString(2, 0.4,2);
+        l = NumberUtilWrapper.toLinearString(2, 0.4,2,",");
         assertEquals(6,l.split(",").length);
 
-        l = NumberUtilWrapper.toLinearString(2, 0.3,2);
+        l = NumberUtilWrapper.toLinearString(2, 0.3,2,",");
         assertEquals(8,l.split(",").length);
     }
 }

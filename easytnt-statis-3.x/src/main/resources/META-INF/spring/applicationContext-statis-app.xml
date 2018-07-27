@@ -15,12 +15,17 @@
        	http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task.xsd">
 
+    <bean class="com.easytnt.statis.infrastructure.DefaultContextBuilder" init-method="installDefaltContext"></bean>
 
     <bean class="com.easytnt.statis.application.StatisApplicationService">
         <constructor-arg index="0" ref="TaskRepositoryMemory"></constructor-arg>
         <constructor-arg index="1" ref="ItemStatisRepository"></constructor-arg>
-        <constructor-arg index="2" ref="dataSetFactory"></constructor-arg>
     </bean>
+    <bean class="com.easytnt.statis.application.StatisQueryService">
+        <constructor-arg index="0" ref="TaskRepositoryMemory"></constructor-arg>
+        <constructor-arg index="1" ref="ItemStatisRepository"></constructor-arg>
+    </bean>
+
     <bean id="TaskRepositoryMemory" class="com.easytnt.statis.port.adapter.persistence.MemoryStatisTaskRepository">
         <constructor-arg index="0" value="${markitem.statis.memoryimpl.maxsize}"/>
         <constructor-arg index="1" value="${markitem.statis.memoryimpl.expire}"/>
@@ -28,4 +33,5 @@
     <bean id="ItemStatisRepository" class="com.easytnt.statis.port.adapter.persistence.ItemStatisJdbcRepository">
         <constructor-arg index="0" ref="jdbcTemplate"/>
     </bean>
+
 </beans>

@@ -37,25 +37,30 @@ public class DefaultDataSetFilterBuilder implements DataSetFilterBuilder {
         List<Identity> itemIds = Arrays.stream(ss2).map(s-> new MarkItemId(s)).collect(Collectors.toList());
         List<Identity> teamIds = Arrays.stream(ss2).map(s-> new MarkerTeamId(s)).collect(Collectors.toList());
         List<Identity> markerIds = Arrays.stream(ss2).map(s-> new MarkerId(s)).collect(Collectors.toList());
-        DataSetFilter itemIdFilter = id -> {
-            if(id instanceof  MarkItemId){
-                if(itemIds.size() > 0){
-                    return !itemIds.contains(id);
+
+        DataSetFilter itemIdFilter = null;
+
+        if(itemIds.size() == 0 && teamIds.size() == 0 && markerIds.size() == 0) {
+            itemIdFilter = id -> true;
+        }else{
+            itemIdFilter = id -> {
+                if(id instanceof  MarkItemId){
+                    if(itemIds.size() > 0){
+                        return itemIds.contains(id);
+                    }
+                }else if(id instanceof MarkerTeamId){
+                    if(teamIds.size() > 0){
+                        return teamIds.contains(id);
+                    }
+                }else if(id instanceof MarkerId){
+                    if(markerIds.size() > 0){
+                        return markerIds.contains(id);
+                    }
                 }
                 return false;
-            }else if(id instanceof MarkerTeamId){
-                if(teamIds.size() > 0){
-                    return !teamIds.contains(id);
-                }
-                return false;
-            }else if(id instanceof MarkerId){
-                if(markerIds.size() > 0){
-                    return !markerIds.contains(id);
-                }
-                return false;
-            }
-            return false;
-        };
+            };
+        }
+
 
         return itemIdFilter;
     }

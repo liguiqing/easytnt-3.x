@@ -8,8 +8,10 @@ import java.util.Collection;
  * @author Liguiqing
  * @since V3.0
  */
-public interface ItemDataSet {
+public interface MarkItemDataSet {
 
     Collection<MarkScore> next();
+
+    boolean hasNext();
 
 }

@@ -1,5 +1,6 @@
 package com.easytnt.statis.application;
 
+import com.easytnt.commons.spring.SpringContextUtil;
 import com.easytnt.commons.util.CollectionsUtilWrapper;
 import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.share.domain.id.subject.SubjectId;
@@ -13,7 +14,6 @@ import com.easytnt.statis.infrastructure.DefaultDataSetFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +40,9 @@ public class StatisApplicationService {
     public StatisApplicationService(StatisTaskRepository taskRepository,
                                     ItemStatisRepository itemStatisRepository,
                                     ItemDataSetFactory dataSetFactory) {
+        if(dataSetFactory == null){
+            dataSetFactory = SpringContextUtil.getBean(ItemDataSetFactory.class);
+        }
         this.taskRepository = taskRepository;
         this.itemStatisRepository = itemStatisRepository;
         this.dataSetFactory = dataSetFactory == null ?new DefaultDataSetFactory():dataSetFactory;
@@ -59,10 +62,10 @@ public class StatisApplicationService {
             return;
 
         List<ItemStatis> itemStatis = itemStatisRepository.newItemStatisFor(markItemId);
-        itemStatis.removeIf(statis -> filter.containsOf(statis.getId()));
+        itemStatis.removeIf(statis -> !filter.containsOf(statis.getId()));
         StatisIndex index = StatisFactory.getDefaultsStatis();
-        ItemDataSet dataSet = dataSetFactory.newDataSetOf(markItemId,startTime,endTime);
-        task = new StatisTask.Builder(taskId,new MarkItemId()).useDataSet(dataSet)
+        MarkItemDataSet dataSet = dataSetFactory.newDataSetOf(markItemId,startTime,endTime);
+        task = new StatisTask.Builder(taskId,markItemId).useDataSet(dataSet)
                 .statisFor(itemStatis).withIndex(index).build();
         taskRepository.save(task);
         task.start();
@@ -72,7 +75,7 @@ public class StatisApplicationService {
         logger.debug("Statis Of Subject :{} is starting",subjectId);
 
         List<MarkItemId> itemIds = itemStatisRepository.findMarkItemIdOf(new SubjectId(subjectId))
-                .stream().filter(s-> filter.containsOf(s)).collect(Collectors.toList());
+                .stream().filter(filter::containsOf).collect(Collectors.toList());
 
         if(CollectionsUtilWrapper.hasElements(itemIds)){
             for (MarkItemId itemId:itemIds){

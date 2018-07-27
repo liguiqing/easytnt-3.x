@@ -56,6 +56,10 @@
     </dependencies>
 
     <build>
+        <finalName>mock</finalName>
+        <filters>
+            <filter>src/filters/${env}.properties</filter>
+        </filters>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -103,6 +107,28 @@
             </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>dev-statis</id>
+            <properties>
+                <env>dev-statis</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault><!--默认启用的是dev环境配置 -->
+            </activation>
+        </profile>
+        <profile>
+            <id>runtime-statis</id>
+            <properties>
+                <env>runtime-statis</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>test-statis</id>
+            <properties>
+                <env>test-statis</env>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

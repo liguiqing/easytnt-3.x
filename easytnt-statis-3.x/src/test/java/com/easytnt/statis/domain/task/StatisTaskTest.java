@@ -1,7 +1,7 @@
 package com.easytnt.statis.domain.task;
 
 import com.easytnt.share.domain.id.mark.MarkItemId;
-import com.easytnt.statis.domain.mark.ItemDataSet;
+import com.easytnt.statis.domain.mark.MarkItemDataSet;
 import com.easytnt.statis.domain.mark.ItemStatis;
 import com.easytnt.statis.domain.mark.MarkScore;
 import com.easytnt.statis.domain.mark.StatisIndex;
@@ -26,7 +26,7 @@ public class StatisTaskTest {
 
     @Test
     public void testStart() throws Exception{
-        ItemDataSet dataSet = mock(ItemDataSet.class);
+        MarkItemDataSet dataSet = mock(MarkItemDataSet.class);
         MarkScore score = mock(MarkScore.class);
         Collection<MarkScore> scores = mock(Collection.class);
         Iterator<MarkScore> it = mock(Iterator.class);
