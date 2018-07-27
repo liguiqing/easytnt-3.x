@@ -38,8 +38,8 @@ public class MarkerMock extends AbstractMock {
             case "org_id": return this.repeator.repeatOf(this.size(),null);
             case "name": return getMarkerNames();
             case "role": return this.repeator.repeatOf(this.size(),"Normal");
-            case "planned": return this.repeator.repeatOf(this.size(),-0);
-            case "finished": return this.repeator.repeatOf(this.size(),-0);
+            case "planned": return this.repeator.repeatOf(this.size(),-1);
+            case "finished": return this.repeator.repeatOf(this.size(),-1);
             case "status": return this.repeator.repeatOf(this.size(),1);
             case "online": return this.repeator.repeatOf(this.size(),0);
             case "is_del": return this.repeator.repeatOf(this.size(),0);

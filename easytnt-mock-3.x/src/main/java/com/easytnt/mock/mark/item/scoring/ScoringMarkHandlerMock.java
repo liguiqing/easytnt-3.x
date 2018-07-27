@@ -1,7 +1,6 @@
 package com.easytnt.mock.mark.item.scoring;
 
 import com.easytnt.commons.spring.SpringContextUtil;
-import com.easytnt.commons.util.ArraysUtilWraper;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.commons.util.NumberUtilWrapper;
 import com.easytnt.mock.AbstractMock;
@@ -10,12 +9,12 @@ import com.easytnt.mock.mark.item.MarkItemMock;
 import com.easytnt.mock.mark.item.MarkItemScoreMock;
 import com.easytnt.mock.mark.team.MarkerMock;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Liguiqing
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ScoringMarkHandlerMock extends AbstractMock {
-    private Object[] scoreingMarkIds;
 
     private int size = 0;
 
@@ -83,8 +81,35 @@ public class ScoringMarkHandlerMock extends AbstractMock {
         }
         jdbc.batchUpdate(sql1, args1);
 
-        String sql2 = "update ps_scoring_mark a inner join ps_scoring_mark_handler b on a.mark_id=b.mark_id set a.unabled=b.unabled where b.unabled=1";
-        jdbc.update(sql2);
+        MarkItemMock markItem = getOtherMock(MarkItemMock.class);
+        Object[] examIds = markItem.getValues("exam_id");
+
+        String sql2 = "update ps_scoring_mark a inner join ps_scoring_mark_handler b on a.mark_id=b.mark_id " +
+                "set a.unabled=b.unabled,a.times=b.fetch_times where b.unabled=1 and a.exam_id=? ";
+        jdbc.update(sql2,new Object[]{examIds[0]});
+
+        String sql3 = "update ps_marker a inner join (select count(a.id) total,a.marker_id from ps_scoring_mark_handler " +
+                "a inner join ps_marker b on b.marker_id=a.marker_id where b.exam_id=? group by a.marker_id) b " +
+                "on b.marker_id = a.marker_id set a.finished=b.total where a.exam_id=? ";
+
+        Object[] args = new Object[]{examIds[0],examIds[0]};
+        jdbc.update(sql3,args);
+
+        String sql4 = "update ps_mark_team a inner join (" +
+                "select count(a.id) total,c.team_id,c.mark_item_id from ps_scoring_mark_handler a inner join ps_marker b " +
+                "on b.marker_id=a.marker_id inner join ps_mark_team_member c on c.marker_id=b.marker_id where b.exam_id=? group by c.team_id " +
+                ") b on b.team_id = a.team_id set a.finished=b.total where a.exam_id =?";
+        jdbc.update(sql4,args);
+
+        String sql5 = "update ps_scoring_mark a inner join( "+
+                "select a.mark_id,b.marker_id,max(b.fetch_times) max_times from  ps_scoring_mark a " +
+                "inner join ps_scoring_mark_handler b on a.mark_id=b.mark_id " +
+                "where a.exam_id=? and a.unabled=0 group by b.mark_id) " +
+                "b on a.mark_id = b.mark_id set a.times=b.max_times ";
+        jdbc.update(sql5,examIds[0]);
+
+        String sql6 = "update ps_scoring_mark set times = 0 where exam_id=? and unabled=1";
+        jdbc.update(sql6,examIds[0]);
     }
 
     private void mock(){
@@ -207,8 +232,7 @@ public class ScoringMarkHandlerMock extends AbstractMock {
                 alMarkItemId.add(markItemId);
 
                 String[] markerIds = this.maker.markerIdsOf(markItemId);
-                int[] ii = new int[markerIds.length];
-                random(0,markerIds.length,ii);
+                Integer[] ii = genRandomArray(markerIds.length);
                 alMarkerId.add(markerIds[ii[0]]);
 
                 Date fetchTime = DateUtilWrapper.now();
@@ -258,7 +282,7 @@ public class ScoringMarkHandlerMock extends AbstractMock {
                         alUnabledCatagory.add(null);
 
                         Double error = this.markItemScore.getError(markItemId);
-                        if(error.compareTo(Math.abs(score-score2))< 0){
+                        if(error.compareTo(Math.abs(score-score2))> 0){
                             scoreables.add(new Scoreable(this.markIds[i],(score+score2)/2,2));
                         }
 
@@ -287,22 +311,21 @@ public class ScoringMarkHandlerMock extends AbstractMock {
             return scores[i];
         }
 
-        private void random(int x,int y,int[] rs){
-            int v = NumberUtilWrapper.randomBetween(x,y-1);
-
-            int length = rs.length;
-            for(int i=1;i<length;i++){
-                if(v == rs[i]){
-                    random(x,y-1,rs);
-                }
+        private Integer[] genRandomArray(int length){
+            Integer[] ii = new Integer[length];
+            for(int i=0;i<length;i++){
+                ii[i] = i;
             }
-            for(int i=1;i<length;i++){
-                if(rs[i] == 0) {
-                    rs[i] = v;
-                    break;
-                }
-            }
+            return shuffle(ii);
         }
+
+        private Integer[] shuffle(Integer[] is){
+            int v = NumberUtilWrapper.randomBetween(0,is.length-1);
+            List<Integer> inList = Stream.of(is).collect(Collectors.toList());
+            Collections.shuffle(inList);
+            return inList.toArray(new Integer[]{});
+        }
+
     }
 
     private class Scoreable{
