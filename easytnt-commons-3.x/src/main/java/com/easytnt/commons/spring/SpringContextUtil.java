@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.easytnt.commons.lang.Throwables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -26,6 +29,7 @@ import org.springframework.context.ApplicationContextAware;
  * @since JDK 1.7+
  */
 public class SpringContextUtil implements ApplicationContextAware {
+	private static Logger logger = LoggerFactory.getLogger(SpringContextUtil.class);
 
 	private static ApplicationContext applicationContext;
 
@@ -34,12 +38,36 @@ public class SpringContextUtil implements ApplicationContextAware {
 		SpringContextUtil.applicationContext = applicationContext;
 	}
 
-	public static <T> T getBean(String name) {
-		return (T) applicationContext.getBean(name);
+	/**
+	 * 从spring context读取bean
+	 * @param beanId 待读取bean的id
+	 * @param <T>
+	 * @return 无定义返回 null
+	 */
+	public static <T> T getBean(String beanId) {
+		try {
+			return (T) applicationContext.getBean(beanId);
+		}catch (Exception e){
+			logger.info(Throwables.toString(e));
+		}
+
+		return null;
 	}
 
+	/**
+	 * 从spring context读取bean
+	 *
+	 * @param clazz 待读取bean的类型
+	 * @param <T>
+	 * @return 无定义返回 null
+	 */
 	public static <T> T getBean(Class clazz) {
-		return (T) applicationContext.getBean(clazz);
+		try {
+			return (T) applicationContext.getBean(clazz);
+		}catch (Exception e){
+			logger.info(Throwables.toString(e));
+		}
+		return null;
 	}
 
 	public static void registerBean(String beanId,String beanClassName,Map<String,Object> pvs) {
