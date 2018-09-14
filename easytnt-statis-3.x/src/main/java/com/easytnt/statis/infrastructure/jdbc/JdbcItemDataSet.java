@@ -138,6 +138,18 @@ public class JdbcItemDataSet implements MarkItemDataSet {
                 "and b.is_del=0 and a.mark_type=2 and a.submit_time is not null " +
                 "and a.valid=1 and a.is_del=0 limit ?,?";
         jdbc.query(sql,rs ->{
+
+            markScores.add(new MarkScore.Builder()
+                    .error(this.error)
+                    .submitTime(rs.getTimestamp("submit_time"))
+                    .fetchTime(rs.getTimestamp("fetch_time"))
+                    .finalScore(rs.getDouble("final_socre"))
+                    .score(rs.getDouble("score"))
+                    .curTimes(rs.getInt("fetch_times"))
+                    .totalTimes(rs.getInt("times"))
+                    .tartgetId(this.markItemId)
+                    .timesRequired(this.timesRequired)
+                    .build());
             String markerId = rs.getString("marker_id");
             List<TeamAndMembers> teams = getMarkerOf(markerId);
             for(TeamAndMembers tam:teams){

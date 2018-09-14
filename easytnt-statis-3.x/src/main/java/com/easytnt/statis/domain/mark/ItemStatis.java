@@ -69,7 +69,7 @@ public abstract class ItemStatis {
     }
 
     public Score getAndIncrement(MarkScore markScore){
-        if(markScore.isSameOf(this.targetId) && markScore.isOutOf(this.fullScore)){
+        if(!markScore.isSameOf(this.targetId) || markScore.isOutOf(this.fullScore)){
             return null;
         }
 

@@ -56,7 +56,7 @@
     </dependencies>
 
     <build>
-        <finalName>mock</finalName>
+        <finalName>mark-statis</finalName>
         <filters>
             <filter>src/filters/${env}.properties</filter>
         </filters>
