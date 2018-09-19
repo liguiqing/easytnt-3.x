@@ -36,7 +36,7 @@ public class MarkScore {
 
     private Date submitTime;
 
-    private ScoreMode mode = ScoreMode.Normal;
+    private ScoreMode mode = ScoreMode.Formal;
 
     private MarkScore(){
 
@@ -254,7 +254,7 @@ public class MarkScore {
 
         public MarkScore build(){
             if(this.markScore.mode == null)
-                this.markScore.mode = ScoreMode.Normal;
+                this.markScore.mode = ScoreMode.Formal;
             return this.markScore;
         }
     }
