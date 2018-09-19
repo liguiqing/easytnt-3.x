@@ -75,7 +75,7 @@ public class JdbcItemDataSet implements MarkItemDataSet {
     }
 
     private void getError(){
-        String sql = "select error from ps_mark_item_score where mark_item_id=?";
+        String sql = "select DISTINCT error from ps_mark_item_score where mark_item_id=? and is_del = 0 ";
         this.error = jdbc.queryForObject(sql,(rs, rowNum) ->rs.getDouble("error"),this.markItemId);
     }
 
@@ -85,7 +85,7 @@ public class JdbcItemDataSet implements MarkItemDataSet {
     }
 
     private void getTeamsAndMembers(){
-        String sql = "select a.team_id,a.parent_team_id from ps_mark_team a where a.mark_item_id=? and a.is_del=0";
+        String sql = "select a.team_id,a.parent_team_id from ps_mark_team a where a.item_id=? and a.is_del=0";
         jdbc.query(sql,(rs)->{addTeam(rs);},this.markItemId);
     }
 
@@ -135,8 +135,8 @@ public class JdbcItemDataSet implements MarkItemDataSet {
                 "a.submit_time,a.score,b.score as final_socre,b.times " +
                 "from ps_scoring_mark_handler a inner join ps_scoring_mark b on a.mark_item_id=b.mark_item_id " +
                 "and a.mark_id = b.mark_id  and b.mark_item_id=? and a.fetch_time>=? and a.fetch_time<=? " +
-                "and b.is_del=0 and a.mark_type=2 and a.submit_time is not null " +
-                "and a.valid=1 and a.is_del=0 limit ?,?";
+                "and b.is_del=0 and a.mark_type=2 and a.is_del=0 limit ?,?";
+        
         jdbc.query(sql,rs ->{
 
             markScores.add(new MarkScore.Builder()
