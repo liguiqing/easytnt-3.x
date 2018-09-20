@@ -13,7 +13,7 @@
         <version>3.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>easytnt.statis-boot</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>Mark Statis Boot</name>
     <url>http://maven.apache.org</url>
