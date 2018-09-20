@@ -516,7 +516,6 @@
 		<!--<module>easytnt-score-3.x</module>-->
 		<!--<module>easytnt-sheet-3.x</module>-->
 		<module>easytnt-statis-3.x</module>
-		<module>easytnt-statis-web-3.x</module>
 		<!--<module>easytnt-aim-3.x</module>-->
 		<module>easytnt-report-3.x</module>
 		<module>easytnt-tss-3.x</module>
