@@ -29,9 +29,9 @@ public class ItemStatisJdbcRepository implements ItemStatisRepository {
 
     @Override
     public List<ItemStatis> newItemStatisFor(MarkItemId itemId) {
-        String sql = "select a.name,a.score,a.required_times,b.error from ps_mark_item a " +
+        String sql = "select a.name,b.score,a.required_times,b.error from ps_mark_item a " +
                 "inner join ps_mark_item_score b on b.mark_item_id =a.mark_item_id  " +
-                "where a.purpose=1 and a.is_del = 0 and b.parent_score_id is null and a.mark_item_id = ? ";
+                "where a.purpose=1 and a.is_del = 0 and b.is_del=0 and b.parent_score_id is null and a.mark_item_id = ? ";
 
         ItemStatis itemStatis = jdbcTemplate.queryForObject(sql,(rs,index)->
                 new MarkItemStatis(itemId, rs.getString("name"),
@@ -74,7 +74,7 @@ public class ItemStatisJdbcRepository implements ItemStatisRepository {
         String sql = "select m.marker_id,m.name,m.planned from ps_marker m left join (" +
                 "select b.marker_id from ps_mark_team_member a " +
                 "inner join ps_marker b on b.marker_id = a.marker_id " +
-                "where a.mark_item_id=? and b.is_del=0 and b.is_del=0 " +
+                "where a.mark_item_id=? and a.is_del=0 and b.is_del=0 " +
                 ") t on m.marker_id = t.marker_id where m.mark_item_id =? and m.is_del=0 and t.marker_id is null";
 
         List<Marker> marker =  jdbcTemplate.query(sql,
@@ -87,7 +87,7 @@ public class ItemStatisJdbcRepository implements ItemStatisRepository {
     private List<Marker> getTeamMarker(MarkTeam team) {
         String sql = "select b.marker_id,b.name,b.planned from ps_mark_team_member a " +
                 "inner join ps_marker b on b.marker_id = a.marker_id " +
-                "where a.team_id=? and b.is_del=0 and b.is_del=0 ";
+                "where a.team_id=? and b.`role`='Normal' and a.is_del=0 and b.is_del=0 ";
         List<Marker> marker =  jdbcTemplate.query(sql,
                 (rs, rowNum) -> new Marker(new MarkerId(rs.getString("marker_id")),
                         rs.getString("name"),rs.getInt("planned")),
@@ -107,7 +107,7 @@ public class ItemStatisJdbcRepository implements ItemStatisRepository {
     }
 
     private List<MarkTeam> findTeamOf(MarkItemId itemId, int level){
-        String sql = "select a.team_id,a.name,a.planned from ps_mark_team a where a.mark_item_id=? and a.is_del=0 and a.level=?";
+        String sql = "select a.team_id,a.name,a.planned from ps_mark_team a where a.item_id=? and a.is_del=0 and a.level=?";
         List<MarkTeam> teamIds =  jdbcTemplate.query(sql,
                 (rs, rowNum) -> new MarkTeam(new MarkerTeamId(rs.getString("team_id")),
                         rs.getString("name"),rs.getInt("planned")),
