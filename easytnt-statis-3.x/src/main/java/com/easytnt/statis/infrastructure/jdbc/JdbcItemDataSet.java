@@ -3,6 +3,7 @@ package com.easytnt.statis.infrastructure.jdbc;
 import com.easytnt.commons.util.DateUtilWrapper;
 import com.easytnt.statis.domain.mark.MarkItemDataSet;
 import com.easytnt.statis.domain.mark.MarkScore;
+import com.easytnt.statis.domain.mark.ScoreMode;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,15 @@ public class JdbcItemDataSet implements MarkItemDataSet {
     private List<TeamAndMembers> teams = Lists.newArrayList();
 
     private Double error = -1d;
+    
+    private Integer errors =0;
+    
+    private Integer dealErrors =0;
+    
+    private Integer arbitrationNum =0;
+    
+    private Integer dealArbitrationNum =0;
+    
 
     private int timesRequired = 1;
 
@@ -72,13 +82,20 @@ public class JdbcItemDataSet implements MarkItemDataSet {
         getTimesRequired();
         getTeamsAndMembers();
         getMarkers();
+        
+        getErrors();
     }
 
     private void getError(){
-        String sql = "select DISTINCT error from ps_mark_item_score where mark_item_id=? and is_del = 0 ";
+        String sql = "select error from ps_mark_item_score where mark_item_id=? and is_del = 0 and parent_score_id IS NULL ";
         this.error = jdbc.queryForObject(sql,(rs, rowNum) ->rs.getDouble("error"),this.markItemId);
     }
-
+    
+    private void getErrors(){
+    	String sql = "SELECT count(1) as errors FROM ps_scoring_mark a WHERE a.unabled = 1 AND a.mark_item_id = ? AND a.is_del = 0 ";
+        this.errors = jdbc.queryForObject(sql,(rs, rowNum) ->rs.getInt("errors"),this.markItemId);
+    }
+    
     private void getTimesRequired(){
         String sql = "select required_times from ps_mark_item where mark_item_id=?";
         this.timesRequired = jdbc.queryForObject(sql,(rs, rowNum) -> rs.getInt("required_times"),this.markItemId);
@@ -131,20 +148,27 @@ public class JdbcItemDataSet implements MarkItemDataSet {
         logger.debug("Loading markerscores by {}", Arrays.toString(args));
 
         ArrayList<MarkScore> markScores = Lists.newArrayList();
-        String sql = "select a.marker_id,a.fetch_times,a.fetch_time, " +
-                "a.submit_time,a.score,b.score as final_socre,b.times " +
+        String sql = "select a.marker_id,a.fetch_times,a.fetch_time, a.mark_type" +
+                "a.submit_time,a.score,b.score as final_socre,b.times, a.unabled,a.submit_times " +
                 "from ps_scoring_mark_handler a inner join ps_scoring_mark b on a.mark_item_id=b.mark_item_id " +
                 "and a.mark_id = b.mark_id  and b.mark_item_id=? and a.fetch_time>=? and a.fetch_time<=? " +
-                "and b.is_del=0 and a.mark_type=2 and a.is_del=0 limit ?,?";
+                "and b.is_del=0 and a.mark_type!=1 and a.is_del=0 limit ?,?";
         
         jdbc.query(sql,rs ->{
-
+        	//判断是否是问题卷
+        	int unabled = rs.getInt("unabled");
+        	ScoreMode mode = ScoreMode.wayOf(rs.getInt("mark_type"));
+        	if(unabled == 0){
+        		mode = ScoreMode.wayOf(-1);
+        	}
+        	
             markScores.add(new MarkScore.Builder()
+            		.mode(mode)
                     .error(this.error)
                     .submitTime(rs.getTimestamp("submit_time"))
-                    .fetchTime(rs.getTimestamp("fetch_time"))
+                    .fetchTime(rs.getTimestamp("submit_times"))
                     .finalScore(rs.getDouble("final_socre"))
-                    .score(rs.getDouble("score"))
+                    .score(rs.getInt("score"))
                     .curTimes(rs.getInt("fetch_times"))
                     .totalTimes(rs.getInt("times"))
                     .tartgetId(this.markItemId)
@@ -154,11 +178,12 @@ public class JdbcItemDataSet implements MarkItemDataSet {
             List<TeamAndMembers> teams = getMarkerOf(markerId);
             for(TeamAndMembers tam:teams){
                 markScores.add(new MarkScore.Builder()
+                		.mode(mode)
                         .error(this.error)
                         .submitTime(rs.getTimestamp("submit_time"))
-                        .fetchTime(rs.getTimestamp("fetch_time"))
+                        .fetchTime(rs.getTimestamp("submit_times"))
                         .finalScore(rs.getDouble("final_socre"))
-                        .score(rs.getDouble("score"))
+                        .score(rs.getInt("score"))
                         .curTimes(rs.getInt("fetch_times"))
                         .totalTimes(rs.getInt("times"))
                         .tartgetId(tam.teamId)
@@ -166,11 +191,12 @@ public class JdbcItemDataSet implements MarkItemDataSet {
                         .build());
             }
             markScores.add(new MarkScore.Builder()
+            		.mode(mode)
                     .error(this.error)
                     .submitTime(rs.getTimestamp("submit_time"))
-                    .fetchTime(rs.getTimestamp("fetch_time"))
+                    .fetchTime(rs.getTimestamp("submit_times"))
                     .finalScore(rs.getDouble("final_socre"))
-                    .score(rs.getDouble("score"))
+                    .score(rs.getInt("score"))
                     .curTimes(rs.getInt("fetch_times"))
                     .totalTimes(rs.getInt("times"))
                     .tartgetId(rs.getString("marker_id"))

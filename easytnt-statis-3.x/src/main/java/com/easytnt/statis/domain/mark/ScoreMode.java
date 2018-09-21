@@ -13,7 +13,7 @@ package com.easytnt.statis.domain.mark;
 
 public enum ScoreMode {
 	//评卷类类型标识：1-识别(Mechine);2-Formal-正评;3-Arbiter-仲裁/抽查给分;4-Error-提问题卷;5-Borker-问题卷处理;6-ReFormal-回评;7-Learnning-试评;8-Self-自评;9-ForceFormal-发回重评;10-Monitor-质控
-	Mechine(1),Formal(2),Arbiter(3),Error(4),Borker(5),ReFormal(6),Learnning(7),Self(8),ForceFormal(9),Monitor(10);
+	Mechine(1),Formal(2),Arbiter(3),Error(4),Borker(5),ReFormal(6),Learnning(7),Self(8),ForceFormal(9),Monitor(10),ERROR(-1);
 
     private int way;
 
@@ -43,6 +43,8 @@ public enum ScoreMode {
 			return ForceFormal;
 		case 10:
 			return Monitor;
+		case -1:
+			return ERROR;
 		}
 		return null;
     }
