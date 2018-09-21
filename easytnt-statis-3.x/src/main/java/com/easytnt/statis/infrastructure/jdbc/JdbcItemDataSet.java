@@ -157,18 +157,18 @@ public class JdbcItemDataSet implements MarkItemDataSet {
         jdbc.query(sql,rs ->{
         	//判断是否是问题卷
         	int unabled = rs.getInt("unabled");
-        	ScoreMode mode = ScoreMode.wayOf(rs.getInt("mark_type"));
+        	double score = rs.getDouble("score");
         	if(unabled == 0){
-        		mode = ScoreMode.wayOf(-1);
+        		score = -1d;
         	}
         	
             markScores.add(new MarkScore.Builder()
-            		.mode(mode)
+            		.mode(ScoreMode.wayOf(rs.getInt("mark_type")))
                     .error(this.error)
                     .submitTime(rs.getTimestamp("submit_time"))
                     .fetchTime(rs.getTimestamp("submit_times"))
                     .finalScore(rs.getDouble("final_socre"))
-                    .score(rs.getInt("score"))
+                    .score(score)
                     .curTimes(rs.getInt("fetch_times"))
                     .totalTimes(rs.getInt("times"))
                     .tartgetId(this.markItemId)
@@ -178,12 +178,12 @@ public class JdbcItemDataSet implements MarkItemDataSet {
             List<TeamAndMembers> teams = getMarkerOf(markerId);
             for(TeamAndMembers tam:teams){
                 markScores.add(new MarkScore.Builder()
-                		.mode(mode)
+                		.mode(ScoreMode.wayOf(rs.getInt("mark_type")))
                         .error(this.error)
                         .submitTime(rs.getTimestamp("submit_time"))
                         .fetchTime(rs.getTimestamp("submit_times"))
                         .finalScore(rs.getDouble("final_socre"))
-                        .score(rs.getInt("score"))
+                        .score(score)
                         .curTimes(rs.getInt("fetch_times"))
                         .totalTimes(rs.getInt("times"))
                         .tartgetId(tam.teamId)
@@ -191,12 +191,12 @@ public class JdbcItemDataSet implements MarkItemDataSet {
                         .build());
             }
             markScores.add(new MarkScore.Builder()
-            		.mode(mode)
+            		.mode(ScoreMode.wayOf(rs.getInt("mark_type")))
                     .error(this.error)
                     .submitTime(rs.getTimestamp("submit_time"))
                     .fetchTime(rs.getTimestamp("submit_times"))
                     .finalScore(rs.getDouble("final_socre"))
-                    .score(rs.getInt("score"))
+                    .score(score)
                     .curTimes(rs.getInt("fetch_times"))
                     .totalTimes(rs.getInt("times"))
                     .tartgetId(rs.getString("marker_id"))
