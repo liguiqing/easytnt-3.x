@@ -23,8 +23,6 @@ public class MarkScore {
     private int timesRequired = 1; //评题评次
 
     private double error = 0d; //评题误差
-    
-    private int errors =0;//问题卷总数
 
     private int totalTimes = 1;//考生评题已完成的评次
 
@@ -38,7 +36,7 @@ public class MarkScore {
 
     private Date submitTime;
 
-    private ScoreMode mode = ScoreMode.Normal;
+    private ScoreMode mode = ScoreMode.Formal;
 
     private MarkScore(){
 
@@ -172,11 +170,7 @@ public class MarkScore {
         return error;
     }
 
-    public int getErrors() {
-		return errors;
-	}
-
-	public int getTotalTimes() {
+    public int getTotalTimes() {
         return totalTimes;
     }
 
@@ -216,12 +210,7 @@ public class MarkScore {
             this.markScore.error = error;
             return this;
         }
-        
-        public Builder errors(int errors){
-        	this.markScore.errors = errors;
-        	return this;
-        }
-        
+
         public Builder totalTimes(int totalTimes){
             this.markScore.totalTimes = totalTimes;
             return this;
@@ -265,7 +254,7 @@ public class MarkScore {
 
         public MarkScore build(){
             if(this.markScore.mode == null)
-                this.markScore.mode = ScoreMode.Normal;
+                this.markScore.mode = ScoreMode.Formal;
             return this.markScore;
         }
     }

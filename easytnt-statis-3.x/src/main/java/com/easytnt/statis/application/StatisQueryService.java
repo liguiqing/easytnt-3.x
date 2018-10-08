@@ -60,4 +60,11 @@ public class StatisQueryService {
         }
         return statises;
     }
+    public List<ItemStatis> queryStatisForMarkItem(String markItemId, Date startTime, Date endTime){
+    	logger.debug("Query Statis Of Subject :{} i",markItemId);
+    	ArrayList<ItemStatis> statises = Lists.newArrayList();
+		List<ItemStatis> anItemStatis = this.queryStatisForItem(markItemId,startTime,endTime);
+		statises.addAll(anItemStatis);
+    	return statises;
+    }
 }

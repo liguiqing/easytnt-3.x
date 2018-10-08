@@ -4,9 +4,12 @@
 
 package com.easytnt.statis.domain.mark;
 
+import java.util.List;
+
 import com.easytnt.share.domain.id.PersonId;
 import com.easytnt.share.domain.id.mark.MarkItemId;
 import com.easytnt.share.domain.id.mark.MarkerTeamId;
+import com.google.common.collect.Lists;
 
 /**
  * 评题统计
@@ -32,5 +35,16 @@ public class MarkItemStatis extends ItemStatis {
         super(markItemId, itemName, timesRequired, fullScore, error, totalRequired);
         this.targetId(markItemId);
         this.targetName(itemName);
+    }
+    
+    public static List<MarkItemStatis> addMarkItemStatis(List<ItemStatis> statises){
+    	List<MarkItemStatis> ItemStatises = Lists.newArrayList();
+    	for(ItemStatis statis: statises){
+    		if(statis instanceof MarkItemStatis){
+    			MarkItemStatis itemStatis = (MarkItemStatis) statis;
+    			ItemStatises.add(itemStatis);
+    		}
+    	}
+    	return ItemStatises;
     }
 }

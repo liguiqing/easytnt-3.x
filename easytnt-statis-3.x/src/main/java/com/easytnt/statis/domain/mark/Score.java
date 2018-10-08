@@ -22,9 +22,8 @@ public class Score {
     private List<ScoreTimes> times = Lists.newArrayList();
 
     private double totalSpend = 0;
-
-
-    protected Score(double value) {
+    
+	protected Score(double value) {
         this.value = value;
     }
 
@@ -55,7 +54,11 @@ public class Score {
         return this.value;
     }
 
-    @Override
+    public List<ScoreTimes> getTimes() {
+		return times;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

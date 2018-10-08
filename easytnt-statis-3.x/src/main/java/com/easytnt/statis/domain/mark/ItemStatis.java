@@ -135,6 +135,17 @@ public abstract class ItemStatis {
     public double getAvgScore(){
         return this.totalScore/(this.getValids());
     }
+    
+    public double getAvgScoreNoneZero(List<Score> scores){
+    	int num = 0;
+    	for(Score score: scores){
+    		if(score.getValue() !=0 && score.getValue() !=-1){
+    			num++;
+    		}
+    	}
+    	
+    	 return this.totalScore/num;
+    }
 
     public boolean hasTotalRequired(){
         return this.totalRequired > -1;

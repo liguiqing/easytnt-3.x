@@ -10,7 +10,8 @@ import com.easytnt.statis.domain.mark.StatisIndex;
 public class StatisFactory {
 
     private static StatisIndex defaults = new FinishedNoErrorsStatis()
-            .append(new AvgScoreStatis()).append(new AvgSpeedStatis()).append(new SdScoreStatis());
+            .append(new AvgScoreStatis()).append(new AvgSpeedStatis()).append(new SdScoreStatis())
+            .append(new AvgScoreNoneZeroStatis()).append(new CurTimesTotalStatis(1)).append(new CurTimesTotalStatis(2));
 
     public static  StatisIndex getDefaultsStatis(){
         return defaults;

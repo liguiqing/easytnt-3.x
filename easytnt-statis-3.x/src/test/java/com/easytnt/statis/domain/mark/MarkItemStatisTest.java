@@ -17,8 +17,8 @@ public class MarkItemStatisTest {
 
     @Test
     public void getMarkItemId() {
-        String id = "MarkItemId9527";
-        String itemName = "item1";
+        String id = "MKIMf56738c4642c435cb6f78896671ad785";
+        String itemName = "31";
         MarkItemId markItemId = new MarkItemId(id);
         MarkItemStatis mistatis = new MarkItemStatis(markItemId,itemName,1,10);
         assertEquals(mistatis.getMarkItemId(),markItemId);
@@ -48,8 +48,8 @@ public class MarkItemStatisTest {
 
     @Test
     public void getAndIncrement() {
-        String id = "MarkItemId9527";
-        String itemName = "item9527";
+    	 String id = "MKIMf56738c4642c435cb6f78896671ad785";
+         String itemName = "31";
         MarkItemId markItemId = new MarkItemId(id);
         MarkItemStatis mistatis = new MarkItemStatis(markItemId,itemName,1,10);
 

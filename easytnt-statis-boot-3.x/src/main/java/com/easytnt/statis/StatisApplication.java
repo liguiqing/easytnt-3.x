@@ -7,13 +7,14 @@ import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfig
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-@Slf4j
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class})
+@Slf4j
 public class StatisApplication  extends SpringBootServletInitializer {
     public static void main(String[] args) throws Exception{
         log.debug("Easytnt marking statis starting ...");
@@ -27,5 +28,4 @@ public class StatisApplication  extends SpringBootServletInitializer {
         application.sources(StatisApplication.class);
         return super.configure(application);
     }
-
 }
