@@ -5,15 +5,17 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
 
-public class Md5DataSource {
-    private static final Logger logger = LoggerFactory.getLogger(Md5DataSource.class);
+public class Md5Removeable {
+    private static final Logger logger = LoggerFactory.getLogger(Md5Removeable.class);
 
     private Connection connection;
 
@@ -25,9 +27,11 @@ public class Md5DataSource {
 
     private String password;
 
-    private String sql = "select a.address from ks_answersheet a where a.examId=? and length(a.address) >0 union all select a.address from ks_studentanswersheetimage a where a.examId=? and length(a.address) >0;";
+    private int start = 0;
 
-    public Md5DataSource(String driver,String url, String username, String password) {
+    private String sql = "select a.address from ks_studentanswersheetimage a inner join ks_exam b on b.id=a.examid where b.state=3 limit ?,5000;";
+
+    public Md5Removeable(String driver,String url, String username, String password) {
         this.driver = driver;
         this.url = url;
         this.username = username;
@@ -37,23 +41,21 @@ public class Md5DataSource {
         connect();
     }
 
-    public List<String> next(long examId) {
+    public Deque<String> next(){
         reConnect();
         PreparedStatement ps = null;
         ResultSet rs = null;
         try{
             ps = connection.prepareStatement(this.sql);
-            logger.debug("Execute sql {}  with examId:{}",sql , examId);
+            logger.debug("Execute sql {}  with start :{}",sql , start);
 
-            ps.setLong(1,examId);
-            ps.setLong(2,examId);
+            ps.setLong(1,start);
             rs = ps.executeQuery();
-            ArrayList<String> md5s = new ArrayList<>();
+            ConcurrentLinkedDeque<String> md5s = new ConcurrentLinkedDeque<>();
             while (rs.next()) {
                 md5s.add(rs.getString("address"));
             }
-
-            logger.debug("Size of examId's md5: {} -> {}", examId,md5s.size());
+            start = start + md5s.size();
             return md5s;
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -61,7 +63,7 @@ public class Md5DataSource {
             closer(rs);
             closer(ps);
         }
-        return new ArrayList<>();
+        return new ConcurrentLinkedDeque<>();
     }
 
     private void loadDriver(){
@@ -110,4 +112,5 @@ public class Md5DataSource {
             }
         }
     }
+
 }

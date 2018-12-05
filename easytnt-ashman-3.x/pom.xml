@@ -51,6 +51,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.38</version>
         </dependency>
+        <dependency>
+            <groupId>com.hyd</groupId>
+            <artifactId>hydrogen-ssdb</artifactId>
+            <version>1.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -58,6 +63,16 @@
         <filters>
             <filter>src/filters/${env}.properties</filter>
         </filters>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>*.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -68,12 +83,9 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.easytnt.ashman.Ashman</mainClass>
+                            <mainClass>com.easytnt.ashman.Ssdb2Ssdb</mainClass>
                         </manifest>
                     </archive>
-                    <descriptors>
-                        <descriptor>jar.xml</descriptor>
-                    </descriptors>
                 </configuration>
                 <executions>
                     <execution>

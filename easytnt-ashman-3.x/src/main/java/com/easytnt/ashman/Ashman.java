@@ -1,6 +1,7 @@
 package com.easytnt.ashman;
 
-import com.easytnt.ashman.ssdb.SSDB;
+import com.hyd.ssdb.SsdbClient;
+import com.hyd.ssdb.conf.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class Ashman {
 
     private boolean removeToSSDB;
 
-    private SSDB ssdb;
+    private SsdbClient ssdbClient;
 
     private long examId = 0;
 
@@ -73,15 +74,14 @@ public class Ashman {
 
         String fileNames = getConfig("img.origin.names");
         this.cleanFileNames = Arrays.asList(fileNames.split(";"));
-
         this.removeToSSDB = getIntConfig("img.remove") > 0;
-
 
         String host = getConfig("ssdb.host");
         int port = getIntConfig("ssdb.port");
         try{
             logger.debug("Connect to SSDB : " +host +" "+ port);
-            this.ssdb = new SSDB(host,port);
+            List<Server> servers = Arrays.asList(new Server(host, port, true));  //主服务器
+            this.ssdbClient = SsdbClient.fromSingleCluster(servers);
             logger.debug("Connect to SSDB success");
         }catch (Exception e){
             logger.error(e.getLocalizedMessage());
@@ -122,6 +122,11 @@ public class Ashman {
                 getConfig("jdbc.url"),getConfig("jdbc.username"),getConfig("jdbc.password"));
         this.logContent = new ArrayList<>();
         while(true) {
+            if(this.examId == 0 || this.examId > 10000){
+                writeExamId();
+                System.exit(0);
+            }
+
             if (isWorkTime()) {
                 initLog();
                 cleaning = true;
@@ -149,10 +154,7 @@ public class Ashman {
                     logger.error(e.getLocalizedMessage());
                 }
             }
-            if(this.examId == 0 || this.examId > 10000){
-                writeExamId();
-                System.exit(0);
-            }
+
         }
     }
 
@@ -168,7 +170,8 @@ public class Ashman {
     private void writeExamId(){
         Path examIdFile = getExamIdFile();
         try (BufferedWriter writer = Files.newBufferedWriter(examIdFile,StandardOpenOption.APPEND)){
-            writer.write(this.examId+"@"+LocalDateTime.now()+" ---> Clean total " + (this.cleanTotal/1024/1024) +"Mb");
+            writer.newLine();
+            writer.append(this.examId+"@"+LocalDateTime.now()+" ---> Clean total " + (this.cleanTotal/1024/1024) +"Mb");
             this.cleanTotal = 0;
         } catch (IOException e) {
             logger.error(e.getLocalizedMessage());
@@ -246,8 +249,9 @@ public class Ashman {
         }
         sb.append("}");
         this.logContent.add(sb.toString());
-        removeToSSDB(md5,path);
-        deleteMd5(path);
+        boolean b = removeToSSDB(md5,path);
+        if(b)
+            deleteMd5(path);
     }
 
     private void deleteMd5(Path path) {
@@ -267,13 +271,16 @@ public class Ashman {
             if(files != null){
                 Stream.of(files).forEach(file -> {
                     this.cleanTotal += file.length();
-                    file.delete();
+                    if(file.delete()){
+                        logger.debug("File "+file.getName()+" has bean deleted");
+                    }
                 });
             }
             Path parentDir = Paths.get(dir.getParent());
             if(!dir.delete()){
                 return;
             }
+            logger.debug("Dir "+dir.getName()+" has bean deleted");
             files = parentDir.toFile().listFiles();
             if(files != null && files.length == 0){
                 deleteDir(parentDir);
@@ -281,9 +288,9 @@ public class Ashman {
         }
     }
 
-    private void removeToSSDB(String key,Path path){
+    private boolean removeToSSDB(String key,Path path){
         if(!path.toFile().exists()){
-            return;
+            return false;
         }
 
         if(this.removeToSSDB){
@@ -292,13 +299,15 @@ public class Ashman {
                 try {
                     Path img = imgs[0].toPath();
                     logger.debug("Removing image {} to SSDB ",img.toUri().toString());
-                    this.ssdb.set(key, Files.readAllBytes(imgs[0].toPath()));
+                    this.ssdbClient.set(key, Files.readAllBytes(imgs[0].toPath()));
                     logger.debug("Remove image {} to SSDB success",img.toUri().toString());
+                    return true;
                 } catch (Exception e) {
                     logger.error(e.getLocalizedMessage());
                 }
             }
         }
+        return false;
     }
 
     private void writeLog(String logContent) {
