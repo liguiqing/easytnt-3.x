@@ -29,27 +29,37 @@ public class Md5Removeable {
 
     private int start = 0;
 
-    private String sql = "select a.address from ks_studentanswersheetimage a inner join ks_exam b on b.id=a.examid where b.state=3 limit ?,5000;";
+    private int size = 100;
 
-    public Md5Removeable(String driver,String url, String username, String password) {
+    private String sql = "select a.address from ks_studentanswersheetimage a inner join ks_exam b on b.id=a.examid where b.state=3 limit ?,?;";
+
+    private String sql2 = "select a.address from ks_studentanswersheetimage a inner join ks_exam b on b.id=a.examid where b.state<3 limit ?,?;";
+
+    public Md5Removeable(String driver,String url, String username, String password,int size) {
         this.driver = driver;
         this.url = url;
         this.username = username;
         this.password = password;
+        if(size >1)
+            this.size = size;
 
         loadDriver();
         connect();
     }
 
-    public Deque<String> next(){
+    public Deque<String> next(boolean finished){
         reConnect();
         PreparedStatement ps = null;
         ResultSet rs = null;
+        String sql_ = sql;
+        if(!finished)
+            sql_ = sql2;
         try{
-            ps = connection.prepareStatement(this.sql);
-            logger.debug("Execute sql {}  with start :{}",sql , start);
+            ps = connection.prepareStatement(sql_);
+            logger.debug("Execute sql {}  with start :{}",sql_ , start);
 
-            ps.setLong(1,start);
+            ps.setInt(1,start);
+            ps.setInt(2,size);
             rs = ps.executeQuery();
             ConcurrentLinkedDeque<String> md5s = new ConcurrentLinkedDeque<>();
             while (rs.next()) {
